@@ -12,9 +12,11 @@
 
     "autoload": {
       "psr-4": {
-        "Omniship\\Speedy\\": "src",
-		"Speedy\\": "Speedy"
-      }
+        "Omniship\\Speedy\\": "src"
+      },
+		"classmap": [
+		  "Speedy"
+		],
     },
 
 	"authors": [
