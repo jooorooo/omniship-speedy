@@ -6,7 +6,7 @@
  * Time: 16:55 ч.
  */
 
-namespace Omniship\FedEx\Http;
+namespace Omniship\Speedy\Http;
 
 use Omniship\Exceptions\InvalidResponseException;
 use Omniship\Message\AbstractRequest AS BaseAbstractRequest;
@@ -42,36 +42,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
      */
     public function setPassword($value) {
         return $this->setParameter('password', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMeter() {
-        return $this->getParameter('meter');
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setMeter($value) {
-        return $this->setParameter('meter', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getKey() {
-        return $this->getParameter('key');
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setKey($value) {
-        return $this->setParameter('key', $value);
     }
 
     abstract protected function createResponse($data);

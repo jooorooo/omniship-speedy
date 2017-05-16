@@ -6,7 +6,7 @@
  * Time: 17:22 ч.
  */
 
-namespace Omniship\FedEx\Http;
+namespace Omniship\Speedy\Http;
 
 use Carbon\Carbon;
 use Omniship\Common\Component;

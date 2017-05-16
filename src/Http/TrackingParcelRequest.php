@@ -6,7 +6,7 @@
  * Time: 18:03 ч.
  */
 
-namespace Omniship\FedEx\Http;
+namespace Omniship\Speedy\Http;
 
 use FedEx\TrackService\Request;
 use FedEx\TrackService\ComplexType;

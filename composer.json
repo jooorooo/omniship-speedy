@@ -14,9 +14,9 @@
       "psr-4": {
         "Omniship\\Speedy\\": "src"
       },
-		"classmap": [
-		  "Speedy"
-		]
+      "classmap": [
+        "Speedy"
+      ]
     },
 
 	"authors": [

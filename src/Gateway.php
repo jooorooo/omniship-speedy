@@ -6,16 +6,16 @@
  * Time: 17:18 ч.
  */
 
-namespace Omniship\FedEx;
+namespace Omniship\Speedy;
 
-use Omniship\FedEx\Http\ShippingServicesRequest;
-use Omniship\FedEx\Http\TrackingParcelRequest;
+use Omniship\Speedy\Http\ShippingServicesRequest;
+use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
 
 class Gateway extends AbstractGateway
 {
 
-    private $name = 'FedEx';
+    private $name = 'Speedy';
 
     /**
      * @return string
@@ -43,8 +43,6 @@ class Gateway extends AbstractGateway
         return array(
             'username' => '',
             'password' => '',
-            'meter' => '',
-            'key' => '',
         );
     }
 
@@ -80,40 +78,6 @@ class Gateway extends AbstractGateway
     public function setPassword($value)
     {
         return $this->setParameter('password', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMeter()
-    {
-        return $this->getParameter('meter');
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setMeter($value)
-    {
-        return $this->setParameter('meter', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getKey()
-    {
-        return $this->getParameter('key');
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setKey($value)
-    {
-        return $this->setParameter('key', $value);
     }
 
     /**

@@ -6,11 +6,12 @@
  * Time: 17:22 ч.
  */
 
-namespace Omniship\FedEx\Http;
+namespace Omniship\Speedy\Http;
 
 use Carbon\Carbon;
 use Omniship\Common\ShippingServiceBag;
 use Omniship\Message\AbstractResponse;
+use ResultCalculationMS;
 
 class ShippingServicesResponse extends AbstractResponse
 {
@@ -29,25 +30,25 @@ class ShippingServicesResponse extends AbstractResponse
             return $result;
         }
 
-        if(!empty($this->data->RateReplyDetails)) {
-            foreach($this->data->RateReplyDetails AS $quote) {
-                if(!empty($quote->RatedShipmentDetails)) {
-                    foreach($quote->RatedShipmentDetails AS $shipment_details) {
-                        $result->add([
-                            'id' => $quote->ServiceType,
-                            'name' => $quote->ServiceType,
-                            'description' => !empty($quote->CommitDetails->DeliveryMessages) ? $quote->CommitDetails->DeliveryMessages : '',
-                            'price' => $shipment_details->ShipmentRateDetail->TotalNetChargeWithDutiesAndTaxes->Amount,
-                            'pickup_date' => Carbon::now($this->request->getSenderTimeZone()),
-                            'pickup_time' => Carbon::now($this->request->getSenderTimeZone()),
-                            'delivery_date' => !empty($quote->DeliveryTimestamp) ? Carbon::createFromFormat('Y-m-d\TH:i:s', $quote->DeliveryTimestamp, $this->request->getReceiverTimeZone()) : null,
-                            'delivery_time' => !empty($quote->DeliveryTimestamp) ? Carbon::createFromFormat('Y-m-d\TH:i:s', $quote->DeliveryTimestamp, $this->request->getReceiverTimeZone()) : null,
-                            'currency' => $shipment_details->ShipmentRateDetail->TotalNetChargeWithDutiesAndTaxes->Currency,
-                            'tax' => $shipment_details->ShipmentRateDetail->TotalTaxes->Amount,
-                            'insurance' => 0
-                        ]);
-                    }
-                }
+        if(is_array($this->data)) {
+            $services = $this->getRequest()->getClient()->getServicesList($this->getRequest()->getLanguageCode());
+            foreach($this->data AS $service) {
+                $service = $this->_getService($service);
+                $result_info = $service->getResultInfo();
+                $amounts = $result_info->getAmounts();
+                $result->add([
+                    'id' => $service->getServiceTypeId(),
+                    'name' => $services[$service->getServiceTypeId()],
+                    'description' => null,
+                    'price' => $amounts->getTotal(),
+                    'pickup_date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getTakingDate()),
+                    'pickup_time' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getTakingDate()),
+                    'delivery_date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getDeadlineDelivery()),
+                    'delivery_time' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getDeadlineDelivery()),
+                    'currency' => $this->getRequest()->getCurrency(),
+                    'tax' => $amounts->getVat(),
+                    'insurance' => $amounts->getInsurancePremium()
+                ]);
             }
         }
         return $result;
@@ -58,16 +59,8 @@ class ShippingServicesResponse extends AbstractResponse
      */
     public function getMessage()
     {
-        if(!empty($this->data->Notifications)) {
-            if(is_array($this->data->Notifications)) {
-                foreach ($this->data->Notifications AS $notification) {
-                    if ($notification->Severity == 'ERROR' || empty($this->data->RateReplyDetails)) {
-                        return $notification->LocalizedMessage;
-                    }
-                }
-            } elseif(empty($this->data->RateReplyDetails)) {
-                return $this->data->Notifications->LocalizedMessage;
-            }
+        if(is_string($this->data)) {
+            return $this->data;
         }
         return null;
     }
@@ -77,18 +70,21 @@ class ShippingServicesResponse extends AbstractResponse
      */
     public function getCode()
     {
-        if(!empty($this->data->Notifications)) {
-            if(is_array($this->data->Notifications)) {
-                foreach ($this->data->Notifications AS $notification) {
-                    if ($notification->Severity == 'ERROR') {
-                        return $notification->Code;
-                    }
-                }
-            } elseif(empty($this->data->RateReplyDetails)) {
-                return $this->data->Notifications->Code;
+        if(is_string($this->data)) {
+            if(preg_match('~\(([^\)]*)\)~', $this->data, $match)) {
+                return $match[1];
             }
+            return md5($this->data);
         }
         return null;
+    }
+
+    /**
+     * @param ResultCalculationMS $service
+     * @return ResultCalculationMS
+     */
+    protected function _getService(ResultCalculationMS $service) {
+        return $service;
     }
 
 }
