@@ -725,7 +725,7 @@ class EPSFacade {
      * This method can be used to track the state/history of a shipment.
      * @since 1.4
      * @param integer $parcelId Signed 64-bit (@since 2.9.0 @param string $parcelId)
-     * @param ParamLanguage $language BG or EN. If set to null the server defaults to BG
+     * @param string $language BG or EN. If set to null the server defaults to BG
      * @throws ClientException Thrown in case EPS interface implementation is not set
      * @throws ServerException Thrown in case communication with server has failed
      * @return array List of ResultTrackPickingEx
@@ -741,7 +741,7 @@ class EPSFacade {
      * This method can be used to track the state/history of a shipment parcel.
      * @since 2.8.0
      * @param List of integer (Signed 64-bit) $barcodes (@since 2.9.0 @param string $barcodes) 
-     * @param ParamLanguage $language BG or EN. If set to null the server defaults to BG
+     * @param string $language BG or EN. If set to null the server defaults to BG
      * @throws ServerException Thrown in case communication with server has failed
      * @return array List of ResultTrackPickingEx
      * @since 2.9.0

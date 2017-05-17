@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy;
 
+use Carbon\Carbon;
 use Exception;
 use EPSFacade;
 use EPSSOAPInterfaceImpl;
@@ -15,7 +16,20 @@ use ResultLogin;
 use ResultClientData;
 use ResultCourierService;
 use ResultCalculationMS;
+use ResultCountry;
+use ResultPickingExtendedInfo;
+use ResultSpecialDeliveryRequirement;
+use ResultTrackPickingEx;
+use ResultOfficeEx;
+use ResultSite;
+use ResultSiteEx;
+use ResultQuarter;
+use ResultStreet;
+use ResultState;
+use ResultCommonObject;
 use ParamCalculation;
+use ParamFilterCountry;
+use ParamFilterSite;
 
 class Client
 {
@@ -30,8 +44,14 @@ class Client
      */
     protected $resultLogin;
 
+    /**
+     * @var string
+     */
     protected $username;
 
+    /**
+     * @var string
+     */
     protected $password;
 
     protected $error;
@@ -61,16 +81,34 @@ class Client
     }
 
     /**
+     * @param null $username
+     * @param null $password
+     * @return bool
+     */
+    public function reconnect($username = null, $password = null)
+    {
+        if ($username) {
+            $this->username = $username;
+        }
+        if ($password) {
+            $this->password = $password;
+        }
+        $this->ePSFacade = $this->resultLogin = $this->error = null;
+        return $this->initialize();
+    }
+
+    /**
      * @param null $client_id
      * @return bool|ResultClientData
      */
-    public function getClientInfo($client_id = null) {
+    public function getClientInfo($client_id = null)
+    {
         $client = false;
         if (!is_null($login = $this->getResultLogin())) {
             try {
                 $client = $this->getEPSFacade()->getClientById($client_id ? $client_id : $login->getClientId());
             } catch (Exception $e) {
-                if(!strpos($e->getMessage(), 'No client with such ID')) {
+                if (!strpos($e->getMessage(), 'No client with such ID')) {
                     $this->error = $e->getMessage();
                 }
                 return false;
@@ -83,7 +121,8 @@ class Client
      * @param string $language
      * @return bool|ResultCourierService[]
      */
-    public function getServices($language = 'bg') {
+    public function getServices($language = 'bg')
+    {
         $services = [];
         if (!is_null($login = $this->getResultLogin())) {
             try {
@@ -91,7 +130,11 @@ class Client
                 $listServices = $this->getEPSFacade()->listServices(time(), $this->_languageValidate($language));
                 if ($listServices) {
                     foreach ($listServices as $service) {
-                        $services[$service->getTypeId()] = $service;
+                        // Remove pallet services
+                        if ($service->getCargoType() == 2) {
+                            continue;
+                        }
+                        $services[] = $service;
                     }
                 }
             } catch (Exception $e) {
@@ -104,16 +147,546 @@ class Client
 
     /**
      * @param string $language
-     * @return bool|array
+     * @return array
      */
-    public function getServicesList($language = 'bg') {
+    public function getServicesList($language = 'bg')
+    {
         $services = $this->getServices($language);
-        if($services) {
-            $services = array_map(function(ResultCourierService $service) {
-                return $service->getName();
-            }, $services);
+        $result = [];
+        if ($services) {
+            foreach ($services as $service) {
+                $result[$service->getTypeId()] = $service->getName();
+            }
         }
-        return $services;
+        return $result;
+    }
+
+    /**
+     * @param integer $id
+     * @param string $language
+     * @return bool|ResultCountry
+     */
+    public function getCountryById($id, $language = 'bg')
+    {
+        return $this->getCountryByFilter(['id' => $id], $language);
+    }
+
+    /**
+     * @param string $name
+     * @param string $language
+     * @return bool|ResultCountry
+     */
+    public function getCountryByName($name, $language = 'bg')
+    {
+        return $this->getCountryByFilter(['name' => $name], $language);
+    }
+
+    /**
+     * @param string $iso2
+     * @param string $language
+     * @return bool|ResultCountry
+     */
+    public function getCountryByIso2($iso2, $language = 'bg')
+    {
+        return $this->getCountryByFilter(['iso2' => $iso2], $language);
+    }
+
+    /**
+     * @param string $iso3
+     * @param string $language
+     * @return bool|ResultCountry
+     */
+    public function getCountryByIso3($iso3, $language = 'bg')
+    {
+        return $this->getCountryByFilter(['iso3' => $iso3], $language);
+    }
+
+    /**
+     * @param array $filter
+     * @param string $language
+     * @return bool|ResultCountry
+     */
+    public function getCountryByFilter(array $filter, $language = 'bg')
+    {
+        $country = false;
+        if (!empty($filter) && !is_null($login = $this->getResultLogin())) {
+            $paramFilterCountry = new ParamFilterCountry();
+            if (!empty($filter['id'])) {
+                $paramFilterCountry->setCountryId($filter['id']);
+            }
+            if (!empty($filter['name'])) {
+                $paramFilterCountry->setName($filter['name']);
+            }
+            if (!empty($filter['iso2'])) {
+                $paramFilterCountry->setIsoAlpha2($filter['iso2']);
+            }
+            if (!empty($filter['iso3'])) {
+                $paramFilterCountry->setIsoAlpha3($filter['iso3']);
+            }
+            try {
+                $listCountries = $this->getEPSFacade()->listCountriesEx($paramFilterCountry, $this->_languageValidate($language));
+                if (count($listCountries) == 1) {
+                    $country = array_shift($listCountries);
+                } else if (count($listCountries) > 1) {
+                    $this->error = 'Response return more that one result';
+                    return false;
+                } else {
+                    return false;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $country;
+    }
+
+    /**
+     * @param string $filter
+     * @param string $language
+     * @return ResultCountry[]
+     */
+    public function searchCountry($filter, $language = 'bg')
+    {
+        $countries = [];
+        if (!is_null($login = $this->getResultLogin())) {
+            $paramFilterCountry = new ParamFilterCountry();
+            $paramFilterCountry->setSearchString($filter);
+            try {
+                $listCountries = $this->getEPSFacade()->listCountriesEx($paramFilterCountry, $this->_languageValidate($language));
+                if ($listCountries) {
+                    $countries = $listCountries;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $countries;
+    }
+
+    /**
+     * @param int $country_id
+     * @param string $language
+     * @return ResultSite[]
+     */
+    public function getCitiesByCountry($country_id, $language = 'bg')
+    {
+        return $this->getCitiesByFilter(['country_id' => $country_id], $language);
+    }
+
+    /**
+     * @param $name
+     * @param null $postcode
+     * @param null $country_id
+     * @param string $language
+     * @return null|ResultSite
+     */
+    public function getCityByName($name, $postcode = null, $country_id = null, $language = 'bg')
+    {
+        $cities = $this->getCities($name, $postcode, $country_id, $language);
+        if (count($cities) == 1) {
+            return array_shift($cities);
+        }
+        return null;
+    }
+
+    /**
+     * @param $name
+     * @param null $postcode
+     * @param null $country_id
+     * @param string $language
+     * @return null|ResultSite
+     */
+    public function searchCities($name, $postcode = null, $country_id = null, $language = 'bg')
+    {
+        $cities = $this->getCities($name, $postcode, $country_id, $language);
+        if (count($cities) == 1) {
+            return array_shift($cities);
+        }
+        return null;
+    }
+
+    /**
+     * @param $id
+     * @return boolean|ResultSite
+     */
+    public function getCityById($id)
+    {
+        $city = false;
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $city = $this->getEPSFacade()->getSiteById($id);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $city;
+    }
+
+    /**
+     * @param $name
+     * @param null $postcode
+     * @param null $country_id
+     * @param string $language
+     * @return ResultSite[]
+     */
+    public function getCities($name, $postcode = null, $country_id = null, $language = 'bg')
+    {
+        $filter = [];
+        if ($postcode) {
+            $filter['name'] = $name;
+            $filter['post_code'] = $postcode;
+        } else {
+            $filter['search'] = $name;
+        }
+
+        if ($country_id) {
+            $filter['country_id'] = $country_id;
+        }
+        return $this->getCitiesByFilter($filter, $language);
+    }
+
+    /**
+     * @param array $filter
+     * @param string $language
+     * @return ResultSite[]
+     */
+    public function getCitiesByFilter(array $filter, $language = 'bg')
+    {
+        $cities = [];
+        if (!empty($filter) && !is_null($login = $this->getResultLogin())) {
+            $paramFilterSite = new ParamFilterSite();
+            if (!empty($filter['country_id'])) {
+                $paramFilterSite->setCountryId($filter['country_id']);
+            }
+            if (!empty($filter['name'])) {
+                $paramFilterSite->setName($filter['name']);
+            }
+            if (!empty($filter['type'])) {
+                $paramFilterSite->setType($filter['type']);
+            }
+            if (!empty($filter['municipality'])) {
+                $paramFilterSite->setMunicipality($filter['municipality']);
+            }
+            if (!empty($filter['post_code'])) {
+                $paramFilterSite->setPostCode($filter['post_code']);
+            }
+            if (!empty($filter['region'])) {
+                $paramFilterSite->setRegion($filter['region']);
+            }
+            if (!empty($filter['search'])) {
+                $paramFilterSite->setSearchString($filter['search']);
+            }
+            try {
+                if (!empty($filter['country_id']) && count($filter) == 1) {
+                    $listCities = $this->getEPSFacade()->listAllSites($this->_languageValidate($language), $filter['country_id']);
+                    if ($listCities) {
+                        $cities = $listCities;
+                    }
+                } else {
+                    /** @var $listCities ResultSiteEx[] */
+                    $listCities = $this->getEPSFacade()->listSitesEx($paramFilterSite, $this->_languageValidate($language));
+                    if ($listCities) {
+                        foreach ($listCities AS $site) {
+                            if ($site->isExactMatch()) {
+                                $cities[] = $site->getSite();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+
+        return $cities;
+    }
+
+    /**
+     * @param null $name
+     * @param null $city_id
+     * @param string $language
+     * @return ResultOfficeEx[]
+     */
+    public function getOffices($name = null, $city_id = null, $language = 'bg')
+    {
+        $offices = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                /** @var $listOffices ResultOfficeEx[] */
+                $listOffices = $this->getEPSFacade()->listOfficesEx($name, $city_id, $this->_languageValidate($language));
+                if ($listOffices) {
+                    $offices = $listOffices;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+
+        return $offices;
+    }
+
+    /**
+     * @param $id
+     * @return boolean|ResultSite
+     */
+    public function getOfficeById($id)
+    {
+        $office = false;
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $office = $this->getEPSFacade()->listOfficesEx($id, 68134);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $office;
+    }
+
+    /**
+     * @param null $name
+     * @param null $city_id
+     * @param string $language
+     * @return ResultCommonObject[]
+     */
+    public function getCommonObjects($name = null, $city_id = null, $language = 'bg')
+    {
+        $offices = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                /** @var $listOffices ResultCommonObject[] */
+                $listOffices = $this->getEPSFacade()->listCommonObjects($name, $city_id, $this->_languageValidate($language));
+                if ($listOffices) {
+                    $offices = $listOffices;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+
+        return $offices;
+    }
+
+    /**
+     * @param string $language
+     * @return array
+     */
+    public function getQuarterTypes($language = 'bg')
+    {
+        $quarter_types = [];
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $list = $this->getEPSFacade()->listQuarterTypes($this->_languageValidate($language));
+                if ($list) {
+                    $quarter_types = $list;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+        return $quarter_types;
+    }
+
+    /**
+     * @param $city_id
+     * @param null $name
+     * @param string $language
+     * @return ResultQuarter[]
+     */
+    public function getQuarters($city_id, $name = null, $language = 'bg')
+    {
+        $quarters = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $listQuarters = $this->getEPSFacade()->listQuarters($name, $city_id, $this->_languageValidate($language));
+                if ($listQuarters) {
+                    $quarters = $listQuarters;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+        return $quarters;
+    }
+
+    /**
+     * @param $city_id
+     * @param null $name
+     * @param string $language
+     * @return ResultStreet[]
+     */
+    public function getStreets($city_id, $name = null, $language = 'bg')
+    {
+        $streets = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $listStreets = $this->getEPSFacade()->listStreets($name, $city_id, $this->_languageValidate($language));
+                if ($listStreets) {
+                    $streets = $listStreets;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+
+        return $streets;
+    }
+
+    /**
+     * @param $city_id
+     * @param null $name
+     * @param string $language
+     * @return array
+     */
+    public function getBlocks($city_id, $name = null, $language = 'bg')
+    {
+        $blocks = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $listBlocks = $this->getEPSFacade()->listBlocks($name, $city_id, $this->_languageValidate($language));
+                if ($listBlocks) {
+                    $blocks = $listBlocks;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+        return $blocks;
+    }
+
+    /**
+     * @param $country_id
+     * @param null $name
+     * @return ResultState[]
+     */
+    public function getStates($country_id, $name = null)
+    {
+        $states = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $listStates = $this->getEPSFacade()->listStates($country_id, $name);
+                if ($listStates) {
+                    $states = $listStates;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+        return $states;
+    }
+
+    /**
+     * @param $service_id
+     * @param null $taking_date
+     * @param null $sender_site_id
+     * @param null $sender_office_id
+     * @return Carbon[]
+     */
+    public function getAllowedDaysForTaking($service_id, $taking_date = null, $sender_site_id = null, $sender_office_id = null)
+    {
+        $availableDates = [];
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $takingTime = $this->getEPSFacade()->getAllowedDaysForTaking($service_id, $sender_site_id, $sender_office_id, $taking_date);
+                if ($takingTime) {
+                    foreach ($takingTime AS $time) {
+                        $availableDates[] = Carbon::createFromFormat('Y-m-d\TH:i:sP', $time);
+                    }
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+
+        return $availableDates;
+    }
+
+    /**
+     * @param $service_id
+     * @param null $taking_date
+     * @param null $sender_site_id
+     * @param null $sender_office_id
+     * @return null|Carbon
+     */
+    public function getFirstAllowedDaysForTaking($service_id, $taking_date = null, $sender_site_id = null, $sender_office_id = null)
+    {
+        $allowed_days_for_taking = $this->getAllowedDaysForTaking($service_id, $taking_date, $sender_site_id, $sender_office_id);
+        return array_shift($allowed_days_for_taking);
+    }
+
+    /**
+     * @param $billOfLading
+     * @return bool|ResultPickingExtendedInfo
+     */
+    public function getPickingExtendedInfo($billOfLading)
+    {
+        $picking_info = false;
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $info = $this->getEPSFacade()->getPickingExtendedInfo((float)$billOfLading);
+                if ($info) {
+                    $picking_info = $info;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+        return $picking_info;
+    }
+
+    /**
+     * @return ResultSpecialDeliveryRequirement[]
+     */
+    public function getListSpecialDeliveryRequirements()
+    {
+        $client = [];
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $results = $this->getEPSFacade()->listSpecialDeliveryRequirements();
+                if ($results) {
+                    $client = $results;
+                }
+
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+        return $client;
+    }
+
+    /**
+     * @return null|ResultLogin
+     */
+    public function getResultLogin()
+    {
+        return $this->resultLogin;
+    }
+
+    /**
+     * @param bool $refreshSession
+     * @return bool
+     */
+    public function isSessionActive($refreshSession = true)
+    {
+        return $this->getEPSFacade()->isSessionActive($refreshSession);
     }
 
     /**
@@ -121,12 +694,14 @@ class Client
      * @param array $allowed_services
      * @return bool|ResultCalculationMS[]
      */
-    public function calculate(ParamCalculation $paramCalculation, array $allowed_services = null) {
-        $resultCalculation = array();
+    public function calculate(ParamCalculation $paramCalculation, array $allowed_services = null)
+    {
+        $resultCalculation = [];
         if (!is_null($login = $this->getResultLogin())) {
             try {
-                if(is_null($allowed_services)) {
-                    $allowed_services = array_keys($this->getServicesList());
+                if (empty($allowed_services) || !is_array($allowed_services)) {
+                    $services = $this->getServicesList();
+                    $allowed_services = array_keys(is_array($services) ? $services : []);
                 }
                 /** @var $resultCalculation ResultCalculationMS[] */
                 $resultCalculation = $this->getEPSFacade()->calculateMultipleServices($paramCalculation, $allowed_services);
@@ -136,7 +711,7 @@ class Client
                         unset($resultCalculation[$key]);
                     }
                 }
-                if(!$resultCalculation && $error) {
+                if (!$resultCalculation && $error) {
                     $this->error = $error;
                 }
                 $resultCalculation = array_values($resultCalculation);
@@ -149,11 +724,82 @@ class Client
     }
 
     /**
-     * @return null|ResultLogin
+     * @param $parcelId
+     * @param string $language
+     * @param bool $returnOnlyLastOperation
+     * @return bool|ResultTrackPickingEx[]
      */
-    public function getResultLogin()
+    public function trackParcel($parcelId, $language = 'bg', $returnOnlyLastOperation = false)
     {
-        return $this->resultLogin;
+        $tracking = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $listTrackParcel = $this->getEPSFacade()->trackParcel((float)$parcelId, $this->_languageValidate($language), $returnOnlyLastOperation);
+                if ($listTrackParcel) {
+                    $tracking = $listTrackParcel;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $tracking;
+    }
+
+    /**
+     * @param array $parcelIds
+     * @param string $language
+     * @param bool $returnOnlyLastOperation
+     * @return bool|ResultTrackPickingEx[][]
+     */
+    public function trackParcelMultiple(array $parcelIds, $language = 'bg', $returnOnlyLastOperation = false)
+    {
+        $tracking = array();
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $parcelIds = array_map('floatval', $parcelIds);
+                /** @var $listTrackParcel ResultTrackPickingEx[] */
+                $listTrackParcel = $this->getEPSFacade()->trackParcelMultiple($parcelIds, $this->_languageValidate($language), $returnOnlyLastOperation);
+                if ($listTrackParcel) {
+                    foreach ($listTrackParcel AS $track) {
+                        $tracking[(string)$track->getBarcode()][] = $track;
+                    }
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return $tracking;
+    }
+
+    /**
+     * @param $postCode
+     * @param $country_id
+     * @param null $site_id
+     * @return bool
+     */
+    public function validatePostCode($postCode, $country_id, $site_id = null)
+    {
+        try {
+            return $this->getResultLogin() && $this->getEPSFacade()->validatePostCode($country_id, $site_id, $postCode);
+        } catch (\ClientException $ce) {
+            return false;
+        } catch (\ServerException $se) {
+            return false;
+        }
+    }
+
+    /**
+     * @param string $username
+     * @return Client
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+        return $this;
     }
 
     /**
@@ -162,6 +808,16 @@ class Client
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * @param string $password
+     * @return Client
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
     }
 
     /**
@@ -192,10 +848,11 @@ class Client
      * @param $language
      * @return string
      */
-    protected function _languageValidate($language) {
-        if (in_array(strtolower($language), ['bg', 'en'])) {
+    protected function _languageValidate($language)
+    {
+        if (!in_array(strtolower($language), ['bg', 'en'])) {
             $language = 'en';
         }
-        return $language;
+        return strtoupper($language);
     }
 }

@@ -342,7 +342,7 @@ class ParamCalculation {
     /**
      * Set the date for shipment pick-up (the "time" component is ignored).
      * Server defaults this value to "today" if it is not set
-     * @param date $takingDate
+     * @param string $takingDate
      */
     public function setTakingDate($takingDate) {
         $this->_takingDate = $takingDate;
@@ -350,7 +350,7 @@ class ParamCalculation {
 
     /**
      * Get date for shipment pick-up (the "time" component is ignored).
-     * @return date Taking date
+     * @return string Taking date
      */
     public function getTakingDate() {
         return $this->_takingDate;

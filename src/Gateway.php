@@ -97,4 +97,22 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(TrackingParcelRequest::class, $this->getParameters() + $parameters);
     }
+    /**
+     * Supports Cash On Delivery
+     *
+     * @return boolean True if this gateway supports the Cash On Delivery
+     */
+    public function supportsCashOnDelivery()
+    {
+        return false;
+    }
+    /**
+     * Supports Insurance
+     *
+     * @return boolean True if this gateway supports the Insurance
+     */
+    public function supportsInsurance()
+    {
+        return true;
+    }
 }

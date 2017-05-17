@@ -10,9 +10,15 @@ namespace Omniship\Speedy\Http;
 
 use Omniship\Exceptions\InvalidResponseException;
 use Omniship\Message\AbstractRequest AS BaseAbstractRequest;
+use Omniship\Speedy\Client AS SpeedyClient;
 
 abstract class AbstractRequest extends BaseAbstractRequest
 {
+
+    /**
+     * @var SpeedyClient
+     */
+    protected $client;
 
     /**
      * @return mixed
@@ -45,5 +51,16 @@ abstract class AbstractRequest extends BaseAbstractRequest
     }
 
     abstract protected function createResponse($data);
+
+    /**
+     * @return SpeedyClient
+     */
+    public function getClient()
+    {
+        if(is_null($this->client)) {
+            $this->client = new SpeedyClient($this->getUsername(), $this->getPassword());
+        }
+        return $this->client;
+    }
 
 }

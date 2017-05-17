@@ -71,7 +71,7 @@ class ShippingServicesResponse extends AbstractResponse
     public function getCode()
     {
         if(is_string($this->data)) {
-            if(preg_match('~\(([^\)]*)\)~', $this->data, $match)) {
+            if(preg_match('~\(([a-z0-9]{2,})\)~i', $this->data, $match)) {
                 return $match[1];
             }
             return md5($this->data);
