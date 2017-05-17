@@ -15,7 +15,7 @@
         "Omniship\\Speedy\\": "src"
       },
       "classmap": [
-        "Speedy"
+        "lib"
       ]
     },
 
