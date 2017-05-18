@@ -21,7 +21,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 ## Description
 
 
-This library is a PHP Oriented Object client for the Speedy SOAP API Services.
+This library is a PHP Oriented Object client for the [Speedy.bg](http://speedy.bg/) SOAP API Services.
 
 
 ## Setup 
