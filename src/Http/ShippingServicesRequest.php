@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy\Http;
 
+use Omniship\Common\ShippingService;
 use ParamCalculation;
 use Carbon\Carbon;
 use Omniship\Speedy\Client AS SpeedyClient;
@@ -94,13 +95,17 @@ class ShippingServicesRequest extends AbstractRequest
 
         //if send out of bg disable cod & payer is sender
         //Payer type (0=sender, 1=receiver or 2=third party)
-        $paramCalculation->setPayerType(\ParamCalculation::PAYER_TYPE_SENDER);
-
+        $payer_type = \ParamCalculation::PAYER_TYPE_SENDER;
+        if($this->getPayer() == ShippingService::PAYER_RECEIVER) {
+            $payer_type = \ParamCalculation::PAYER_TYPE_RECEIVER;
+        } elseif($this->getPayer() == ShippingService::PAYER_OTHER) {
+            $payer_type = \ParamCalculation::PAYER_TYPE_THIRD_PARTY;
+        }
+        $paramCalculation->setPayerType($payer_type);
         //Insurance payer type (0=sender, 1=reciever or 2=third party)
-        $paramCalculation->setPayerTypeInsurance(\ParamCalculation::PAYER_TYPE_SENDER);
-
+        $paramCalculation->setPayerTypeInsurance($payer_type);
         //Packings payer type (0=sender, 1=reciever or 2=third party)
-        $paramCalculation->setPayerTypePackings(\ParamCalculation::PAYER_TYPE_SENDER);
+        $paramCalculation->setPayerTypePackings($payer_type);
 
         if ($special_delivery_id = $this->getOtherParameters('special_delivery_id')) {
             //A special delivery ID
