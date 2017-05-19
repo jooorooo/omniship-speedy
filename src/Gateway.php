@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy;
 
+use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\ShippingServicesRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
@@ -96,6 +97,14 @@ class Gateway extends AbstractGateway
     public function trackingParcel(array $parameters = [])
     {
         return $this->createRequest(TrackingParcelRequest::class, $this->getParameters() + $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return \Omniship\Message\AbstractRequest
+     */
+    public function createBillOfLading(array $parameters = []) {
+        return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
     }
     /**
      * Supports Cash On Delivery
