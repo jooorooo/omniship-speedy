@@ -82,7 +82,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Message\AbstractRequest
+     * @return \Omniship\Common\ShippingServiceBag
      */
     public function getServices(array $parameters = [])
     {
@@ -91,7 +91,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Message\AbstractRequest
+     * @return \Omniship\Common\TrackingBag
      */
     public function trackingParcel(array $parameters = [])
     {
