@@ -684,7 +684,7 @@ class EPSFacade {
      * @param integer $billOfLading Signed 64-bit
      * @throws ClientException Thrown in case EPS interface implementation is not set
      * @throws ServerException Thrown in case communication with server has failed
-     * @return array List of ResultParcelInfo
+     * @return ResultParcelInfo[] List of ResultParcelInfo
      */
     public function getPickingParcels($billOfLading) {
         $this->checkStateBeforeCall();

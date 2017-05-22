@@ -422,7 +422,7 @@ class ParamPicking {
 
     /**
      * Set date for shipment pick-up (the "time" component is ignored).
-     * @param date $takingDate
+     * @param string "date" $takingDate
      */
     public function setTakingDate($takingDate) {
         $this->_takingDate = $takingDate;
@@ -430,7 +430,7 @@ class ParamPicking {
 
     /**
      * Get BOL number
-     * @return date
+     * @return string "date"
      */
     public function getTakingDate() {
         return $this->_takingDate;

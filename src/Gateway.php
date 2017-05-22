@@ -8,10 +8,12 @@
 
 namespace Omniship\Speedy;
 
+use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\ShippingServicesRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
+use Omniship\Speedy\Http\ValidateAddressRequest;
 
 class Gateway extends AbstractGateway
 {
@@ -101,11 +103,31 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Message\AbstractRequest
+     * @return \Omniship\Common\Bill\Create
      */
     public function createBillOfLading(array $parameters = []) {
         return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
     }
+
+    /**
+     * @param $bill_id
+     * @param null $cancelComment
+     * @return bool
+     */
+    public function cancelBillOfLading($bill_id, $cancelComment=null) {
+        $this->setBillId((float)$bill_id)->setCancelComment($cancelComment);
+        return $this->createRequest(CancelBillOfLadingRequest::class, $this->getParameters());
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    public function addressValidation($type) {
+        $this->setAddressType($type);
+        return $this->createRequest(ValidateAddressRequest::class, $this->getParameters());
+    }
+
     /**
      * Supports Cash On Delivery
      *
@@ -113,7 +135,7 @@ class Gateway extends AbstractGateway
      */
     public function supportsCashOnDelivery()
     {
-        return false;
+        return true;
     }
     /**
      * Supports Insurance

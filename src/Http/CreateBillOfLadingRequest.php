@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy\Http;
 
+use Omniship\Common\ItemBag;
 use Omniship\Common\ShippingService;
 use ParamCalculation;
 use ParamClientData;
@@ -26,6 +27,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
      */
     protected $client;
 
+    const SpeedyClientId = null; //An optional value used to identify user's client software. Please verify the allowed values with Speedy's IT Department.
+
     /**
      * @return ParamCalculation
      */
@@ -41,7 +44,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if ($sender_address->getPhone()) {
             $senderPhone = new ParamPhoneNumber();
             $senderPhone->setNumber($sender_address->getPhone());
-            $sender->setPhones(array(0 => $senderPhone));
+            $sender->setPhones([$senderPhone]);
         }
 
         $receiver_address = $this->getReceiverAddress();
@@ -111,13 +114,14 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $receiver = new ParamClientData();
         $receiver->setPartnerName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
+        $receiver->setContactName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
         $receiverPhone = new ParamPhoneNumber();
         $receiverPhone->setNumber($receiver_address->getPhone());
         $receiver->setPhones(array(0 => $receiverPhone));
         $receiver->setEmail($this->getOtherParameters('receiver_email'));
 
         $picking = new ParamPicking();
-//        $picking->setClientSystemId(self::SpeedyClientId);
+        $picking->setClientSystemId(self::SpeedyClientId);
         $picking->setRef1($this->getTransactionId());
 
 //        if ($data['depth'] || $data['height'] || $data['width']) {
@@ -142,7 +146,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setFixedTimeDelivery($this->getOtherParameters('priority_time_value'));
         }
 
-        $picking->setServiceTypeId($data['shipping_method_id']);
+        $picking->setServiceTypeId($this->getServiceId());
 
         if ($receiver_address->getParameter('office_id')) {
             $picking->setOfficeToBeCalledId($receiver_address->getParameter('office_id'));
@@ -166,11 +170,29 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setWillBringToOffice(false);
         }
 
-        $picking->setParcelsCount($this->getItems()->count());
+        /** @var $items ItemBag */
+        $items = $this->getItems();
+//        $parcels = [];
+//        foreach($items->all() AS $row => $item) {
+//            $parcel = new ParamParcelInfo();
+//            $parcel->setSeqNo($row - 1);
+//            $parcel->setWeight($item->getWeight());
+//            if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+//                $size = new Size();
+//                $size->setDepth($item->getDepth());
+//                $size->setHeight($item->getHeight());
+//                $size->setWidth($item->getWidth());
+//                $parcel->setSize($size);
+//            }
+//            $parcels[] = $parcel;
+//        }
+//        $picking->setParcels($parcels);
+
+        $picking->setParcelsCount($items->count());
         $picking->setWeightDeclared($this->getWeight());
-        $picking->setContents('Shipping items aaaa');
-        $picking->setPacking(1); // number of packages
-        $picking->setPackId(null);
+        $picking->setContents($this->getOtherParameters('contents_text'));
+        $picking->setPacking($this->getOtherParameters('packing_type')); // number of packages
+        $picking->setPackId($this->getOtherParameters('package_id'));
         $picking->setDocuments($this->getOtherParameters('is_documents'));
         $picking->setPalletized(false);
 
@@ -184,7 +206,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         if(($ins = $this->getInsuranceAmount()) > 0) {
             $picking->setFragile((bool)$this->getOtherParameters('fragile'));
-            $picking->setAmountInsuranceBase($data['totalNoShipping']);
+            $picking->setAmountInsuranceBase($ins);
             $picking->setPayerTypeInsurance($payer_type);
         } else {
             $picking->setFragile(false);
@@ -194,18 +216,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setReceiver($receiver);
 
         $picking->setPayerType($payer_type);
-
-        if(empty($data['taking_date'])) {
-            $result = $this->getClient()->getAllowedDaysForTaking([
-                'shipping_method_id' => $data['shipping_method_id'],
-                'taking_date' => time()
-            ]);
+        if(is_null($taking_date = $this->getTakingDate())) {
+            $result = $this->getClient()->getAllowedDaysForTaking(
+                $this->getServiceId(),
+                Carbon::now($this->getSenderTimeZone())->addDay(1)->timestamp
+            );
             if($result && !empty($result[1])) {
-                $this->setOtherParameters('taking_date', $result[1]->format('Y-m-d'));
+                $this->setTakingDate($result[1]);
             }
         }
 
-        $picking->setTakingDate($this->getOtherParameters('taking_date'));
+        if(!is_null($taking_date = $this->getTakingDate())) {
+            $picking->setTakingDate($this->getTakingDate()->format('H:i'));
+        }
 
         if ($this->getOtherParameters('deffered_days')) {
             $picking->setDeferredDeliveryWorkDays($this->getOtherParameters('deffered_days'));
@@ -215,149 +238,52 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setNoteClient($this->getOtherParameters('client_note'));
         }
 
-//				$currency = $this->registry->get('currency');
-//				if ($data['abroad'] && $data['active_currency_code'] && $currency->has($data['active_currency_code'])) {
-//					$data['total'] = $currency->convert($data['total'], setting('speedy_currency'), $data['active_currency_code']);
-//				}
-
         if(($cod = $this->getCashOnDeliveryAmount()) > 0) {
             $picking->setAmountCodBase($cod);
         } else {
             $picking->setAmountCodBase(0);
         }
 
-        if ($cod > 0 && ($this->getOtherParameters('money_transfer') && !$data['abroad'])) {
-            $picking->setRetMoneyTransferReqAmount($data['total']);
-            $picking->setAmountCodBase(0);
-        }
+//        if ($cod > 0 && ($this->getOtherParameters('money_transfer') && !$data['abroad'])) {
+//            $picking->setRetMoneyTransferReqAmount($data['total']);
+//            $picking->setAmountCodBase(0);
+//        }
 
         $optionBeforePayment = new ParamOptionsBeforePayment();
-        if ($data['cod'] && !empty($data['option_before_payment']) && $data['option_before_payment'] != 'no_option') {
-            if($data['option_before_payment'] == 'test') {
+        if ($cod > 0 && !empty($this->getOtherParameters('option_before_payment')) && $this->getOtherParameters('option_before_payment') != 'no_option') {
+            if($this->getOtherParameters('option_before_payment') == 'test') {
                 $optionBeforePayment->setTest(true);
-                $optionBeforePayment->returnServiceTypeId($data['shipping_method_id']);
-                $optionBeforePayment->returnPayerType($payerType);
-            } elseif($data['option_before_payment'] == 'open') {
+                $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
+                $optionBeforePayment->setReturnPayerType($payer_type);
+            } elseif($this->getOtherParameters('option_before_payment') == 'open') {
                 $optionBeforePayment->setOpen(true);
-                $optionBeforePayment->returnServiceTypeId($data['shipping_method_id']);
-                $optionBeforePayment->returnPayerType($payerType);
+                $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
+                $optionBeforePayment->setReturnPayerType($payer_type);
             }
             $picking->setOptionsBeforePayment($optionBeforePayment);
         }
 
-        if (isset($data['abroad']) && $data['abroad'] && $data['cod'] && ($data['price_gen_method'] == 'calculator' || $data['price_gen_method'] == 'calculator_fixed')) {
-            $picking->setIncludeShippingPriceInCod(true);
-        }
+        $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
 
-
-
-        $paramCalculation = new ParamCalculation();
-        if(is_null($login = $this->getClient()->getResultLogin())) {
-            return $paramCalculation;
-        }
-
-        //The date for shipment pick-up (the "time" component is ignored if it is allready passed or is overriden with 09:01). Default value is "today". (Required: no)
-        $paramCalculation->setTakingDate(Carbon::now()->format('H:i'));
-        //If set to true, the "takingDate" field is not just to be validated, but the first allowed (following) date will be used instead (in compliance with the pick-up schedule etc.). (Required: no)
-        $paramCalculation->setAutoAdjustTakingDate(true);
-
-        $sender_address = $this->getSenderAddress();
-        // if no sender address get information from profile
-        if(!$sender_address) {
-            $paramCalculation->setSenderId($login->getClientId());
-        } else {
-            //if send from office
-            if(!is_null($office_id = $sender_address->getParameter('office_id'))) {
-                $paramCalculation->setWillBringToOfficeId($office_id);
-            } else {
-                $paramCalculation->setSenderCountryId($sender_address->getCountry()->getId());
-                $paramCalculation->setSenderSiteId($sender_address->getCity()->getId());
-                $paramCalculation->setSenderPostCode($sender_address->getPostCode());
-            }
-        }
-
-        $receiver_address = $this->getReceiverAddress();
-        if($receiver_address && !is_null($office_id = $receiver_address->getParameter('office_id'))) {
-            //ID of an office "to be called". Non-null and non-zero value indicates this picking as "to office". Otherwise "to address" is considered. If officeToBeCalledId is provided (non-null and non-zero), toBeCalled flag is considered "true". If officeToBeCalledId is set to 0, toBeCalled flag is considered "false".
-            $paramCalculation->setOfficeToBeCalledId($office_id);
-            //Specifies if the shipment is "to be called". If this flag is true the shipment is considered "to office". Otherwise "to address" is considered.
-            $paramCalculation->setToBeCalled(true);
-        } else {
-            if($receiver_address) {
-                $paramCalculation->setReceiverCountryId($receiver_address->getCountry()->getId());
-                $paramCalculation->setReceiverSiteId($receiver_address->getCity()->getId());
-                $paramCalculation->setReceiverPostCode($receiver_address->getPostCode());
-            }
-            $paramCalculation->setOfficeToBeCalledId(0);
-            $paramCalculation->setToBeCalled(false);
-        }
-
-        //Fixed time for delivery ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.) (Depending on the courier service, this property could be required, allowed or banned)
-        $paramCalculation->setFixedTimeDelivery(null);
-
-        //In some rare cases users might prefer the delivery to be deferred by a day or two. This parameter allows users to specify by how many (working) days they would like to postpone the shipment delivery.
-        $paramCalculation->setDeferredDeliveryWorkDays(0);
-
-        //Shipment insurance value (if the shipment is insured)
-        $paramCalculation->setAmountInsuranceBase($this->getInsuranceAmount());
-        //Specifies whether the shipment is fragile - necessary when the price of insurance is being calculated
-        $paramCalculation->setFragile(true);
-
-        //Cash-on-Delivery (COD) amount
-        $paramCalculation->setAmountCodBase($this->getCashOnDeliveryAmount());
-
-        //Specifies if the COD value is to be paid to a third party. Allowed only if the shipment has payerType = 2 (third party). (Required: no)
-        $paramCalculation->setPayCodToThirdParty(false);
-
-        //Parcels count (must be equal to the number of parcels described in List parcels)
-        $paramCalculation->setParcelsCount($this->getItems()->count());
-        //Declared weight (the greater of "volume" and "real" weight values)
-        $paramCalculation->setWeightDeclared($this->getWeight());
-        //Specifies whether the shipment only consists of documents
-        $paramCalculation->setDocuments(false);
-        //Specifies whether the shipment is palletized
-        $paramCalculation->setPalletized(false);
-
-        //if send out of bg disable cod & payer is sender
-        //Payer type (0=sender, 1=receiver or 2=third party)
-        $payer_type = \ParamCalculation::PAYER_TYPE_SENDER;
-        if($this->getPayer() == ShippingService::PAYER_RECEIVER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_RECEIVER;
-        } elseif($this->getPayer() == ShippingService::PAYER_OTHER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_THIRD_PARTY;
-        }
-        $paramCalculation->setPayerType($payer_type);
-        //Insurance payer type (0=sender, 1=reciever or 2=third party)
-        $paramCalculation->setPayerTypeInsurance($payer_type);
-        //Packings payer type (0=sender, 1=reciever or 2=third party)
-        $paramCalculation->setPayerTypePackings($payer_type);
-
-        if ($special_delivery_id = $this->getOtherParameters('special_delivery_id')) {
-            //A special delivery ID
-            $paramCalculation->setSpecialDeliveryId($special_delivery_id);
-        }
-
-        //Flag indicating whether the shipping price should be included into the cash on delivery price.
-        $paramCalculation->setIncludeShippingPriceInCod(true);
-
-        //Check if specified office to be called is working. Default value - true
-        $paramCalculation->setCheckTBCOfficeWorkDay(true);
-
-        return $paramCalculation;
+        return $picking;
     }
 
+    /**
+     * @param mixed $data
+     * @return CreateBillOfLadingResponse
+     */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->calculate($data, $this->getOtherParameters('allowed_services')) : null;
+        $response = $data ? $this->getClient()->createBillOfLading($data) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
     /**
      * @param $data
-     * @return ShippingServicesResponse
+     * @return CreateBillOfLadingResponse
      */
     protected function createResponse($data)
     {
-        return $this->response = new ShippingServicesResponse($this, $data);
+        return $this->response = new CreateBillOfLadingResponse($this, $data);
     }
 
 }

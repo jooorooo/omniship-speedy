@@ -17,6 +17,10 @@ class TrackingParcelRequest extends AbstractRequest
         return $this->getParcelId();
     }
 
+    /**
+     * @param mixed $data
+     * @return TrackingParcelResponse
+     */
     public function sendData($data) {
         $response = $this->getClient()->trackParcel($data, $this->getLanguageCode(), (float)$this->getOtherParameters('last_operation'));
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);

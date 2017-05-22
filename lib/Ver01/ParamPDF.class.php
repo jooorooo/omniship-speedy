@@ -122,7 +122,7 @@ class ParamPDF {
     /**
      * Set list of IDs. For type 10 only the BOL number is needed.
      * For types 20 and 25 one or more parcel IDs are expected (parcels must be of a single BOL).
-     * @param array $ids List of signed 64-bit integers
+     * @param array|string $ids List of signed 64-bit integers
      */
     public function setIds($ids) {
         $this->_ids = $ids;

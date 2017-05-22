@@ -30,6 +30,8 @@ use ResultCommonObject;
 use ParamCalculation;
 use ParamFilterCountry;
 use ParamFilterSite;
+use ParamPDF;
+use ParamAddress;
 
 class Client
 {
@@ -37,12 +39,12 @@ class Client
     /**
      * @var EPSFacade
      */
-    protected $ePSFacade;
+    protected static $ePSFacade;
 
     /**
      * @var ResultLogin
      */
-    protected $resultLogin;
+    protected static $resultLogin;
 
     /**
      * @var string
@@ -66,13 +68,17 @@ class Client
     }
 
     /**
+     * @param bool $refresh
      * @return bool
      */
-    public function initialize()
+    public function initialize($refresh = false)
     {
         try {
-            $this->ePSFacade = new EPSFacade(new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS), $this->username, $this->password);
-            $this->resultLogin = $this->ePSFacade->getResultLogin();
+            if (empty(static::$resultLogin) || $refresh) {
+                @ini_set("soap.wsdl_cache_enabled", 0);
+                static::$ePSFacade = new EPSFacade(new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, array('cache_wsdl' => WSDL_CACHE_NONE, 'trace' => 1)), $this->username, $this->password);
+                static::$resultLogin = static::$ePSFacade->getResultLogin();
+            }
             return true;
         } catch (Exception $e) {
             $this->error = $e->getMessage();
@@ -93,8 +99,8 @@ class Client
         if ($password) {
             $this->password = $password;
         }
-        $this->ePSFacade = $this->resultLogin = $this->error = null;
-        return $this->initialize();
+        static::$ePSFacade = static::$resultLogin = $this->error = null;
+        return $this->initialize(true);
     }
 
     /**
@@ -677,7 +683,7 @@ class Client
      */
     public function getResultLogin()
     {
-        return $this->resultLogin;
+        return static::$resultLogin;
     }
 
     /**
@@ -721,6 +727,75 @@ class Client
             }
         }
         return $resultCalculation;
+    }
+
+    /**
+     * @param $picking
+     * @return bool|\ResultBOL
+     */
+    public function createBillOfLading($picking)
+    {
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                return $this->getEPSFacade()->createBillOfLading($picking);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $bol_id
+     * @param string $type printer or label
+     * @return array|bool
+     */
+    public function createPDF($bol_id, $type = 'printer')
+    {
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $paramPDF = new ParamPDF();
+                if ($type == 'label') {
+                    $pickingParcels = $this->getEPSFacade()->getPickingParcels((float)$bol_id);
+                    $ids = array_map(function (\ResultParcelInfo $parcel) {
+                        return $parcel->getParcelId();
+                    }, $pickingParcels);
+
+                    $paramPDF->setIds($ids);
+                    $paramPDF->setType(ParamPDF::PARAM_PDF_TYPE_LBL);
+                } else {
+                    $paramPDF->setIds((float)$bol_id);
+                    $paramPDF->setType(ParamPDF::PARAM_PDF_TYPE_BOL);
+                }
+
+                $paramPDF->setIncludeAutoPrintJS(true);
+                return $this->getEPSFacade()->createPDF($paramPDF);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $bol_id
+     * @param null $cancelComment
+     * @return bool
+     */
+    public function cancelBol($bol_id, $cancelComment = null)
+    {
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                return $this->getEPSFacade()->invalidatePicking((float)$bol_id, $cancelComment);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -793,6 +868,21 @@ class Client
     }
 
     /**
+     * @param ParamAddress $address
+     * @param int $validationMode (validationMode = 0 (default) - Extended validation w/o GIS info (address uniqueness is not verified); validationMode = 2 - basic validation (the same as address validation in createBillOfLading)
+     * @return bool
+     */
+    public function validateAddress(ParamAddress $address, $validationMode = 0)
+    {
+        try {
+            return $this->getEPSFacade()->validateAddress($address, $validationMode);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
      * @param string $username
      * @return Client
      */
@@ -841,7 +931,7 @@ class Client
      */
     public function getEPSFacade()
     {
-        return $this->ePSFacade;
+        return static::$ePSFacade;
     }
 
     /**
