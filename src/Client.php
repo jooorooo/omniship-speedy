@@ -32,6 +32,10 @@ use ParamFilterCountry;
 use ParamFilterSite;
 use ParamPDF;
 use ParamAddress;
+use ClientException;
+use ServerException;
+use ParamOrder;
+use ParamPhoneNumber;
 
 class Client
 {
@@ -39,12 +43,12 @@ class Client
     /**
      * @var EPSFacade
      */
-    protected static $ePSFacade;
+    protected $ePSFacade;
 
     /**
      * @var ResultLogin
      */
-    protected static $resultLogin;
+    protected $resultLogin;
 
     /**
      * @var string
@@ -68,17 +72,14 @@ class Client
     }
 
     /**
-     * @param bool $refresh
      * @return bool
      */
-    public function initialize($refresh = false)
+    public function initialize()
     {
         try {
-            if (empty(static::$resultLogin) || $refresh) {
-                @ini_set("soap.wsdl_cache_enabled", 0);
-                static::$ePSFacade = new EPSFacade(new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, array('cache_wsdl' => WSDL_CACHE_NONE, 'trace' => 1)), $this->username, $this->password);
-                static::$resultLogin = static::$ePSFacade->getResultLogin();
-            }
+            @ini_set("soap.wsdl_cache_enabled", 0);
+            $this->ePSFacade = new EPSFacade(new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, array('cache_wsdl' => WSDL_CACHE_NONE, 'trace' => 1)), $this->username, $this->password);
+            $this->resultLogin = $this->ePSFacade->getResultLogin();
             return true;
         } catch (Exception $e) {
             $this->error = $e->getMessage();
@@ -99,8 +100,8 @@ class Client
         if ($password) {
             $this->password = $password;
         }
-        static::$ePSFacade = static::$resultLogin = $this->error = null;
-        return $this->initialize(true);
+        $this->ePSFacade = $this->resultLogin = $this->error = null;
+        return $this->initialize();
     }
 
     /**
@@ -683,7 +684,7 @@ class Client
      */
     public function getResultLogin()
     {
-        return static::$resultLogin;
+        return $this->resultLogin;
     }
 
     /**
@@ -799,6 +800,39 @@ class Client
     }
 
     /**
+     * @param array $bol_ids
+     * @return array|bool
+     */
+    public function requestCourier(array $bol_ids) {
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $paramOrder = new ParamOrder();
+                $paramOrder->setBillOfLadingsList(array_map('floatval', $bol_ids));
+                $paramOrder->setBillOfLadingsToIncludeType(ParamOrder::ORDER_BOL_INCLUDE_TYPE_EXPLICIT);
+
+//                if ($this->getManager()->getSetting('phone')) {
+//                    $paramPhoneNumber = new ParamPhoneNumber();
+//                    $paramPhoneNumber->setNumber($this->getManager()->getSetting('phone'));
+//                    $paramOrder->setPhoneNumber($paramPhoneNumber);
+//                }
+
+//                $paramOrder->setWorkingEndTime($this->getManager()->getSetting('workingtime_end_hour', '00') . $this->getManager()->getSetting('workingtime_end_min', '00'));
+//                $paramOrder->setContactName($this->getManager()->getSetting('name'));
+
+                $paramOrder->setWorkingEndTime('0000');
+                $paramOrder->setContactName('Demo test');
+
+                return $this->getEPSFacade()->createOrder($paramOrder);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param $parcelId
      * @param string $language
      * @param bool $returnOnlyLastOperation
@@ -860,9 +894,9 @@ class Client
     {
         try {
             return $this->getResultLogin() && $this->getEPSFacade()->validatePostCode($country_id, $site_id, $postCode);
-        } catch (\ClientException $ce) {
+        } catch (ClientException $ce) {
             return false;
-        } catch (\ServerException $se) {
+        } catch (ServerException $se) {
             return false;
         }
     }
@@ -879,6 +913,40 @@ class Client
         } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
+        }
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
+    public function validateCredentials($username, $password) {
+        $instance = new static($username, $password);
+        $result = $instance->getResultLogin();
+        if(!$result) {
+            $this->error = $instance->getError();
+        }
+        return (bool)$result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailableMoneyTransfer() {
+        return in_array('101', $this->getAdditionalUserParams());
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalUserParams() {
+        try {
+            return $this->ePSFacade->getAdditionalUserParams(Carbon::now()->timestamp);
+        } catch (ClientException $ce) {
+            return [];
+        } catch (ServerException $se) {
+            return [];
         }
     }
 
@@ -919,6 +987,16 @@ class Client
     }
 
     /**
+     * @param string $error
+     * @return $this
+     */
+    public function setError($error)
+    {
+        $this->error = $error;
+        return $this;
+    }
+
+    /**
      * @return null|string
      */
     public function getError()
@@ -931,7 +1009,7 @@ class Client
      */
     public function getEPSFacade()
     {
-        return static::$ePSFacade;
+        return $this->ePSFacade;
     }
 
     /**

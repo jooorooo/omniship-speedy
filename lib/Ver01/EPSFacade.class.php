@@ -896,7 +896,7 @@ class EPSFacade {
     
     /**
      * Get list of additional user parameters
-     * @param date $date Effective date. If null is provided then current date is applied
+     * @param "date-timestamp" $date Effective date. If null is provided then current date is applied
      * @return array signed 32-bit integers - List of additional user parameters
      * @throws ClientException Thrown in case EPS interface implementation is not set
      * @throws ServerException Thrown in case communication with server has failed

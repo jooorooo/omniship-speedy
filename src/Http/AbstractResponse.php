@@ -12,6 +12,15 @@ use Omniship\Message\AbstractResponse AS BaseAbstractResponse;
 
 abstract class AbstractResponse extends BaseAbstractResponse
 {
+    /**
+     * Get the initiating request object.
+     *
+     * @return AbstractRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
 
     /**
      * @return null|string

@@ -10,7 +10,7 @@ namespace Omniship\Speedy\Http;
 
 use Omniship\Speedy\Client AS SpeedyClient;
 
-class CancelBillOfLadingRequest extends AbstractRequest
+class RequestCourierRequest extends AbstractRequest
 {
 
     /**
@@ -26,28 +26,25 @@ class CancelBillOfLadingRequest extends AbstractRequest
             return null;
         }
 
-        return [
-            'bol_id' => $this->getBolId(),
-            'comment' => $this->getCancelComment()
-        ];
+        return $this->getBolId();
     }
 
     /**
      * @param mixed $data
-     * @return CancelBillOfLadingResponse
+     * @return RequestCourierResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->cancelBol($data['bol_id'], $data['comment']) : null;
+        $response = $data ? $this->getClient()->requestCourier($data) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
     /**
      * @param $data
-     * @return CancelBillOfLadingResponse
+     * @return RequestCourierResponse
      */
     protected function createResponse($data)
     {
-        return $this->response = new CancelBillOfLadingResponse($this, $data);
+        return $this->response = new RequestCourierResponse($this, $data);
     }
 
 }

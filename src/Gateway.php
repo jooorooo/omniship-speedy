@@ -10,10 +10,12 @@ namespace Omniship\Speedy;
 
 use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
+use Omniship\Speedy\Http\RequestCourierRequest;
 use Omniship\Speedy\Http\ShippingServicesRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
 use Omniship\Speedy\Http\ValidateAddressRequest;
+use Omniship\Speedy\Http\ValidateCredentialsRequest;
 
 class Gateway extends AbstractGateway
 {
@@ -110,22 +112,41 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param $bill_id
+     * @param $bol_id
      * @param null $cancelComment
-     * @return bool
+     * @return CancelBillOfLadingRequest
      */
-    public function cancelBillOfLading($bill_id, $cancelComment=null) {
-        $this->setBillId((float)$bill_id)->setCancelComment($cancelComment);
+    public function cancelBillOfLading($bol_id, $cancelComment=null) {
+        $this->setBolId((float)$bol_id)->setCancelComment($cancelComment);
         return $this->createRequest(CancelBillOfLadingRequest::class, $this->getParameters());
     }
 
     /**
+     * @param $bol_ids
+     * @return RequestCourierRequest
+     */
+    public function requestCourier(array $bol_ids = []) {
+        $this->setBolId(array_map('floatval', $bol_ids));
+        return $this->createRequest(RequestCourierRequest::class, $this->getParameters());
+    }
+
+    /**
      * @param string $type
-     * @return bool
+     * @return ValidateAddressRequest
      */
     public function addressValidation($type) {
         $this->setAddressType($type);
         return $this->createRequest(ValidateAddressRequest::class, $this->getParameters());
+    }
+
+    /**
+     * @param array $parameters
+     * @return ValidateCredentialsRequest
+     */
+    public function validateCredentials(array $parameters = []) {
+        $instance = new Gateway();
+        $instance->initialize($parameters);
+        return $instance->createRequest(ValidateCredentialsRequest::class, $instance->getParameters());
     }
 
     /**

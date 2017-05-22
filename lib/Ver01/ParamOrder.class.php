@@ -152,7 +152,7 @@ class ParamOrder {
 
     /**
      * Set sender's working time end
-     * @param iteger $workingEndTime Signed 16-bit
+     * @param string $workingEndTime Signed 16-bit
      */
     public function setWorkingEndTime($workingEndTime) {
         $this->_workingEndTime = $workingEndTime;

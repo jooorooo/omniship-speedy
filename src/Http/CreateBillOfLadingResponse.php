@@ -32,9 +32,9 @@ class CreateBillOfLadingResponse extends AbstractResponse
         /** @var $parcels ResultParcelInfo[] */
         $parcels = $this->data->getGeneratedParcels();
 
-        $result->setBillId($parcels[0]->getParcelId());
+        $result->setBolId($parcels[0]->getParcelId());
         $result->setBillOfLadingType($result::PDF);
-        $result->setBillOfLadingSource(base64_encode($this->getRequest()->getClient()->createPDF($result->getBillId())));
+        $result->setBillOfLadingSource(base64_encode($this->getRequest()->getClient()->createPDF($result->getBolId())));
         $result->setEstimatedDeliveryDate(Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDeadlineDelivery(), $this->getRequest()->getReceiverTimeZone()));
         $result->setPickupDate($this->getRequest()->getTakingDate());
         $result->setInsurance($amounts->getInsurancePremium());
