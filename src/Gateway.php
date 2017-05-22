@@ -87,7 +87,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Common\ShippingServiceBag
+     * @return ShippingServicesRequest
      */
     public function getServices(array $parameters = [])
     {
@@ -96,7 +96,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Common\TrackingBag
+     * @return TrackingParcelRequest
      */
     public function trackingParcel(array $parameters = [])
     {
@@ -105,7 +105,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omniship\Common\Bill\Create
+     * @return CreateBillOfLadingRequest
      */
     public function createBillOfLading(array $parameters = []) {
         return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
