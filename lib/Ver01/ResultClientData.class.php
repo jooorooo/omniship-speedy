@@ -109,7 +109,7 @@ class ResultClientData {
 
     /**
      * Get phone numbers
-     * @return array ResultPhoneNumber
+     * @return ResultPhoneNumber[]
      */
     public function getPhones() {
         return $this->_phones;

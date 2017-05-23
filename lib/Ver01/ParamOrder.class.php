@@ -120,7 +120,7 @@ class ParamOrder {
 
     /**
      * Set date for shipments pick-up (the "time" component is ignored)
-     * @param date $pickupDate
+     * @param "date" $pickupDate
      */
     public function setPickupDate($pickupDate) {
         $this->_pickupDate = $pickupDate;
@@ -128,7 +128,7 @@ class ParamOrder {
 
     /**
      * Get date for shipments pick-up
-     * @return date
+     * @return "date"
      */
     public function getPickupDate() {
         return $this->_pickupDate;
@@ -136,7 +136,7 @@ class ParamOrder {
 
     /**
      * Set the time when all the shipments/parcels will be ready for pickup.
-     * @param iteger $readinessTime Signed 16-bit
+     * @param integer $readinessTime Signed 16-bit
      */
     public function setReadinessTime($readinessTime) {
         $this->_readinessTime = $readinessTime;
@@ -144,7 +144,7 @@ class ParamOrder {
 
     /**
      * Get the time when all the shipments/parcels will be ready for pickup.
-     * @return iteger Signed 16-bit
+     * @return integer Signed 16-bit
      */
     public function getReadinessTime() {
         return $this->_readinessTime;
@@ -160,7 +160,7 @@ class ParamOrder {
 
     /**
      * Get sender's working time end
-     * @return iteger Signed 16-bit
+     * @return integer Signed 16-bit
      */
     public function getWorkingEndTime() {
         return $this->_workingEndTime;

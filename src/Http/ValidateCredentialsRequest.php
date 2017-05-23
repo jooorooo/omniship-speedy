@@ -8,15 +8,8 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Speedy\Client AS SpeedyClient;
-
 class ValidateCredentialsRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     /**
      * @return bool

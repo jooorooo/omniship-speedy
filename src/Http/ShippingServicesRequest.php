@@ -11,15 +11,9 @@ namespace Omniship\Speedy\Http;
 use Omniship\Common\ShippingService;
 use ParamCalculation;
 use Carbon\Carbon;
-use Omniship\Speedy\Client AS SpeedyClient;
 
 class ShippingServicesRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     /**
      * @return ParamCalculation

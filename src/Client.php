@@ -801,26 +801,32 @@ class Client
 
     /**
      * @param array $bol_ids
+     * @param null|Carbon $date
      * @return array|bool
      */
-    public function requestCourier(array $bol_ids) {
+    public function requestCourier(array $bol_ids, Carbon $date = null) {
         if (!is_null($login = $this->getResultLogin())) {
             try {
                 $paramOrder = new ParamOrder();
                 $paramOrder->setBillOfLadingsList(array_map('floatval', $bol_ids));
                 $paramOrder->setBillOfLadingsToIncludeType(ParamOrder::ORDER_BOL_INCLUDE_TYPE_EXPLICIT);
 
-//                if ($this->getManager()->getSetting('phone')) {
-//                    $paramPhoneNumber = new ParamPhoneNumber();
-//                    $paramPhoneNumber->setNumber($this->getManager()->getSetting('phone'));
-//                    $paramOrder->setPhoneNumber($paramPhoneNumber);
-//                }
+                if($date) {
+//                    $paramOrder->setPickupDate($date->format('Y-m-d'));
+                    $paramOrder->setWorkingEndTime($date->format('Hi'));
+                }
 
-//                $paramOrder->setWorkingEndTime($this->getManager()->getSetting('workingtime_end_hour', '00') . $this->getManager()->getSetting('workingtime_end_min', '00'));
-//                $paramOrder->setContactName($this->getManager()->getSetting('name'));
-
-                $paramOrder->setWorkingEndTime('0000');
-                $paramOrder->setContactName('Demo test');
+                $client_info = $this->getClientInfo();
+                if($client_info) {
+                    $paramOrder->setContactName($client_info->getContactName() ? : $client_info->getPartnerName());
+                    /** @var $phones \ResultPhoneNumber[]*/
+                    $phones = $client_info->getPhones();
+                    if($phones && !empty($phones[0])) {
+                        $paramPhoneNumber = new ParamPhoneNumber();
+                        $paramPhoneNumber->setNumber($phones[0]->getNumber());
+                        $paramOrder->setPhoneNumber($paramPhoneNumber);
+                    }
+                }
 
                 return $this->getEPSFacade()->createOrder($paramOrder);
             } catch (Exception $e) {
@@ -840,20 +846,11 @@ class Client
      */
     public function trackParcel($parcelId, $language = 'bg', $returnOnlyLastOperation = false)
     {
-        $tracking = array();
-        if (!is_null($login = $this->getResultLogin())) {
-            try {
-                $listTrackParcel = $this->getEPSFacade()->trackParcel((float)$parcelId, $this->_languageValidate($language), $returnOnlyLastOperation);
-                if ($listTrackParcel) {
-                    $tracking = $listTrackParcel;
-                }
-            } catch (Exception $e) {
-                $this->error = $e->getMessage();
-                return false;
-            }
+        $tracking = $this->trackParcelMultiple([$parcelId], $language, $returnOnlyLastOperation);
+        if(!empty($tracking[$parcelId])) {
+            return $tracking[$parcelId];
         }
-
-        return $tracking;
+        return false;
     }
 
     /**

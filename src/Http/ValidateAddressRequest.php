@@ -9,15 +9,9 @@
 namespace Omniship\Speedy\Http;
 
 use ParamAddress;
-use Omniship\Speedy\Client AS SpeedyClient;
 
 class ValidateAddressRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     /**
      * @return ParamAddress

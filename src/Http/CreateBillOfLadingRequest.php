@@ -17,15 +17,9 @@ use ParamOptionsBeforePayment;
 use ParamAddress;
 use Carbon\Carbon;
 use ParamPicking;
-use Omniship\Speedy\Client AS SpeedyClient;
 
 class CreateBillOfLadingRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     const SpeedyClientId = null; //An optional value used to identify user's client software. Please verify the allowed values with Speedy's IT Department.
 
@@ -96,8 +90,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $receiverAddress->setApartmentNo($receiver_address->getApartment());
         }
 
-        if (isset($data['note']) && $data['note']) {
-            $receiverAddress->setAddressNote($data['note']);
+        $note = array_filter([$receiver_address->getAddress1(), $receiver_address->getAddress2(), $receiver_address->getAddress3()]);
+        if ($note) {
+            $receiverAddress->setAddressNote(implode(', ', $note));
         }
 
         if ($receiver_state && $receiver_state->getId()) {
@@ -196,11 +191,11 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setDocuments($this->getOtherParameters('is_documents'));
         $picking->setPalletized(false);
 
-        $payer_type = \ParamCalculation::PAYER_TYPE_SENDER;
+        $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
         if($this->getPayer() == ShippingService::PAYER_RECEIVER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_RECEIVER;
+            $payer_type = ParamCalculation::PAYER_TYPE_RECEIVER;
         } elseif($this->getPayer() == ShippingService::PAYER_OTHER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_THIRD_PARTY;
+            $payer_type = ParamCalculation::PAYER_TYPE_THIRD_PARTY;
         }
         $picking->setPayerType($payer_type);
 
@@ -264,6 +259,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
 
         $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
+
+        if($this->getClient()->getError()) {
+            return null;
+        }
 
         return $picking;
     }

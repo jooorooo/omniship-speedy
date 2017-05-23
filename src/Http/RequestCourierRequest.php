@@ -8,15 +8,8 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Speedy\Client AS SpeedyClient;
-
 class RequestCourierRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     /**
      * @return array
@@ -26,7 +19,10 @@ class RequestCourierRequest extends AbstractRequest
             return null;
         }
 
-        return $this->getBolId();
+        return [
+            'bol_id' => $this->getBolId(),
+            'date' => $this->getDate(),
+        ];
     }
 
     /**
@@ -34,7 +30,7 @@ class RequestCourierRequest extends AbstractRequest
      * @return RequestCourierResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->requestCourier($data) : null;
+        $response = $data ? $this->getClient()->requestCourier($data['bol_id'], $data['date']) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 

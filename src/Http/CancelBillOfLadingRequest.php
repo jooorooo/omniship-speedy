@@ -8,15 +8,8 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Speedy\Client AS SpeedyClient;
-
 class CancelBillOfLadingRequest extends AbstractRequest
 {
-
-    /**
-     * @var SpeedyClient
-     */
-    protected $client;
 
     /**
      * @return array

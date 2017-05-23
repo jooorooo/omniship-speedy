@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy;
 
+use Carbon\Carbon;
 use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
@@ -122,11 +123,12 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param $bol_ids
+     * @param $bol_id
+     * @param null|Carbon $date
      * @return RequestCourierRequest
      */
-    public function requestCourier(array $bol_ids = []) {
-        $this->setBolId(array_map('floatval', $bol_ids));
+    public function requestCourier($bol_id, Carbon $date = null) {
+        $this->setBolId(array_map('floatval', (array)$bol_id))->setDate($date);
         return $this->createRequest(RequestCourierRequest::class, $this->getParameters());
     }
 
@@ -141,11 +143,14 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
+     * @param null|bool $test_mode
+     *      if set null get mode from currently instance
      * @return ValidateCredentialsRequest
      */
-    public function validateCredentials(array $parameters = []) {
+    public function validateCredentials(array $parameters = [], $test_mode = null) {
         $instance = new Gateway();
         $instance->initialize($parameters);
+        $instance->setTestMode(is_null($test_mode) ? $this->getTestMode() : (bool)$test_mode);
         return $instance->createRequest(ValidateCredentialsRequest::class, $instance->getParameters());
     }
 
