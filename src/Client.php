@@ -890,10 +890,15 @@ class Client
     public function validatePostCode($postCode, $country_id, $site_id = null)
     {
         try {
-            return $this->getResultLogin() && $this->getEPSFacade()->validatePostCode($country_id, $site_id, $postCode);
+            return $this->getResultLogin() && $this->getEPSFacade()->validatePostCode($country_id, $postCode, $site_id);
         } catch (ClientException $ce) {
+            $this->error = $ce->getMessage();
             return false;
         } catch (ServerException $se) {
+            $this->error = $se->getMessage();
+            return false;
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
             return false;
         }
     }

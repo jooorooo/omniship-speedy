@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy\Http;
 
+use Omniship\Common\Address;
 use Omniship\Common\ItemBag;
 use Omniship\Common\ShippingService;
 use ParamCalculation;
@@ -31,91 +32,87 @@ class CreateBillOfLadingRequest extends AbstractRequest
             return null;
         }
 
+        $picking = new ParamPicking();
+
         //sender
         $sender = new ParamClientData();
-        $sender->setClientId($login->getClientId());
         $sender_address = $this->getSenderAddress();
-        if ($sender_address->getPhone()) {
-            $senderPhone = new ParamPhoneNumber();
-            $senderPhone->setNumber($sender_address->getPhone());
-            $sender->setPhones([$senderPhone]);
-        }
 
-        $receiver_address = $this->getReceiverAddress();
-        $receiver_country = $receiver_address->getCountry();
-        $receiver_state = $receiver_address->getState();
-        $receiver_city = $receiver_address->getCity();
-        $receiver_quarter = $receiver_address->getQuarter();
-        $receiver_street = $receiver_address->getStreet();
-        $receiverAddress = new ParamAddress();
-        if ($receiver_city && $receiver_city->getId()) {
-            $receiverAddress->setSiteId($receiver_city->getId());
+        $sender_city_id = null;
+        $sender_office_id = null;
+        $sender->setClientId($login->getClientId());
+
+        if($sender_address) {
+
+//            $sender->setPartnerName($sender_address->getFirstName() . ' ' . $sender_address->getLastName());
+            $sender->setContactName($sender_address->getFirstName() . ' ' . $sender_address->getLastName());
+
+            if($company = $sender_address->getCompanyName()) {
+                $sender->setObjectName($company);
+            }
+
+            if ($sender_address->getPhone()) {
+                $senderPhone = new ParamPhoneNumber();
+                $senderPhone->setNumber($sender_address->getPhone());
+                $sender->setPhones([$senderPhone]);
+            }
+
+            $sender_city = $sender_address->getCity();
+            $sender_office = $sender_address->getOffice();
+            if($sender_city && $sender_city->getId()) {
+                $sender_city_id = $sender_city->getId();
+            } elseif(!$sender_office || !$sender_office->getId()) {
+                $client_info = $this->getClient()->getClientInfo()->getAddress();
+                $sender_city_id = $client_info->getSiteId();
+            }
+            if($sender_office && $sender_office->getId()) {
+                $sender_office_id = $sender_office->getId();
+            }
+            if ($sender_office && $sender_office->getId()) {
+                $picking->setWillBringToOffice(true);
+                $picking->setWillBringToOfficeId($sender_office->getId());
+            } else {
+                $picking->setWillBringToOffice(false);
+//                $sender->setAddress($this->translateAddress($sender_address));
+            }
         } else {
-            $receiverAddress->setSiteName($receiver_city ? $receiver_city->getName() : '');
+            $client_info = $this->getClient()->getClientInfo();
+            if($client_info && $phones = $client_info->getPhones()) {
+                $senderPhone = new ParamPhoneNumber();
+                $senderPhone->setNumber($phones[0]->getNumber());
+                $sender->setPhones([$senderPhone]);
+            }
         }
 
-        if ($receiver_quarter && $receiver_quarter->getName()) {
-            $receiverAddress->setQuarterName($receiver_quarter->getName());
-        }
-
-        if ($receiver_quarter && $receiver_quarter->getId()) {
-            $receiverAddress->setQuarterId($receiver_quarter->getId());
-        }
-
-        if ($receiver_street && $receiver_street->getName()) {
-            $receiverAddress->setStreetName($receiver_street->getName());
-        }
-
-        if ($receiver_street && $receiver_street->getId()) {
-            $receiverAddress->setStreetId($receiver_street->getId());
-        }
-
-        if ($receiver_address->getStreetNumber()) {
-            $receiverAddress->setStreetNo($receiver_address->getStreetNumber());
-        }
-
-        if (1==2) {
-            $receiverAddress->setBlockNo(null);
-        }
-
-        if ($receiver_address->getEntrance()) {
-            $receiverAddress->setEntranceNo($receiver_address->getEntrance());
-        }
-
-        if ($receiver_address->getFloor()) {
-            $receiverAddress->setFloorNo($receiver_address->getFloor());
-        }
-
-        if ($receiver_address->getApartment()) {
-            $receiverAddress->setApartmentNo($receiver_address->getApartment());
-        }
-
-        $note = array_filter([$receiver_address->getAddress1(), $receiver_address->getAddress2(), $receiver_address->getAddress3()]);
-        if ($note) {
-            $receiverAddress->setAddressNote(implode(', ', $note));
-        }
-
-        if ($receiver_state && $receiver_state->getId()) {
-            $receiverAddress->setStateId($receiver_state->getId());
-        }
-
-        if ($receiver_country && $receiver_country->getId()) {
-            $receiverAddress->setPostCode($receiver_address->getPostCode());
-            $receiverAddress->setFrnAddressLine1($receiver_address->getAddress1());
-            $receiverAddress->setFrnAddressLine2($receiver_address->getAddress2());
-            $receiverAddress->setCountryId($receiver_country->getId());
-            $receiverAddress->setStateId($receiver_state ? $receiver_state->getId() : null);
-        }
+        $picking->setSender($sender);
 
         $receiver = new ParamClientData();
-        $receiver->setPartnerName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
-        $receiver->setContactName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
-        $receiverPhone = new ParamPhoneNumber();
-        $receiverPhone->setNumber($receiver_address->getPhone());
-        $receiver->setPhones(array(0 => $receiverPhone));
         $receiver->setEmail($this->getOtherParameters('receiver_email'));
+        $receiver_address = $this->getReceiverAddress();
+        if($receiver_address) {
+            $receiver->setPartnerName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
+            $receiver->setContactName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
 
-        $picking = new ParamPicking();
+            if($company = $receiver_address->getCompanyName()) {
+                $receiver->setObjectName($company);
+            }
+
+            if ($receiver_address->getPhone()) {
+                $receiverPhone = new ParamPhoneNumber();
+                $receiverPhone->setNumber($receiver_address->getPhone());
+                $receiver->setPhones([$receiverPhone]);
+            }
+
+            $receiver_office = $receiver_address->getOffice();
+            if ($receiver_office && $receiver_office->getId()) {
+                $picking->setOfficeToBeCalledId($receiver_office->getId());
+            } else {
+                $picking->setOfficeToBeCalledId(null);
+                $receiver->setAddress($this->translateAddress($receiver_address));
+            }
+        }
+        $picking->setReceiver($receiver);
+
         $picking->setClientSystemId(self::SpeedyClientId);
         $picking->setRef1($this->getTransactionId());
 
@@ -143,26 +140,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $picking->setServiceTypeId($this->getServiceId());
 
-        if ($receiver_address->getParameter('office_id')) {
-            $picking->setOfficeToBeCalledId($receiver_address->getParameter('office_id'));
-        } else {
-            $receiver->setAddress($receiverAddress);
-            $picking->setOfficeToBeCalledId(null);
-        }
-
         $picking->setBackDocumentsRequest($this->getOtherParameters('back_documents'));
         $picking->setBackReceiptRequest($this->getOtherParameters('back_receipt'));
 
         if ($special_delivery_id = $this->getOtherParameters('special_delivery_id')) {
             //A special delivery ID
             $picking->setSpecialDeliveryId($special_delivery_id);
-        }
-
-        if ($sender_address->getParameter('office_id')) {
-            $picking->setWillBringToOffice(true);
-            $picking->setWillBringToOfficeId($sender_address->getParameter('office_id'));
-        } else {
-            $picking->setWillBringToOffice(false);
         }
 
         /** @var $items ItemBag */
@@ -186,7 +169,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setParcelsCount($items->count());
         $picking->setWeightDeclared($this->getWeight());
         $picking->setContents($this->getOtherParameters('contents_text'));
-        $picking->setPacking($this->getOtherParameters('packing_type')); // number of packages
+        $picking->setPacking($this->getOtherParameters('packing_type')); // packing type
         $picking->setPackId($this->getOtherParameters('package_id'));
         $picking->setDocuments($this->getOtherParameters('is_documents'));
         $picking->setPalletized(false);
@@ -207,14 +190,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setFragile(false);
         }
 
-        $picking->setSender($sender);
-        $picking->setReceiver($receiver);
-
-        $picking->setPayerType($payer_type);
         if(is_null($taking_date = $this->getTakingDate())) {
             $result = $this->getClient()->getAllowedDaysForTaking(
                 $this->getServiceId(),
-                Carbon::now($this->getSenderTimeZone())->addDay(1)->timestamp
+                Carbon::now($this->getSenderTimeZone())->addDay(1)->timestamp,
+                $sender_city_id && !$sender_office_id ? $sender_city_id : null,
+                !$sender_city_id && $sender_office_id ? $sender_office_id : null
             );
             if($result && !empty($result[1])) {
                 $this->setTakingDate($result[1]);
@@ -283,6 +264,97 @@ class CreateBillOfLadingRequest extends AbstractRequest
     protected function createResponse($data)
     {
         return $this->response = new CreateBillOfLadingResponse($this, $data);
+    }
+
+    /**
+     * @param null|Address $address
+     * @return null|ParamAddress
+     */
+    protected function translateAddress($address = null)
+    {
+        if(!$address || $address->isEmpty()) {
+            return null;
+        }
+        $country = $address->getCountry();
+        $state = $address->getState();
+        $city = $address->getCity();
+        $quarter = $address->getQuarter();
+        $street = $address->getStreet();
+
+        $new_address = new ParamAddress();
+
+        if ($country && $country->getId()) {
+            $new_address->setCountryId($country->getId());
+        }
+
+        if ($state && $state->getId()) {
+            $new_address->setStateId($state->getId());
+        }
+
+        if ($city) {
+            if($city->getId()) {
+                $new_address->setSiteId($city->getId());
+            }
+            if($city->getName()) {
+                $new_address->setSiteName($city->getName());
+            }
+        }
+
+        if ($quarter) {
+            if($quarter->getId()) {
+                $new_address->setQuarterId($quarter->getId());
+            }
+            if($quarter->getName()) {
+                $new_address->setQuarterName($quarter->getName());
+            }
+        }
+
+        if ($street) {
+            if($street->getId()) {
+                $new_address->setStreetId($street->getId());
+            }
+            if($street->getName()) {
+                $new_address->setStreetName($street->getName());
+            }
+        }
+
+        if ($address->getStreetNumber()) {
+            $new_address->setStreetNo($address->getStreetNumber());
+        }
+
+//        if (1==2) {
+//            $senderAddress->setBlockNo(null);
+//        }
+
+        if ($address->getEntrance()) {
+            $new_address->setEntranceNo($address->getEntrance());
+        }
+
+        if ($address->getFloor()) {
+            $new_address->setFloorNo($address->getFloor());
+        }
+
+        if ($address->getApartment()) {
+            $new_address->setApartmentNo($address->getApartment());
+        }
+
+        if($l = $address->getNote()) {
+            $new_address->setAddressNote($l);
+        }
+
+        if($l = $address->getAddress1()) {
+            $new_address->setFrnAddressLine1($l);
+        }
+
+        if($l = $address->getAddress2()) {
+            $new_address->setFrnAddressLine2($l);
+        }
+
+        if($post_code = $address->getPostCode()) {
+            $new_address->setPostCode($post_code);
+        }
+
+        return $new_address;
     }
 
 }

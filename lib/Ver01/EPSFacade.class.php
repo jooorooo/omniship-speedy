@@ -72,7 +72,7 @@ class EPSFacade {
     /**
      * Return EPS interface implementation
      * @since 1.0
-     * @return EPSInterface
+     * @return EPSSOAPInterfaceImpl
      */
     public function getEPSInterfaceImpl() {
         return $this->_epsInterfaceImpl;

@@ -36,8 +36,8 @@ class ShippingServicesRequest extends AbstractRequest
             $paramCalculation->setSenderId($login->getClientId());
         } else {
             //if send from office
-            if(!is_null($office_id = $sender_address->getParameter('office_id'))) {
-                $paramCalculation->setWillBringToOfficeId($office_id);
+            if(!is_null($office = $sender_address->getOffice()) && $office->getId()) {
+                $paramCalculation->setWillBringToOfficeId($office->getId());
             } else {
                 $paramCalculation->setSenderCountryId($sender_address->getCountry()->getId());
                 $paramCalculation->setSenderSiteId($sender_address->getCity()->getId());
@@ -46,9 +46,9 @@ class ShippingServicesRequest extends AbstractRequest
         }
 
         $receiver_address = $this->getReceiverAddress();
-        if($receiver_address && !is_null($office_id = $receiver_address->getParameter('office_id'))) {
+        if($receiver_address && !is_null($office = $receiver_address->getOffice()) && $office->getId()) {
             //ID of an office "to be called". Non-null and non-zero value indicates this picking as "to office". Otherwise "to address" is considered. If officeToBeCalledId is provided (non-null and non-zero), toBeCalled flag is considered "true". If officeToBeCalledId is set to 0, toBeCalled flag is considered "false".
-            $paramCalculation->setOfficeToBeCalledId($office_id);
+            $paramCalculation->setOfficeToBeCalledId($office->getId());
             //Specifies if the shipment is "to be called". If this flag is true the shipment is considered "to office". Otherwise "to address" is considered.
             $paramCalculation->setToBeCalled(true);
         } else {
@@ -89,11 +89,11 @@ class ShippingServicesRequest extends AbstractRequest
 
         //if send out of bg disable cod & payer is sender
         //Payer type (0=sender, 1=receiver or 2=third party)
-        $payer_type = \ParamCalculation::PAYER_TYPE_SENDER;
+        $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
         if($this->getPayer() == ShippingService::PAYER_RECEIVER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_RECEIVER;
+            $payer_type = ParamCalculation::PAYER_TYPE_RECEIVER;
         } elseif($this->getPayer() == ShippingService::PAYER_OTHER) {
-            $payer_type = \ParamCalculation::PAYER_TYPE_THIRD_PARTY;
+            $payer_type = ParamCalculation::PAYER_TYPE_THIRD_PARTY;
         }
         $paramCalculation->setPayerType($payer_type);
         //Insurance payer type (0=sender, 1=reciever or 2=third party)
