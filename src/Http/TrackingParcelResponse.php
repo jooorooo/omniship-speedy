@@ -33,7 +33,7 @@ class TrackingParcelResponse extends AbstractResponse
                 $name = implode(' ', array_filter([$track->getSiteType(), $track->getSiteName()]));
                 $name = explode('[', !$name && !$row ? $track->getOperationComment() : $name);
                 $name = trim(array_shift($name));
-                $result->add([
+                $result->push([
                     'id' => $track->getOperationCode(),
                     'name' => $name,
                     'events' => $this->_getEvents($track),
@@ -55,19 +55,19 @@ class TrackingParcelResponse extends AbstractResponse
     {
         $result = new EventBag();
         if($event = $track->getOperationComment()) {
-            $result->add(new Component([
+            $result->push(new Component([
                 'id' => 'comment',
                 'name' => trim($event),
             ]));
         }
         if($event = $track->getOperationDescription()) {
-            $result->add(new Component([
+            $result->push(new Component([
                 'id' => 'description',
                 'name' => trim($event),
             ]));
         }
         if($event = $track->getSignatureImage()) {
-            $result->add(new Component([
+            $result->push(new Component([
                 'id' => 'image',
                 'name' => trim($event),
             ]));

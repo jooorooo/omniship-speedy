@@ -31,7 +31,7 @@ class ShippingServicesResponse extends AbstractResponse
                 $service = $this->_getService($service);
                 $result_info = $service->getResultInfo();
                 $amounts = $result_info->getAmounts();
-                $result->add([
+                $result->push([
                     'id' => $service->getServiceTypeId(),
                     'name' => $services[$service->getServiceTypeId()],
                     'description' => null,
