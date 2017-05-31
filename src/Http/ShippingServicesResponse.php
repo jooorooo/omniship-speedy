@@ -40,7 +40,7 @@ class ShippingServicesResponse extends AbstractResponse
                     'pickup_time' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getTakingDate()),
                     'delivery_date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getDeadlineDelivery()),
                     'delivery_time' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getDeadlineDelivery()),
-                    'currency' => 'BGN',//$this->getRequest()->getCurrency(),
+                    'currency' => 'BGN',//@todo return price in BGN
                     'tax' => $amounts->getVat(),
                     'insurance' => $amounts->getInsurancePremium(),
                     'exchange_rate' => null

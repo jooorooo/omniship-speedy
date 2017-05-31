@@ -39,6 +39,7 @@ class CreateBillOfLadingResponse extends AbstractResponse
         $result->setPickupDate($this->getRequest()->getTakingDate());
         $result->setInsurance($amounts->getInsurancePremium());
         $result->setTotal($amounts->getTotal());
+        $result->setCurrency('BGN'); //@todo return price in BGN
 
         return $result;
     }
