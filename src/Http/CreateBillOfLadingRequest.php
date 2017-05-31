@@ -168,10 +168,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $picking->setParcelsCount($items->count());
         $picking->setWeightDeclared($this->getWeight());
-        $picking->setContents($this->getOtherParameters('contents_text'));
-        $picking->setPacking($this->getOtherParameters('packing_type')); // packing type
-        $picking->setPackId($this->getOtherParameters('package_id'));
-        $picking->setDocuments($this->getOtherParameters('is_documents'));
+        $picking->setContents($this->getContent());
+        $picking->setPacking($this->getPackageType()); // packing type
+        if(!is_null($package_id = $this->getOtherParameters('package_id'))) {
+            $picking->setPackId($package_id);
+        }
+        $picking->setDocuments($this->getIsDocuments());
         $picking->setPalletized(false);
 
         $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
@@ -216,6 +218,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         if(($cod = $this->getCashOnDeliveryAmount()) > 0) {
             $picking->setAmountCodBase($cod);
+            $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
         } else {
             $picking->setAmountCodBase(0);
         }
@@ -238,8 +241,6 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
             $picking->setOptionsBeforePayment($optionBeforePayment);
         }
-
-        $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
 
         if($this->getClient()->getError()) {
             return null;
