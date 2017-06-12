@@ -27,7 +27,7 @@ class CodPaymentRequest extends AbstractRequest
      * @return CodPaymentResponse
      */
     public function sendData($bol_id) {
-        $response = $bol_id ? $this->getClient()->getPickingExtendedInfo($bol_id) : null;
+        $response = $bol_id ? $this->getClient()->codPayment($bol_id) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 

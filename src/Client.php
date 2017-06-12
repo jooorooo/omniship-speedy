@@ -800,6 +800,20 @@ class Client
     }
 
     /**
+     * Get status for bill of landing
+     * @param $parcelId
+     * @return null|\CODPayment
+     */
+    public function codPayment($parcelId)
+    {
+        $info = $this->getPickingExtendedInfo($parcelId);
+        if($info) {
+            return $info->getCodPayment();
+        }
+        return null;
+    }
+
+    /**
      * @param array $bol_ids
      * @param null|Carbon $date
      * @return array|bool
