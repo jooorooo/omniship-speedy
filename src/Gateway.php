@@ -11,6 +11,7 @@ namespace Omniship\Speedy;
 use Carbon\Carbon;
 use Omniship\Common\Address;
 use Omniship\Speedy\Http\CancelBillOfLadingRequest;
+use Omniship\Speedy\Http\CodPaymentRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
 use Omniship\Speedy\Http\ShippingServicesRequest;
@@ -134,6 +135,15 @@ class Gateway extends AbstractGateway
     public function requestCourier($bol_id, Carbon $date = null)
     {
         return $this->createRequest(RequestCourierRequest::class, $this->setBolId(array_map('floatval', (array)$bol_id))->setDate($date)->getParameters());
+    }
+
+    /**
+     * @param $bol_id
+     * @return CodPaymentRequest
+     */
+    public function codPayment($bol_id)
+    {
+        return $this->createRequest(CodPaymentRequest::class, $this->setBolId($bol_id)->getParameters());
     }
 
     /**
