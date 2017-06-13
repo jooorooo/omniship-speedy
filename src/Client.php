@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Exception;
 use EPSFacade;
 use EPSSOAPInterfaceImpl;
+use Omniship\Helper\Collection;
 use ResultLogin;
 use ResultClientData;
 use ResultCourierService;

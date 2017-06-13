@@ -1438,7 +1438,7 @@ class EPSSOAPInterfaceImpl extends SoapClient implements EPSInterface {
             $getPickingExtendedInfoStdObject->sessionId    = $sessionId;
             $getPickingExtendedInfoStdObject->billOfLading = $billOfLading;
             $response = parent::getPickingExtendedInfo($getPickingExtendedInfoStdObject);
-            
+
             if (isset($response->return)) {
                 $ResultPickingExtendedInfo = new ResultPickingExtendedInfo($response->return);
             } else {
