@@ -8,9 +8,13 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Common\ShippingService;
+use Omniship\Common\ItemBag;
+use Omniship\Consts;
+use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
 use Carbon\Carbon;
+use ParamParcelInfo;
+use Size;
 
 class ShippingServicesRequest extends AbstractRequest
 {
@@ -24,6 +28,8 @@ class ShippingServicesRequest extends AbstractRequest
         if(is_null($login = $this->getClient()->getResultLogin())) {
             return $paramCalculation;
         }
+
+        $convert = new Convert();
 
         //The date for shipment pick-up (the "time" component is ignored if it is allready passed or is overriden with 09:01). Default value is "today". (Required: no)
         $paramCalculation->setTakingDate(Carbon::now()->format('H:i'));
@@ -79,9 +85,9 @@ class ShippingServicesRequest extends AbstractRequest
         $paramCalculation->setPayCodToThirdParty(false);
 
         //Parcels count (must be equal to the number of parcels described in List parcels)
-        $paramCalculation->setParcelsCount($this->getItems()->count());
+        $paramCalculation->setParcelsCount($this->getNumberOfPieces());
         //Declared weight (the greater of "volume" and "real" weight values)
-        $paramCalculation->setWeightDeclared($this->getWeight());
+        $paramCalculation->setWeightDeclared($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()));
         //Specifies whether the shipment only consists of documents
         $paramCalculation->setDocuments(false);
         //Specifies whether the shipment is palletized
@@ -90,9 +96,9 @@ class ShippingServicesRequest extends AbstractRequest
         //if send out of bg disable cod & payer is sender
         //Payer type (0=sender, 1=receiver or 2=third party)
         $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
-        if($this->getPayer() == ShippingService::PAYER_RECEIVER) {
+        if($this->getPayer() == Consts::PAYER_RECEIVER) {
             $payer_type = ParamCalculation::PAYER_TYPE_RECEIVER;
-        } elseif($this->getPayer() == ShippingService::PAYER_OTHER) {
+        } elseif($this->getPayer() == Consts::PAYER_OTHER) {
             $payer_type = ParamCalculation::PAYER_TYPE_THIRD_PARTY;
         }
         $paramCalculation->setPayerType($payer_type);
@@ -111,6 +117,25 @@ class ShippingServicesRequest extends AbstractRequest
 
         //Check if specified office to be called is working. Default value - true
         $paramCalculation->setCheckTBCOfficeWorkDay(true);
+
+        /** @var $items ItemBag */
+//        $items = $this->getItems();
+//        $parcels = [];
+//        foreach($items->all() AS $row => $item) {
+//            $parcel = new ParamParcelInfo();
+////            $parcel->setSeqNo(-1);
+//            $parcel->setParcelId($row+1);
+//            $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
+//            if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+//                $size = new Size();
+//                $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
+//                $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
+//                $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
+//                $parcel->setSize($size);
+//            }
+//            $parcels[] = $parcel;
+//        }
+//        $paramCalculation->setParcels($parcels);
 
         return $paramCalculation;
     }

@@ -22,7 +22,7 @@ class TrackingParcelRequest extends AbstractRequest
      * @return TrackingParcelResponse
      */
     public function sendData($data) {
-        $response = $this->getClient()->trackParcel($data, $this->getLanguageCode(), (float)$this->getOtherParameters('last_operation'));
+        $response = $this->getClient()->trackParcel($data, $this->getLanguageCode(), false);
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
