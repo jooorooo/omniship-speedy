@@ -130,13 +130,14 @@ class Gateway extends AbstractGateway
 
     /**
      * @param $bol_id
-     * @param null|Carbon $date
+     * @param null|Carbon $date_start
+     * @param null|Carbon $date_end
      * @return RequestCourierRequest
      */
-    public function requestCourier($bol_id, Carbon $date = null)
-    {
-        return $this->createRequest(RequestCourierRequest::class, $this->setBolId(array_map('floatval', (array)$bol_id))->setDate($date)->getParameters());
-    }
+//    public function requestCourier($bol_id, Carbon $date_start = null, Carbon $date_end = null)
+//    {
+//        return $this->createRequest(RequestCourierRequest::class, $this->setBolId(array_map('floatval', (array)$bol_id))->setStartDate($date_start)->setEndDate($date_end)->getParameters());
+//    }
 
     /**
      * @param $bol_id

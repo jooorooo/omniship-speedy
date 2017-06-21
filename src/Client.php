@@ -816,19 +816,20 @@ class Client
 
     /**
      * @param array $bol_ids
-     * @param null|Carbon $date
+     * @param null|Carbon $date_start
+     * @param null|Carbon $date_end
      * @return array|bool
      */
-    public function requestCourier(array $bol_ids, Carbon $date = null) {
+    public function requestCourier(array $bol_ids, Carbon $date_start = null, Carbon $date_end = null) {
         if (!is_null($login = $this->getResultLogin())) {
             try {
                 $paramOrder = new ParamOrder();
                 $paramOrder->setBillOfLadingsList(array_map('floatval', $bol_ids));
                 $paramOrder->setBillOfLadingsToIncludeType(ParamOrder::ORDER_BOL_INCLUDE_TYPE_EXPLICIT);
 
-                if($date) {
+                if($date_end) {
 //                    $paramOrder->setPickupDate($date->format('Y-m-d'));
-                    $paramOrder->setWorkingEndTime($date->format('Hi'));
+                    $paramOrder->setWorkingEndTime($date_end->format('Hi'));
                 }
 
                 $client_info = $this->getClientInfo();

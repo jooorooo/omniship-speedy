@@ -21,7 +21,8 @@ class RequestCourierRequest extends AbstractRequest
 
         return [
             'bol_id' => $this->getBolId(),
-            'date' => $this->getDate(),
+            'start_date' => $this->getStartDate(),
+            'end_date' => $this->getStartDate()
         ];
     }
 
@@ -30,7 +31,7 @@ class RequestCourierRequest extends AbstractRequest
      * @return RequestCourierResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->requestCourier($data['bol_id'], $data['date']) : null;
+        $response = $data ? $this->getClient()->requestCourier($data['bol_id'], $data['start_date'], $data['end_date']) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
