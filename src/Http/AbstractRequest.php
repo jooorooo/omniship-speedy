@@ -8,7 +8,6 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Exceptions\InvalidResponseException;
 use Omniship\Message\AbstractRequest AS BaseAbstractRequest;
 use Omniship\Speedy\Client AS SpeedyClient;
 

@@ -9,7 +9,6 @@
 namespace Omniship\Speedy\Http;
 
 use Omniship\Common\Address;
-use Omniship\Common\ItemBag;
 use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
@@ -19,8 +18,6 @@ use ParamOptionsBeforePayment;
 use ParamAddress;
 use Carbon\Carbon;
 use ParamPicking;
-use ParamParcelInfo;
-use Size;
 
 class CreateBillOfLadingRequest extends AbstractRequest
 {

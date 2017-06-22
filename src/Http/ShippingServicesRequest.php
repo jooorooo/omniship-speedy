@@ -13,8 +13,6 @@ use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
 use Carbon\Carbon;
-use ParamParcelInfo;
-use Size;
 
 class ShippingServicesRequest extends AbstractRequest
 {

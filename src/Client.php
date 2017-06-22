@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Exception;
 use EPSFacade;
 use EPSSOAPInterfaceImpl;
-use Omniship\Helper\Collection;
 use ResultLogin;
 use ResultClientData;
 use ResultCourierService;
@@ -828,7 +827,9 @@ class Client
                 $paramOrder->setBillOfLadingsToIncludeType(ParamOrder::ORDER_BOL_INCLUDE_TYPE_EXPLICIT);
 
                 if($date_end) {
-//                    $paramOrder->setPickupDate($date->format('Y-m-d'));
+                    if($date_start) {
+                        $paramOrder->setPickupDate($date_start->format('Y-m-d'));
+                    }
                     $paramOrder->setWorkingEndTime($date_end->format('Hi'));
                 }
 

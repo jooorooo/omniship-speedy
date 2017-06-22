@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Omniship\Common\Address;
 use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CodPaymentRequest;
-use Omniship\Speedy\Http\CodPaymentsRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
 use Omniship\Speedy\Http\ShippingServicesRequest;
