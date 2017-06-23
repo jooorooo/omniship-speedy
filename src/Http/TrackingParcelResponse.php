@@ -12,10 +12,15 @@ use Carbon\Carbon;
 use Omniship\Common\Component;
 use Omniship\Common\EventBag;
 use Omniship\Common\TrackingBag;
-use ResultTrackPickingEx;
+use Omniship\Message\AbstractResponse;
+use Symfony\Component\Translation\Loader\PhpFileLoader;
 
 class TrackingParcelResponse extends AbstractResponse
 {
+    /**
+     * @var \SimpleXMLElement
+     */
+    protected $xml;
 
     /**
      * @return TrackingBag
@@ -27,20 +32,16 @@ class TrackingParcelResponse extends AbstractResponse
             return $result;
         }
 
-        if(!empty($this->data)) {
-            foreach($this->data AS $row => $track) {
-                $track = $this->_getTrackPicking($track);
-                $name = implode(' ', array_filter([$track->getSiteType(), $track->getSiteName()]));
-                $name = explode('[', !$name && !$row ? $track->getOperationComment() : $name);
-                $name = trim(array_shift($name));
-                $result->push([
-                    'id' => $track->getOperationCode(),
-                    'name' => $name,
-                    'events' => $this->_getEvents($track),
-                    'shipment_date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $track->getMoment()),
-                    'estimated_delivery_date' => $this->_findEstimatedDeliveryDate($this->data[0]),
+        if(!empty($this->data->TrackDetails)) {
+            foreach($this->data->TrackDetails AS $quote) {
+                $result->add([
+                    'id' => $quote->TrackingNumberUniqueIdentifier,
+                    'name' => ($name = (!empty($quote->DestinationAddress) ? $this->_getDestinationAddress($quote->DestinationAddress) : null)),
+                    'events' => $this->_getEvents($quote),
+                    'shipment_date' => !empty($quote->ShipTimestamp) ? Carbon::createFromFormat('Y-m-d\TH:i:s', $quote->ShipTimestamp) : null,
+                    'estimated_delivery_date' => !empty($quote->ActualDeliveryTimestamp) ? Carbon::createFromFormat('Y-m-d\TH:i:sP', $quote->ActualDeliveryTimestamp) : null,
                     'origin_service_area' => null,
-                    'destination_service_area' => $name ? new Component(['id' => md5($name), 'name' => $name]) : null,
+                    'destination_service_area' => $name ? new Component(['id' => md5(json_encode($quote->DestinationAddress)), 'name' => $name]) : null,
                 ]);
             }
         }
@@ -48,50 +49,74 @@ class TrackingParcelResponse extends AbstractResponse
     }
 
     /**
-     * @param ResultTrackPickingEx $track
+     * @return null|string
+     */
+    public function getMessage()
+    {
+        if(!empty($this->data->Notifications)) {
+            if(is_array($this->data->Notifications)) {
+                foreach ($this->data->Notifications AS $notification) {
+                    if ($notification->Severity == 'ERROR' || empty($this->data->RateReplyDetails)) {
+                        return $notification->LocalizedMessage;
+                    }
+                }
+            } elseif(empty($this->data->TrackDetails)) {
+                return $this->data->Notifications->LocalizedMessage;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCode()
+    {
+        if(!empty($this->data->Notifications)) {
+            if(is_array($this->data->Notifications)) {
+                foreach ($this->data->Notifications AS $notification) {
+                    if ($notification->Severity == 'ERROR') {
+                        return $notification->Code;
+                    }
+                }
+            } elseif(empty($this->data->TrackDetails)) {
+                return $this->data->Notifications->Code;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param $data
      * @return EventBag
      */
-    protected function _getEvents(ResultTrackPickingEx $track)
+    protected function _getEvents($data)
     {
         $result = new EventBag();
-        if($event = $track->getOperationComment()) {
-            $result->push(new Component([
-                'id' => 'comment',
-                'name' => trim($event),
-            ]));
-        }
-        if($event = $track->getOperationDescription()) {
-            $result->push(new Component([
-                'id' => 'description',
-                'name' => trim($event),
-            ]));
-        }
-        if($event = $track->getSignatureImage()) {
-            $result->push(new Component([
-                'id' => 'image',
-                'name' => trim($event),
+        if(!empty($data->Notification)) {
+            $result->add(new Component([
+                'id' => $data->Notification->Severity,
+                'name' => $data->Notification->LocalizedMessage,
             ]));
         }
         return $result;
     }
 
-    /**
-     * @param ResultTrackPickingEx $track
-     * @return ResultTrackPickingEx
-     */
-    protected function _getTrackPicking(ResultTrackPickingEx $track) {
-        return $track;
-    }
-
-    /**
-     * @param ResultTrackPickingEx $track
-     * @return null|Carbon
-     */
-    protected function _findEstimatedDeliveryDate(ResultTrackPickingEx $track) {
-        if(preg_match('~\:\s(([\d]{2}).([\d]{2}).([\d]{4}))$~im', $track->getOperationComment(), $match)) {
-            return Carbon::createFromFormat('d.m.Y', $match[1], $this->getRequest()->getReceiverTimeZone());
+    protected function _getDestinationAddress($data) {
+        $return = [];
+        if(!empty($data->CountryCode)) {
+            $return[] = $this->getCountryName($data->CountryCode);
+            if(!empty($data->StateOrProvinceCode)) {
+                $return[] = $data->StateOrProvinceCode;
+                if(!empty($data->City)) {
+                    $return[] = $data->City;
+                    if(!empty($data->Residential)) {
+                        $return[] = $data->Residential;
+                    }
+                }
+            }
         }
-        return null;
+        return implode(', ', $return);
     }
 
 }
