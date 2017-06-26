@@ -67,9 +67,6 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 $client_info = $this->getClient()->getClientInfo()->getAddress();
                 $sender_city_id = $client_info->getSiteId();
             }
-            if($sender_office && $sender_office->getId()) {
-                $sender_office_id = $sender_office->getId();
-            }
             if ($sender_office && $sender_office->getId()) {
                 $picking->setWillBringToOffice(true);
                 $picking->setWillBringToOfficeId($sender_office->getId());
@@ -232,14 +229,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $optionBeforePayment = new ParamOptionsBeforePayment();
         if ($cod > 0 && in_array($this->getOptionBeforePayment(), [Consts::OPTION_BEFORE_PAYMENT_OPEN, Consts::OPTION_BEFORE_PAYMENT_TEST])) {
+            if($this->getOtherParameters('instruction_returns') == 'return') {
+                $payer_type_return = ParamCalculation::PAYER_TYPE_SENDER;
+            } else {
+                $payer_type_return = ParamCalculation::PAYER_TYPE_RECEIVER;
+            }
             if($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
                 $optionBeforePayment->setTest(true);
                 $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
-                $optionBeforePayment->setReturnPayerType($payer_type);
+                $optionBeforePayment->setReturnPayerType($payer_type_return);
             } elseif($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
                 $optionBeforePayment->setOpen(true);
                 $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
-                $optionBeforePayment->setReturnPayerType($payer_type);
+                $optionBeforePayment->setReturnPayerType($payer_type_return);
             }
             $picking->setOptionsBeforePayment($optionBeforePayment);
         }
@@ -281,6 +283,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $country = $address->getCountry();
         $state = $address->getState();
         $city = $address->getCity();
+        $office = $address->getOffice();
         $quarter = $address->getQuarter();
         $street = $address->getStreet();
 
@@ -297,17 +300,18 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if ($city) {
             if($city->getId()) {
                 $new_address->setSiteId($city->getId());
-            }
-            if($city->getName()) {
+            } elseif ($city->getName()) {
                 $new_address->setSiteName($city->getName());
             }
+        }
+        if($office && $office->getId()) {
+            $new_address->setSiteId(null);
         }
 
         if ($quarter) {
             if($quarter->getId()) {
                 $new_address->setQuarterId($quarter->getId());
-            }
-            if($quarter->getName()) {
+            } elseif($quarter->getName()) {
                 $new_address->setQuarterName($quarter->getName());
             }
         }
@@ -315,8 +319,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if ($street) {
             if($street->getId()) {
                 $new_address->setStreetId($street->getId());
-            }
-            if($street->getName()) {
+            } elseif($street->getName()) {
                 $new_address->setStreetName($street->getName());
             }
         }
@@ -325,9 +328,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $new_address->setStreetNo($address->getStreetNumber());
         }
 
-//        if (1==2) {
-//            $senderAddress->setBlockNo(null);
-//        }
+        if ($address->getBuilding()) {
+            $new_address->setBlockNo($address->getBuilding());
+        }
 
         if ($address->getEntrance()) {
             $new_address->setEntranceNo($address->getEntrance());
