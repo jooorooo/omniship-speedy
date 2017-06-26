@@ -14,7 +14,7 @@ use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CodPaymentRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
-use Omniship\Speedy\Http\ShippingServicesRequest;
+use Omniship\Speedy\Http\ShippingQuoteRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
 use Omniship\Speedy\Http\ValidateAddressRequest;
@@ -91,11 +91,11 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return ShippingServicesRequest
+     * @return ShippingQuoteRequest
      */
     public function getQuotes(array $parameters = [])
     {
-        return $this->createRequest(ShippingServicesRequest::class, $this->getParameters() + $parameters);
+        return $this->createRequest(ShippingQuoteRequest::class, $this->getParameters() + $parameters);
     }
 
     /**

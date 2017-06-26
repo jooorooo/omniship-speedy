@@ -14,7 +14,7 @@ use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
 use Carbon\Carbon;
 
-class ShippingServicesRequest extends AbstractRequest
+class ShippingQuoteRequest extends AbstractRequest
 {
 
     /**
@@ -149,11 +149,11 @@ class ShippingServicesRequest extends AbstractRequest
 
     /**
      * @param $data
-     * @return ShippingServicesResponse
+     * @return ShippingQuoteResponse
      */
     protected function createResponse($data)
     {
-        return $this->response = new ShippingServicesResponse($this, $data);
+        return $this->response = new ShippingQuoteResponse($this, $data);
     }
 
 }
