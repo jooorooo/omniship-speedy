@@ -133,8 +133,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
 //            $picking->setSize($size);
 //        }
 
-        if ($this->getOtherParameters('priority_time_value')) {
-            $picking->setFixedTimeDelivery($this->getOtherParameters('priority_time_value'));
+        if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
+            $picking->setFixedTimeDelivery($priority_time_value->format('Hi'));
         }
 
         $picking->setServiceTypeId($this->getServiceId());

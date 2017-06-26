@@ -135,6 +135,10 @@ class ShippingServicesRequest extends AbstractRequest
 //        }
 //        $paramCalculation->setParcels($parcels);
 
+        if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
+            $paramCalculation->setFixedTimeDelivery($priority_time_value->format('Hi'));
+        }
+
         return $paramCalculation;
     }
 
