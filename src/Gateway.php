@@ -14,6 +14,7 @@ use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CodPaymentRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
+use Omniship\Speedy\Http\ServicesRequest;
 use Omniship\Speedy\Http\ShippingQuoteRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
@@ -87,6 +88,15 @@ class Gateway extends AbstractGateway
     public function setPassword($value)
     {
         return $this->setParameter('password', $value);
+    }
+
+    /**
+     * @param array $parameters
+     * @return ServicesRequest
+     */
+    public function getServices(array $parameters = [])
+    {
+        return $this->createRequest(ServicesRequest::class, $this->getParameters() + $parameters);
     }
 
     /**
