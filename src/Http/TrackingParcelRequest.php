@@ -14,7 +14,7 @@ class TrackingParcelRequest extends AbstractRequest
      * @return integer
      */
     public function getData() {
-        return $this->getParcelId();
+        return $this->getBolId();
     }
 
     /**

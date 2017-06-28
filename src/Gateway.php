@@ -13,6 +13,7 @@ use Omniship\Common\Address;
 use Omniship\Speedy\Http\CancelBillOfLadingRequest;
 use Omniship\Speedy\Http\CodPaymentRequest;
 use Omniship\Speedy\Http\CreateBillOfLadingRequest;
+use Omniship\Speedy\Http\GetPdfRequest;
 use Omniship\Speedy\Http\RequestCourierRequest;
 use Omniship\Speedy\Http\ServicesRequest;
 use Omniship\Speedy\Http\ShippingQuoteRequest;
@@ -155,6 +156,15 @@ class Gateway extends AbstractGateway
     public function codPayment($bol_id)
     {
         return $this->createRequest(CodPaymentRequest::class, $this->setBolId($bol_id)->getParameters());
+    }
+
+    /**
+     * @param $bol_id
+     * @return GetPdfRequest
+     */
+    public function getPdf($bol_id)
+    {
+        return $this->createRequest(GetPdfRequest::class, $this->setBolId($bol_id)->getParameters());
     }
 
     /**
