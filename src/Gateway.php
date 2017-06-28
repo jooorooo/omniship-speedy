@@ -181,6 +181,14 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * @return Client
+     */
+    public function getClient() {
+        $client = new Client($this->getUsername(), $this->getPassword());
+        return $client;
+    }
+
+    /**
      * @param Address $address
      * @return ValidatePostCodeRequest
      */
