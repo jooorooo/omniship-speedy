@@ -19,6 +19,7 @@ use Omniship\Speedy\Http\ServicesRequest;
 use Omniship\Speedy\Http\ShippingQuoteRequest;
 use Omniship\Speedy\Http\TrackingParcelRequest;
 use Omniship\Common\AbstractGateway;
+use Omniship\Speedy\Http\TrackingParcelsRequest;
 use Omniship\Speedy\Http\ValidateAddressRequest;
 use Omniship\Speedy\Http\ValidateCredentialsRequest;
 use Omniship\Speedy\Http\ValidatePostCodeRequest;
@@ -110,12 +111,21 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param array $parameters
+     * @param string $bol_id
      * @return TrackingParcelRequest
      */
-    public function trackingParcel(array $parameters = [])
+    public function trackingParcel($bol_id)
     {
-        return $this->createRequest(TrackingParcelRequest::class, $this->getParameters() + $parameters);
+        return $this->createRequest(TrackingParcelRequest::class, $this->setBolId($bol_id)->getParameters());
+    }
+
+    /**
+     * @param array $bol_ids
+     * @return TrackingParcelRequest
+     */
+    public function trackingParcels(array $bol_ids = [])
+    {
+        return $this->createRequest(TrackingParcelsRequest::class, $this->setBolId($bol_ids)->getParameters());
     }
 
     /**
