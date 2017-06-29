@@ -689,7 +689,11 @@ class Client
      */
     public function isSessionActive($refreshSession = true)
     {
-        return $this->getEPSFacade()->isSessionActive($refreshSession);
+        if (!is_null($login = $this->getResultLogin())) {
+            return $this->getEPSFacade()->isSessionActive($refreshSession);
+        } else {
+            return false;
+        }
     }
 
     /**
