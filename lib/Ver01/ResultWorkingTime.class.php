@@ -11,26 +11,26 @@ class ResultWorkingTime extends SpeedyResultFormat {
      * Date for which working time is valid
      * @var date
      */
-    private $_date;
+    protected $_date;
     
     /**
      * Flag whether office working time is overriden
      * @var boolean
      * @since 2.8.0
      */
-    private $_workingTimeException;
+    protected $_workingTimeException;
     
     /**
      * Working time start (HHMM)
      * @var signed 16 bit integer
      */
-    private $_workingTimeFrom;
+    protected $_workingTimeFrom;
     
     /**
      * Working time end (HHMM)
      * @var signed 16 bit integer
      */
-    private $_workingTimeTo;
+    protected $_workingTimeTo;
 
     /**
      * Constructs new instance of ResultWorkingTime from stdClass

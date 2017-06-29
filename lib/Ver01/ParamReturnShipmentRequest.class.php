@@ -11,28 +11,28 @@ class ParamReturnShipmentRequest {
 	 * MANDATORY: NO
 	 * @var double Signed 64-bit
 	 */
-    private $_amountInsuranceBase;
+    protected $_amountInsuranceBase;
     
     /**
      * Fragile flag
      * MANDATORY: NO
      * @var boolean
      */
-    private $_fragile;
+    protected $_fragile;
     
     /**
      * Number of parcels
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_parcelsCount;
+    protected $_parcelsCount;
     
     /**
      * Service type id
      * MANDATORY: YES
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
 
     /**
      * Gets insurance base amount

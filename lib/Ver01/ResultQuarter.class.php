@@ -9,25 +9,25 @@ class ResultQuarter extends SpeedyResultFormat {
      * Quarter ID
      * @var integer Signed 64-bit
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Quarter type
      * @var string
      */
-    private $_type;
+    protected $_type;
 
     /**
      * Quarter name
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Actual name (in case "name" is an old name)
      * @var string
      */
-    private $_actualName;
+    protected $_actualName;
 
     /**
      * Constructs new instance of ResultQuarter

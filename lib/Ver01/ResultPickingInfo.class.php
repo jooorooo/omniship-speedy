@@ -8,7 +8,7 @@ class ResultPickingInfo extends SpeedyResultFormat {
      * BOL of the secondary shipment.
      * @var integer Signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * Search type (nullable)
@@ -20,25 +20,25 @@ class ResultPickingInfo extends SpeedyResultFormat {
 	 * 6 = PICKING_TYPE_TRANSPORT_DAMAGED 	- damaged shipment transport
      * @var integer Signed 32-bit
      */
-    private $_secondaryPickingType;
+    protected $_secondaryPickingType;
     
     /**
      * The date for shipment pick-up (the "time" component is ignored). Default value is "today".
      * @var date Taking date
      */
-    private $_takingDate;
+    protected $_takingDate;
     
     /**
      * Courier service type ID.
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
     
     /**
      * Shows whether the secondary shipment has any barcode history operations.
      * @var boolean Hs scan flag
      */
-    private $_hasScans;
+    protected $_hasScans;
     
 
     /**

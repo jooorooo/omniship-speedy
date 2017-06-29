@@ -12,37 +12,37 @@ class ResultClientInfo extends SpeedyResultFormat {
      * Client ID
      * @var integer Signed 64-bit (nullable)
      */
-    private $_clientId;
+    protected $_clientId;
 
     /**
      * Name of the client (company or private person)
      * @var string
      */
-    private $_partnerName;
+    protected $_partnerName;
 
     /**
      * Company department/office
      * @var string
      */
-    private $_objectName;
+    protected $_objectName;
 
     /**
      * Address
      * @var ResultAddress
      */
-    private $_address;
+    protected $_address;
 
     /**
      * Contact name
      * @var string
      */
-    private $_contactName;
+    protected $_contactName;
 
     /**
      * Phone numbers
      * @var array ResultPhoneNumber
      */
-    private $_phones;
+    protected $_phones;
 
     /**
      * Constructs new instance of ResultClientInfo

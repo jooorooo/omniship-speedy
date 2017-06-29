@@ -8,13 +8,13 @@ class ResultOrderPickingInfo extends SpeedyResultFormat {
      * BOL number
      * @var integer signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * A list of validation errors (empty list means there is no problem with this BOL)
      * @var array List of strings
      */
-    private $_errorDescriptions;
+    protected $_errorDescriptions;
 
     /**
      * Constructs new instance of ResultOrderPickingInfo from stdClass

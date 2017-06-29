@@ -10,42 +10,42 @@ class ParamClientSearch {
      * MANDATORY: NO
      * @var integer signed 64-bit
      */
-    private $_clientId;
+    protected $_clientId;
     
     /**
      * Client name
      * MANDATORY: NO
      * @var string
      */
-    private $_clientName;
+    protected $_clientName;
 
     /**
      * Common object name
      * MANDATORY: NO
      * @var string
      */
-    private $_objectName;
+    protected $_objectName;
 
     /**
      * Client phone
      * MANDATORY: NO
      * @var string
      */
-    private $_phone;
+    protected $_phone;
 
     /**
      * Site id
      * MANDATORY: NO
      * @var integer signed 64-bit
      */
-    private $_siteId;
+    protected $_siteId;
 
     /**
      * User def tag
      * MANDATORY: NO
      * @var string
      */
-    private $_userDefTag;
+    protected $_userDefTag;
     
     /**
      * Set client id

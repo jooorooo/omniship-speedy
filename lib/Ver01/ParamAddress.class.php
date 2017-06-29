@@ -15,112 +15,112 @@ class ParamAddress {
      * MANDATORY: YES
      * @var integer Signed 64-bit
      */
-    private $_siteId;
+    protected $_siteId;
 
     /**
      * Street name. Max size is 50 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_streetName;
+    protected $_streetName;
 
     /**
      * Street type. Max size is 15 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_streetType;
+    protected $_streetType;
 
     /**
      * Street ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_streetId;
+    protected $_streetId;
 
     /**
      * Quarter name. Max size is 50 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_quarterName;
+    protected $_quarterName;
 
     /**
      * Quarter type. Max size is 15 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_quarterType;
+    protected $_quarterType;
 
     /**
      * Quarter ID
      * MANDATORY: NO
      * @var long Signed 64-bit
      */
-    private $_quarterId;
+    protected $_quarterId;
 
     /**
      * Street No. Max size is 10 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_streetNo;
+    protected $_streetNo;
 
     /**
      * Block No. Max size is 32 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_blockNo;
+    protected $_blockNo;
 
     /**
      * Entrance No. Max size is 10 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_entranceNo;
+    protected $_entranceNo;
 
     /**
      * Floor No. Max size is 10 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_floorNo;
+    protected $_floorNo;
 
     /**
      * Appartment No. Max size is 10 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_apartmentNo;
+    protected $_apartmentNo;
 
     /**
      * Address note. Max size is 200 symbols.
      * MANDATORY: NO
      * @var string
      */
-    private $_addressNote;
+    protected $_addressNote;
 
     /**
      * Common object ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_commonObjectId;
+    protected $_commonObjectId;
 
     /**
      * GIS coordinates - X
      * MANDATORY: NO
      * @var double Signed 64-bit
      */
-    private $_coordX;
+    protected $_coordX;
 
     /**
      * GIS coordinates - Y
      * MANDATORY: NO
      * @var double Signed 64-bit
      */
-    private $_coordY;
+    protected $_coordY;
     
     /**
      * Serialized address
@@ -136,7 +136,7 @@ class ParamAddress {
      * @var integer Signed 64-bit
      * @since 2.5.0
      */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Address line 1
@@ -144,7 +144,7 @@ class ParamAddress {
      * @var string
      * @since 2.5.0
      */
-    private $_frnAddressLine1;
+    protected $_frnAddressLine1;
     
     /**
      * Address line 2
@@ -152,7 +152,7 @@ class ParamAddress {
      * @var string
      * @since 2.5.0
      */
-    private $_frnAddressLine2;
+    protected $_frnAddressLine2;
     
     /**
      * Post code
@@ -160,7 +160,7 @@ class ParamAddress {
      * @var string
      * @since 2.5.0
      */
-    private $_postCode;
+    protected $_postCode;
     
     /**
      * Site name
@@ -168,7 +168,7 @@ class ParamAddress {
      * @var string
      * @since 2.5.0
      */
-    private $_siteName;
+    protected $_siteName;
     
     /**
      * State id
@@ -176,7 +176,7 @@ class ParamAddress {
      * @var string
      * @since 2.5.0
      */
-    private $_stateId;
+    protected $_stateId;
     
     /**
      * Constructs new instance of ParamAddress

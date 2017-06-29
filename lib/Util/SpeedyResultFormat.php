@@ -15,10 +15,10 @@ class SpeedyResultFormat implements JsonSerializable
      * @return array
      */
     public function toArray() {
-        $vars = get_class_vars(get_class($this));
+        $reflection = new ReflectionClass($this);
         $return = [];
-        foreach($vars AS $var => $data) {
-            $value = $this->{$var};
+        foreach($reflection->getProperties() AS $property) {
+            $value = $this->{$property->getName()};
             if(is_object($value) && method_exists($value, 'toArray')) {
                 $value = $value->toArray();
             } else if(is_array($value)) {
@@ -28,7 +28,7 @@ class SpeedyResultFormat implements JsonSerializable
                 }
                 $value = $tmp;
             }
-            $return[substr(Helper::snake($var), 1)] = $value;
+            $return[substr(Helper::snake($property->getName()), 1)] = $value;
 
         }
         return $return;

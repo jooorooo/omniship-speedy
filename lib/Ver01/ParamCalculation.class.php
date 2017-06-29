@@ -35,7 +35,7 @@ class ParamCalculation {
      * @access private
      * @var date
      */
-    private $_takingDate;
+    protected $_takingDate;
 
     /**
      * If set to true, the "takingDate" field is not just to be validated, but the first allowed (following)
@@ -44,7 +44,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_autoAdjustTakingDate;
+    protected $_autoAdjustTakingDate;
      
     /**
      * Courier service type ID
@@ -52,7 +52,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
 
 	/**
      * Specifies the specific Speedy office, where the sender intends to deliver the shipment by him/herself. 
@@ -65,7 +65,7 @@ class ParamCalculation {
      * @var integer signed 64-bit
      * @since 2.8.0
      */
-	private $_willBringToOfficeId;
+	protected $_willBringToOfficeId;
 
     /**
      * Specifies if the sender intends to deliver the shipment to a Speedy office by him/herself instead of ordering a visit by courier
@@ -73,7 +73,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_broughtToOffice;
+    protected $_broughtToOffice;
 
 	/**
      * ID of an office "to be called". 
@@ -85,7 +85,7 @@ class ParamCalculation {
      * @var integer signed 64-bit
      * @since 2.8.0
      */
-	private $_officeToBeCalledId;
+	protected $_officeToBeCalledId;
 
     /**
      * Specifies if the shipment is "to be called"
@@ -93,7 +93,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_toBeCalled;
+    protected $_toBeCalled;
 
     /**
      * Fixed time for delivery ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.).
@@ -102,7 +102,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 16-bit
      */
-    private $_fixedTimeDelivery;
+    protected $_fixedTimeDelivery;
 
     /**
      * In some rare cases users might prefer the delivery to be deferred by a day or two.
@@ -112,7 +112,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 32-bit
      */
-    private $_deferredDeliveryWorkDays;
+    protected $_deferredDeliveryWorkDays;
 
     /**
      * Shipment insurance value (if the shipment is insured).
@@ -121,7 +121,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_amountInsuranceBase;
+    protected $_amountInsuranceBase;
 
     /**
      * Cash-on-Delivery (COD) amount
@@ -130,7 +130,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_amountCodBase;
+    protected $_amountCodBase;
 
     /**
      * Specifies if the COD value is to be paid to a third party. Allowed only if the shipment has payerType = 2 (third party).
@@ -138,7 +138,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_payCodToThirdParty;
+    protected $_payCodToThirdParty;
 
     /**
      * Parcels count.
@@ -147,7 +147,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 32-bit
      */
-    private $_parcelsCount;
+    protected $_parcelsCount;
     
    /**
      * Data for parcels with explicit/fixed IDs (from the second one onward)
@@ -155,7 +155,7 @@ class ParamCalculation {
      * MANDATORY: NO
      * @var array List of ParamParcelInfo
      */
-    private $_parcels;
+    protected $_parcels;
 
     /**
      * Declared weight (the greater of "volume" and "real" weight values).
@@ -164,7 +164,7 @@ class ParamCalculation {
      * @access private
      * @var double Signed 64-bit
      */
-    private $_weightDeclared;
+    protected $_weightDeclared;
 
     /**
      * Specifies whether the shipment consists of documents
@@ -172,7 +172,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_documents;
+    protected $_documents;
 
     /**
      * Specifies whether the shipment is fragile - necessary when the price of insurance is being calculated
@@ -180,7 +180,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_fragile;
+    protected $_fragile;
 
     /**
      * Specifies whether the shipment is palletized
@@ -188,7 +188,7 @@ class ParamCalculation {
      * @access private
      * @var boolean
      */
-    private $_palletized;
+    protected $_palletized;
 
     /**
      * Sender's ID.
@@ -197,7 +197,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_senderId;
+    protected $_senderId;
 
     /**
      * Sender's site ID.
@@ -206,7 +206,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_senderSiteId;
+    protected $_senderSiteId;
 
     /**
      * Receiver's ID.
@@ -215,7 +215,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_receiverId;
+    protected $_receiverId;
 
     /**
      * Receiver's site ID
@@ -224,7 +224,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_receiverSiteId;
+    protected $_receiverSiteId;
 
     /**
      * Payer type (0=sender, 1=receiver or 2=third party)
@@ -232,7 +232,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 32-bit
      */
-    private $_payerType;
+    protected $_payerType;
 
     /**
      * Payer ID. Must be set <=> payer is "third party".
@@ -240,7 +240,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_payerRefId;
+    protected $_payerRefId;
 
     /**
      * Insurance payer type (0=sender, 1=reciever or 2=third party).
@@ -249,7 +249,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 32-bit
      */
-    private $_payerTypeInsurance;
+    protected $_payerTypeInsurance;
     
     /**
      * Packings payer type (0=sender, 1=reciever or 2=third party)
@@ -257,7 +257,7 @@ class ParamCalculation {
      * @var integer Signed 32-bit
      * @since 2.3.0
      */
-    private $_payerTypePackings;
+    protected $_payerTypePackings;
     
     /**
      * Insurance payer ID. Must be set <=> shipment has insurance (i.e. amountInsuranceBase > 0) and it is payed by a "third party".
@@ -265,7 +265,7 @@ class ParamCalculation {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_payerRefInsuranceId;
+    protected $_payerRefInsuranceId;
     
     /**
      * Packings payer id
@@ -289,7 +289,7 @@ class ParamCalculation {
      * @var integer Signed 64-bit
      * @since 2.5.0
      */
-    private $_receiverCountryId;
+    protected $_receiverCountryId;
 
     /**
      * Receiver's post code
@@ -297,7 +297,7 @@ class ParamCalculation {
      * @var string
      * @since 2.5.0
      */
-    private $_receiverPostCode;
+    protected $_receiverPostCode;
     
     /**
      * Sender's country ID
@@ -305,7 +305,7 @@ class ParamCalculation {
      * @var integer Signed 64-bit
      * @since 2.5.0
      */
-    private $_senderCountryId;
+    protected $_senderCountryId;
     
     /**
      * Sender's post code
@@ -313,7 +313,7 @@ class ParamCalculation {
      * @var string
      * @since 2.5.0
      */
-    private $_senderPostCode;
+    protected $_senderPostCode;
 
     /**
      * Flag indicating whether the shipping price should be included into the cash on delivery price.
@@ -321,7 +321,7 @@ class ParamCalculation {
      * @var boolean
      * @since 2.9.0
      */
-    private $_includeShippingPriceInCod;
+    protected $_includeShippingPriceInCod;
 
     /**
      * Check if specified office to be called is working. Default value - true.
@@ -329,7 +329,7 @@ class ParamCalculation {
      * @var boolean
      * @since 2.9.4
      */
-    private $_checkTBCOfficeWorkDay;
+    protected $_checkTBCOfficeWorkDay;
 
     /**
      * Flag indicating whether the shipment should be delivered on a half working day, if such a delivery date happens to be calculated.
@@ -337,7 +337,7 @@ class ParamCalculation {
      * @var boolean
      * @since 3.2.6
      */
-    private $_halfWorkDayDelivery;
+    protected $_halfWorkDayDelivery;
 
     /**
      * Set the date for shipment pick-up (the "time" component is ignored).

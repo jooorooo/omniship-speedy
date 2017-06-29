@@ -10,25 +10,25 @@ class ResultState extends SpeedyResultFormat {
 	 * State country id
 	 * @var integer signed 64-bit
 	 */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Country state name
      * @var string
      */
-    private $_name;
+    protected $_name;
     
     /**
      * Country state alpha code
      * @var string
      */
-    private $_stateAlpha;
+    protected $_stateAlpha;
     
     /**
      * Country state id
      * @var string
      */
-    private $_stateId;
+    protected $_stateId;
     
     /**
      * Constructs new instance of ResultState

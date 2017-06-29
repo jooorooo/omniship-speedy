@@ -7,147 +7,147 @@ class ResultAmounts extends SpeedyResultFormat {
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_insuranceBase;
+    protected $_insuranceBase;
 
     /**
      * The insurance premium (i.e. the price of the "Insurance" complementary service)
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_insurancePremium;
+    protected $_insurancePremium;
 
     /**
      * The net price (of the courier service only; w/o discounts, complementary services, VAT etc.)
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_net;
+    protected $_net;
 
     /**
      * (NEGATIVE value) Fixed discount value
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discountFixed;
+    protected $_discountFixed;
 
     /**
      * (NEGATIVE value) Discount for shipments delivered to a Speedy office by the sender
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discountToOffice;
+    protected $_discountToOffice;
 
     /**
      * (NEGATIVE value) Discount for the "To be called" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discountToBeCalled;
+    protected $_discountToBeCalled;
 
     /**
      * (NEGATIVE value) Additional discount
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discountAdditional;
+    protected $_discountAdditional;
 
     /**
      * Packings value
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_packings;
+    protected $_packings;
 
     /**
      * The amount of the "Additional charges for loading/unloading operations" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_tro;
+    protected $_tro;
 
     /**
      * The amount of the "Fixed time for delivery" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_fixedTimeDelivery;
+    protected $_fixedTimeDelivery;
 
     /**
      * Fuel surcharge
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_fuelSurcharge;
+    protected $_fuelSurcharge;
 
     /**
      * Island surcharge (international shipments)
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_islandSurcharge;
+    protected $_islandSurcharge;
 
     /**
      * The "Cash on delivery" amount to be paid to the sender
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_codBase;
+    protected $_codBase;
 
     /**
      * The price of the "Cash on delivery" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_codPremium;
+    protected $_codPremium;
 
     /**
      * VAT (Value added tax)
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_vat;
+    protected $_vat;
 
     /**
      * The total amount
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_total;
+    protected $_total;
 
     /**
      * The PERCENTAGE of fixed discount
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discPcntFixed;
+    protected $_discPcntFixed;
 
     /**
      * The PERCENTAGE of the "brought to office" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discPcntToOffice;
+    protected $_discPcntToOffice;
 
     /**
      * The PERCENTAGE of the "To be called" complementary service
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discPcntToBeCalled;
+    protected $_discPcntToBeCalled;
 
     /**
      * The PERCENTAGE of additional discount
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_discPcntAdditional;
+    protected $_discPcntAdditional;
 
     /**
      * The PERCENTAGE of fuel surcharge
      * @access private
      * @var double Signed 64-bit double
      */
-    private $_pcntFuelSurcharge;
+    protected $_pcntFuelSurcharge;
     
     /**
      * The PERCENTAGE of return shipment discount
@@ -155,7 +155,7 @@ class ResultAmounts extends SpeedyResultFormat {
      * @var double Signed 64-bit double
      * @since 2.5.0
      */
-    private $_discPcntRetShipment;
+    protected $_discPcntRetShipment;
     
     /**
      * The amount of return shipment discount
@@ -163,7 +163,7 @@ class ResultAmounts extends SpeedyResultFormat {
      * @var double Signed 64-bit double
      * @since 2.5.0
      */
-    private $_discountRetShipment;
+    protected $_discountRetShipment;
     
     /**
      * The amount of special delivery discount
@@ -171,7 +171,7 @@ class ResultAmounts extends SpeedyResultFormat {
      * @var double Signed 64-bit double
      * @since 2.5.0
      */
-    private $_specialDelivery;
+    protected $_specialDelivery;
 
     /**
      * Constructs new instance of ResultAmounts from stdClass

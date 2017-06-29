@@ -10,42 +10,42 @@ class ResultRoutingLabelInfo extends SpeedyResultFormat {
      * @access private
      * @var integer
      */
-    private $_hubId;
+    protected $_hubId;
 
     /**
      * Delivery office id
      * @access private
      * @var integer
      */
-    private $_officeId;
+    protected $_officeId;
 
     /**
      * Delivery deadline day of month
      * @access private
      * @var integer
      */
-    private $_deadlineDay;
+    protected $_deadlineDay;
 
     /**
      * The delivery deadline month
      * @access private
      * @var integer
      */
-    private $_deadlineMonth;
+    protected $_deadlineMonth;
 
     /**
      * Tour Id
      * @access private
      * @var integer
      */
-    private $_tourId;
+    protected $_tourId;
 
     /**
      * Barcode containing the parcel number and important routing information.
      * @access private
      * @var string
      */
-    private $_fullBarcode;
+    protected $_fullBarcode;
 
 
     /**

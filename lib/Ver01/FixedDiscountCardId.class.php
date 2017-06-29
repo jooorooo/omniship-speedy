@@ -9,13 +9,13 @@ class FixedDiscountCardId {
      * MANDATORY: NO
      * @var integer Signed 32-bit
      */
-    private $_agreementId;
+    protected $_agreementId;
 
     /**
      * Card ID
      * @var integer Signed 32-bit
      */
-    private $_cardId;
+    protected $_cardId;
 
     /**
      * Set agreement (contract) ID

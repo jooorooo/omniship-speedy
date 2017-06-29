@@ -9,25 +9,25 @@ class ResultStreet extends SpeedyResultFormat {
      * Street ID
      * @var integer Signed 64-bit
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Street type
      * @var string
      */
-    private $_type;
+    protected $_type;
 
     /**
      * Street name
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Actual name (in case "name" is an old name)
      * @var string
      */
-    private $_actualName;
+    protected $_actualName;
 
     /**
      * Constructs new instance of ResultStreet

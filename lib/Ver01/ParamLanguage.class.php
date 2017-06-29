@@ -21,7 +21,7 @@ class ParamLanguage {
      * Value is one of the constants (BG, EN)
      * @var string
      */
-    private $_value;
+    protected $_value;
 
     /**
      * Constructs new instance of ParamLangage from string.

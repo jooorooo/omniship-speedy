@@ -8,49 +8,49 @@ class ResultAddressSearch extends SpeedyResultFormat {
      * Text description of the address found
      * @var string
      */
-    private $_text;
+    protected $_text;
 
     /**
      * GIS coordinates - X
      * @var double Signed 64-bit
      */
-    private $_coordX;
+    protected $_coordX;
 
     /**
      * GIS coordinates - Y
      * @var double Signed 64-bit
      */
-    private $_coordY;
+    protected $_coordY;
 
     /**
      * Microregion ID
      * @var integer Signed 64-bit
      */
-    private $_microregionId;
+    protected $_microregionId;
 
     /**
      * Distance to site's center in kilometers (straight line)
      * @var double Signed 64-bit
      */
-    private $_distanceToSiteCenter;
+    protected $_distanceToSiteCenter;
 
     /**
      * Specifies if the address is actual now
      * @var boolean
      */
-    private $_actual;
+    protected $_actual;
 
     /**
      * GIS coordinates type
      * @var integer Signed 32-bit
      */
-    private $_coordType;
+    protected $_coordType;
 
     /**
      * Internal/debug info
      * @var integer Signed 32-bit
      */
-    private $_additionalAddressProcessing;
+    protected $_additionalAddressProcessing;
 
     /**
      * Constructs new instance of ResultAddressSearch from stdClass

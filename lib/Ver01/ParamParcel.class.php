@@ -12,35 +12,35 @@ class ParamParcel {
      * MANDATORY: YES
      * @var integer signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * Parcel ID (if empty, the server will generate one)
      * MANDATORY: NO
      * @var integer signed 64-bit
      */
-    private $_parcelId;
+    protected $_parcelId;
 
     /**
      * Packing ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_packId;
+    protected $_packId;
 
     /**
      * Real weight (kg)
      * MANDATORY: YES
      * @var double Signed 64-bit
      */
-    private $_weight;
+    protected $_weight;
 
     /**
      * Parcel size
      * MANDATORY: NO
      * @var Size
      */
-    private $_size;
+    protected $_size;
     
     /**
      * Foreign parcel number
@@ -48,7 +48,7 @@ class ParamParcel {
      * @var string
      * @since 2.5.0
      */
-    private $_foreignParcelNumber;
+    protected $_foreignParcelNumber;
 
     /**
      * Set BOL number

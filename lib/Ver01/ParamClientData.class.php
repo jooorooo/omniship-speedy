@@ -13,7 +13,7 @@ class ParamClientData {
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_clientId;
+    protected $_clientId;
 
     /**
      * Name of the client (company or private person).
@@ -21,7 +21,7 @@ class ParamClientData {
      * MANDATORY: Must be set <=> clientId is null.
      * @var string
      */
-    private $_partnerName;
+    protected $_partnerName;
 
     /**
      * Company department/office.
@@ -29,14 +29,14 @@ class ParamClientData {
      * MANDATORY: Allowed <=> clientId is null.
      * @var string
      */
-    private $_objectName;
+    protected $_objectName;
 
     /**
      * Address details
      * MANDATORY: Required when clientId is null
      * @var ParamAddress
      */
-    private $_address;
+    protected $_address;
 
     /**
      * Contact name.
@@ -44,7 +44,7 @@ class ParamClientData {
      * MANDATORY: NO
      * @var string
      */
-    private $_contactName;
+    protected $_contactName;
 
     /**
      * Phone numbers.
@@ -55,7 +55,7 @@ class ParamClientData {
      *   ("Required" means at least one valid phone number must be set.)
      * @var array List of ParamPhoneNumber
      */
-    private $_phones;
+    protected $_phones;
     
     /**
      * Email
@@ -65,7 +65,7 @@ class ParamClientData {
      * 
      * @since 2.1.0
      */
-    private $_email;
+    protected $_email;
 
     /**
      * Private Person Type
@@ -74,7 +74,7 @@ class ParamClientData {
      * 
      * @since 3.2.1
 	   */
-    private $_privatePersonType;
+    protected $_privatePersonType;
 
 
     /**

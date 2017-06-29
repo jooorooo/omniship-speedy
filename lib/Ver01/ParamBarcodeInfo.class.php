@@ -9,7 +9,7 @@ class ParamBarcodeInfo {
      * MANDATORY: YES
      * @var string
      */
-    private $_barcodeValue;
+    protected $_barcodeValue;
 
     /**
      * Barcode label. It is printed just below the barcode image.
@@ -17,7 +17,7 @@ class ParamBarcodeInfo {
      * MANDATORY: NO
      * @var string
      */
-    private $_barcodeLabel;
+    protected $_barcodeLabel;
 
     /**
      * Set barcode value. For barcode formats other than 'CODE128' it must contain digits only.

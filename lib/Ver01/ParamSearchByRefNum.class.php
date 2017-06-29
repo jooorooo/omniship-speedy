@@ -27,28 +27,28 @@ class ParamSearchByRefNum {
      * MANDATORY: YES
      * @var string
      */
-    private $_referenceNumber;
+    protected $_referenceNumber;
 
     /**
      * Specifies where to search: 0 means [Ref1 or Ref2], 1 means [Ref1], 2 means [Ref2]
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_searchInField;
+    protected $_searchInField;
 
     /**
      * Pick-up date - from
      * MANDATORY: NO
      * @var date
      */
-    private $_dateFrom;
+    protected $_dateFrom;
 
     /**
      * Pick-up date - to
      * MANDATORY: NO
      * @var date
      */
-    private $_dateTo;
+    protected $_dateTo;
 
     /**
      * Set reference code to be searched (exact match, case sensitive)

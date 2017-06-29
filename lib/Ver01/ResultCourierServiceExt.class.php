@@ -11,13 +11,13 @@ class ResultCourierServiceExt extends ResultCourierService {
      * The deadline for shipment delivery
      * @var datetime
      */
-    private $_deliveryDeadline;
+    protected $_deliveryDeadline;
 
     /**
      * Specifies if the complementary service "Delivery to floor" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceDeliveryToFloor;
+    protected $_allowanceDeliveryToFloor;
 
     /**
      * Constructs new instance of ResultCourierServiceExt

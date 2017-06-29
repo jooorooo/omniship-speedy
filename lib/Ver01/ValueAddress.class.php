@@ -8,169 +8,169 @@ class ValueAddress {
      * Country ID (ISO)
      * @var integer Signed 64-bit
      */
-    private $_countryId;
+    protected $_countryId;
 
     /**
      * State
      * @var string
      */
-    private $_stateId;
+    protected $_stateId;
 
     /**
      * Site ID
      * @var integer Signed 64-bit
      */
-    private $_siteId;
+    protected $_siteId;
 
     /**
      * Site name
      * @var string
      */
-    private $_siteName;
+    protected $_siteName;
 
     /**
      * Site type
      * @var string
      */
-    private $_siteType;
+    protected $_siteType;
 
     /**
      * Municpality name
      * @var string
      */
-    private $_municipalityName;
+    protected $_municipalityName;
 
     /**
      * Region name
      * @var string
      */
-    private $_regionName;
+    protected $_regionName;
 
     /**
      * Post code
      * @var string
      */
-    private $_postCode;
+    protected $_postCode;
 
     /**
      *
      * @var string
      */
-    private $_eknm;
+    protected $_eknm;
 
     /**
      * Street name
      * @var string
      */
-    private $_streetName;
+    protected $_streetName;
 
     /**
      * Street type
      * @var string
      */
-    private $_streetType;
+    protected $_streetType;
 
     /**
      * Street ID
      * @var integer Signed 64-bit
      */
-    private $_streetId;
+    protected $_streetId;
 
     /**
      * Quarter name
      * @var string
      */
-    private $_quarterName;
+    protected $_quarterName;
 
     /**
      * Quarter type
      * @var string
      */
-    private $_quarterType;
+    protected $_quarterType;
 
     /**
      * Quarter ID
      * @var long Signed 64-bit
      */
-    private $_quarterId;
+    protected $_quarterId;
 
     /**
      * Street No
      * @var string
      */
-    private $_streetNo;
+    protected $_streetNo;
 
     /**
      * Block No
      * @var string
      */
-    private $_blockNo;
+    protected $_blockNo;
 
     /**
      * Entrance No
      * @var string
      */
-    private $_entranceNo;
+    protected $_entranceNo;
 
     /**
      * Floor No
      * @var string
      */
-    private $_floorNo;
+    protected $_floorNo;
 
     /**
      * Appartment No
      * @var string
      */
-    private $_apartmentNo;
+    protected $_apartmentNo;
 
     /**
      * Address note
      * @var string
      */
-    private $_addressNote;
+    protected $_addressNote;
 
     /**
      * GIS coordinate - X
      * @var double Signed 64-bit
      */
-    private $_coordX;
+    protected $_coordX;
 
     /**
      * GIS coordinate - Y
      * @var double Signed 64-bit
      */
-    private $_coordY;
+    protected $_coordY;
 
     /**
      * GIS coordinates type
      * @var integer Signed 32-bit
      */
-    private $_coordTypeId;
+    protected $_coordTypeId;
 
     /**
      * Common object name
      * @var string
      */
-    private $_commonObjectName;
+    protected $_commonObjectName;
 
     /**
      * Common object ID
      * @var integer Signed 64-bit
      */
-    private $_commonObjectId;
+    protected $_commonObjectId;
 
     /**
      * Flag for full nomenclature
      * @var boolean
      */
-    private $_fullNomenclature;
+    protected $_fullNomenclature;
 
     /**
      * Site details
      * @var string
      */
-    private $_siteDetails;
+    protected $_siteDetails;
 
     /**
      * Constructs new instance of ValueAddress

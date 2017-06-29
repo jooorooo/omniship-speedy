@@ -11,35 +11,35 @@ class ParamFilterCountry {
 	 * MANDATORY: NO
 	 * @var integer Signed 64-bit
 	 */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * ISO alpha2 country code
      * MANDATORY: NO
      * @var string
      */
-    private $_isoAlpha2;
+    protected $_isoAlpha2;
     
     /**
      * ISO alpha 3 country code
      * MANDATORY: NO
      * @var string
      */
-    private $_isoAlpha3;
+    protected $_isoAlpha3;
     
     /**
      * Country name
      * MANDATORY: NO
      * @var string
      */
-    private $_name;
+    protected $_name;
     
     /**
      * Search string
      * MANDATORY: NO
      * @var string
      */
-    private $_searchString;
+    protected $_searchString;
 
     /**
      * Gets the country id

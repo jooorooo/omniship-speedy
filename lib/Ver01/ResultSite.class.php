@@ -12,42 +12,42 @@ class ResultSite extends SpeedyResultFormat {
      * @access private
      * @var integer Signed 64-bit
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Site type
      * @access private
      * @var string
      */
-    private $_type;
+    protected $_type;
 
     /**
      * Site name
      * @access private
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Site municipality name
      * @access private
      * @var string
      */
-    private $_municipality;
+    protected $_municipality;
 
     /**
      * Site region name
      * @access private
      * @var string
      */
-    private $_region;
+    protected $_region;
 
     /**
      * Site post code
      * @access private
      * @var string
      */
-    private $_postCode;
+    protected $_postCode;
 
     /**
      * Site address nomenclature.
@@ -55,7 +55,7 @@ class ResultSite extends SpeedyResultFormat {
      * @access private
      * @var AddrNomen
      */
-    private $_addrNomen;
+    protected $_addrNomen;
     
     /**
      * Site country id
@@ -63,7 +63,7 @@ class ResultSite extends SpeedyResultFormat {
      * @var integer signed 64-bit
      * @since 2.5.0
      */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Serving office id
@@ -71,25 +71,25 @@ class ResultSite extends SpeedyResultFormat {
      * @var integer signed 64-bit
      * @since 2.6.0
      */
-    private $_servingOfficeId;
+    protected $_servingOfficeId;
     
     /**
      * GIS coordinate - X
      * @var double Signed 64-bit
      */
-    private $_coordX;
+    protected $_coordX;
 
     /**
      * GIS coordinate - Y
      * @var double Signed 64-bit
      */
-    private $_coordY;
+    protected $_coordY;
 
     /**
      * GIS coordinates type
      * @var integer Signed 32-bit
      */
-    private $_coordType;
+    protected $_coordType;
     
     /**
      * Serving days for this site. 
@@ -97,7 +97,7 @@ class ResultSite extends SpeedyResultFormat {
      * Value of '0' (zero) means that the site is not served by Speedy on this day while '1' (one) means that it is served. 
      * (Example: the text "0100100" means that the site is served on Tuesday and Friday only.)
      */
-    private $_servingDays;
+    protected $_servingDays;
     
 
     /**

@@ -12,28 +12,28 @@ class ResultCalculation extends SpeedyResultFormat {
      * @access private
      * @var ResultAmounts Amounts structure
      */
-    private $_amounts;
+    protected $_amounts;
 
     /**
      * The pick-up date
      * @access private
      * @var date
      */
-    private $_takingDate;
+    protected $_takingDate;
 
     /**
      * Deadline for delivery
      * @access private
      * @var date
      */
-    private $_deadlineDelivery;
+    protected $_deadlineDelivery;
 
     /**
      * Specifies if the discounts are potentially partial (the final discounts might be bigger depending on the other participants' contracts).
      * @access private
      * @var boolean
      */
-    private $_partialDiscount;
+    protected $_partialDiscount;
 
     /**
      * Constructs new instance of ResultCalculation from stdClass

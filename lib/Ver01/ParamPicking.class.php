@@ -21,28 +21,28 @@ class ParamPicking {
      * MANDATORY: Only for updateBillOfLading. Null otherwise
      * @var integer Signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * The date for shipment pick-up (the "time" component is ignored). Default value is "today".
      * MANDATORY: NO
      * @var date
      */
-    private $_takingDate;
+    protected $_takingDate;
 
     /**
      * Courier service type ID
      * MANDATORY: YES
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
 
     /**
      * ID of an office "to be called"
      * MANDATORY: Only for "to be called" pickings
      * @var integer Signed 64-bit
      */
-    private $_officeToBeCalledId;
+    protected $_officeToBeCalledId;
     
     /**
      * Options before payment
@@ -57,7 +57,7 @@ class ParamPicking {
      * MANDATORY: Depending on the courier service, this property could be required, allowed or banned
      * @var integer Signed 16-bit
      */
-    private $_fixedTimeDelivery;
+    protected $_fixedTimeDelivery;
 
     /**
      * In some rare cases users might prefer the delivery to be deferred by a day or two.
@@ -66,28 +66,28 @@ class ParamPicking {
      * MANDATORY: No
      * @var integer Signed 32-bit
      */
-    private $_deferredDeliveryWorkDays;
+    protected $_deferredDeliveryWorkDays;
 
     /**
      * Specifies if the shipment has a "request for return documents"
      * MANDATORY: YES
      * @var boolean
      */
-    private $_backDocumentsRequest;
+    protected $_backDocumentsRequest;
 
     /**
      * Specifies if the shipment has a "request for return receipt"
      * MANDATORY: YES
      * @var boolean
      */
-    private $_backReceiptRequest;
+    protected $_backReceiptRequest;
 
     /**
      * Specifies if the sender intends to deliver the shipment to a Speedy office by him/herself instead of ordering a visit by courier
      * MANDATORY: YES
      * @var boolean
      */
-    private $_willBringToOffice;
+    protected $_willBringToOffice;
     
     /**
      * Special delivery id
@@ -107,7 +107,7 @@ class ParamPicking {
      * @since 1.3
      * @var integer Signed 64-bit
      */
-    private $_willBringToOfficeId;
+    protected $_willBringToOfficeId;
 
     /**
      * Shipment insurance value (if the shipment is insured).
@@ -115,7 +115,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var double Signed 64-bit
      */
-    private $_amountInsuranceBase;
+    protected $_amountInsuranceBase;
 
     /**
      * Cash-on-Delivery (COD) amount.
@@ -123,14 +123,14 @@ class ParamPicking {
      * MANDATORY: NO
      * @var double Signed 64-bit
      */
-    private $_amountCodBase;
+    protected $_amountCodBase;
 
     /**
      * Specifies if the COD value is to be paid to a third party. Allowed only if the shipment has payerType = 2 (third party).
      * MANDATORY: NO
      * @var boolean
      */
-    private $_payCodToThirdParty;
+    protected $_payCodToThirdParty;
 
     /**
      * Return money-transfer request amount
@@ -138,7 +138,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var double Signed 64-bit
      */
-    private $_retMoneyTransferReqAmount;
+    protected $_retMoneyTransferReqAmount;
     
     /**
      * Return third party payer flag
@@ -153,14 +153,14 @@ class ParamPicking {
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_parcelsCount;
+    protected $_parcelsCount;
 
     /**
      * Size of shipment
      * MANDATORY: NO
      * @var Size
      */
-    private $_size;
+    protected $_size;
 
     /**
      * Declared weight (the greater of "volume" and "real" weight values).
@@ -168,21 +168,21 @@ class ParamPicking {
      * MANDATORY: YES
      * @var double Signed 64-bit
      */
-    private $_weightDeclared;
+    protected $_weightDeclared;
 
     /**
      * Contents. Max text size - 50 symbols
      * MANDATORY: YES
      * @var string
      */
-    private $_contents;
+    protected $_contents;
 
     /**
      * Packing
      * MANDATORY: YES
      * @var string
      */
-    private $_packing;
+    protected $_packing;
     
     /**
      * Data for packings. For internal use only
@@ -190,70 +190,70 @@ class ParamPicking {
      * @var ParamPackings
      * @since 2.3.0
      */
-    private $_packings;
+    protected $_packings;
 
     /**
      * Packing ID (number)
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_packId;
+    protected $_packId;
 
     /**
      * Specifies whether the shipment consists of documents
      * MANDATORY: YES
      * @var boolean
      */
-    private $_documents;
+    protected $_documents;
 
     /**
      * Specifies whether the shipment is fragile - necessary when the price of insurance is being calculated
      * MANDATORY: YES
      * @var boolean
      */
-    private $_fragile;
+    protected $_fragile;
 
     /**
      * Specifies whether the shipment is palletized
      * MANDATORY: YES
      * @var boolean
      */
-    private $_palletized;
+    protected $_palletized;
 
     /**
      * Data for the sender
      * MANDATORY: YES
      * @var ParamClientData
      */
-    private $_sender;
+    protected $_sender;
 
     /**
      * Data for the receiver
      * MANDATORY: YES
      * @var ParamClientData
      */
-    private $_receiver;
+    protected $_receiver;
 
     /**
      * Payer type (0=sender, 1=receiver or 2=third party)
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_payerType;
+    protected $_payerType;
 
     /**
      * Payer ID.
      * MANDATORY: Must be set <=> payer is "third party".
      * @var integer Signed 64-bit
      */
-    private $_payerRefId;
+    protected $_payerRefId;
 
     /**
      * Insurance payer type (0=sender, 1=reciever or 2=third party)
      * MANDATORY: Must be set <=> shipment is insured (i.e. amountInsuranceBase > 0).
      * @var integer Signed 32-bit
      */
-    private $_payerTypeInsurance;
+    protected $_payerTypeInsurance;
     
     /**
      * Packings payer type (0=sender, 1=reciever or 2=third party)
@@ -268,7 +268,7 @@ class ParamPicking {
      * MANDATORY: Must be set <=> shipment has insurance (i.e. amountInsuranceBase > 0) and it is payed by a "third party".
      * @var integer Signed 64-bit
      */
-    private $_payerRefInsuranceId;
+    protected $_payerRefInsuranceId;
     
     /**
      * Packings payer ID
@@ -283,14 +283,14 @@ class ParamPicking {
      * MANDATORY: NO
      * @var string
      */
-    private $_noteClient;
+    protected $_noteClient;
 
     /**
      * Card/Coupon/Voucher number for fixed discount
      * MANDATORY: NO
      * @var FixedDiscountCardId
      */
-    private $_discCalc;
+    protected $_discCalc;
 
     /**
      * ID of the client who is to receive the return receipt and/or the return documents.
@@ -299,7 +299,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_retToClientId;
+    protected $_retToClientId;
 
     /**
      * An optional reference code.
@@ -307,7 +307,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var string
      */
-    private $_ref1;
+    protected $_ref1;
 
     /**
      * An optional reference code.
@@ -315,7 +315,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var string
      */
-    private $_ref2;
+    protected $_ref2;
 
     /**
      * An optional value used to identify user's client software.
@@ -323,7 +323,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_clientSystemId;
+    protected $_clientSystemId;
 
     /**
      * Data for parcels with explicit/fixed IDs (from the second one onward)
@@ -331,7 +331,7 @@ class ParamPicking {
      * MANDATORY: NO
      * @var array List of ParamParcelInfo
      */
-    private $_parcels;
+    protected $_parcels;
 
     /**
      * When parcelsCount > 1 and no explicit data has been set in the parcels property during the creation,
@@ -340,21 +340,21 @@ class ParamPicking {
      * MANDATORY: NO
      * @var boolean
      */
-    private $_skipAutomaticParcelsCreation;
+    protected $_skipAutomaticParcelsCreation;
 
     /**
      * Specifies if the service/system should allow parcels to be added to the shipment at a later stage.
      * MANDATORY: NO
      * @var boolean
      */
-    private $_pendingParcelsDescription;
+    protected $_pendingParcelsDescription;
 
     /**
      * Specifies if the service/system should allow BOL's modification at a later stage.
      * MANDATORY: NO
      * @var boolean
      */
-    private $_pendingShipmentDescription;
+    protected $_pendingShipmentDescription;
     
     /**
      * Return service request
@@ -362,7 +362,7 @@ class ParamPicking {
      * @var array of ParamReturnServiceRequest
      * since 2.5.0
      */
-    private $_retServicesRequest;
+    protected $_retServicesRequest;
     
     /**
      * Return shipment request
@@ -370,7 +370,7 @@ class ParamPicking {
      * @var ParamReturnShipmentRequest
      * since 2.5.0
      */
-    private $_retShipmentRequest;
+    protected $_retShipmentRequest;
 
     /**
      * Specifies details for return voucher
@@ -378,7 +378,7 @@ class ParamPicking {
      * @var returnVoucher
      * @since 2.9.0
      */
-    private $_returnVoucher;
+    protected $_returnVoucher;
 
     /**
      * Specifies details for delivery to floor No (max 99)
@@ -386,7 +386,7 @@ class ParamPicking {
      * @var returnVoucher
      * @since 2.9.0
      */
-    private $_deliveryToFloorNo;
+    protected $_deliveryToFloorNo;
 
     /**
      * Flag indicating whether the shipping price should be included into the cash on delivery price.
@@ -394,7 +394,7 @@ class ParamPicking {
      * @var boolean
      * @since 2.9.0
      */
-    private $_includeShippingPriceInCod;
+    protected $_includeShippingPriceInCod;
 
     /**
      * Flag indicating whether the shipment should be delivered on a half working day, if such a delivery date happens to be calculated.
@@ -402,7 +402,7 @@ class ParamPicking {
      * @var boolean
      * @since 3.2.6
      */
-    private $_halfWorkDayDelivery;
+    protected $_halfWorkDayDelivery;
 
     /**
      * Set BOL number

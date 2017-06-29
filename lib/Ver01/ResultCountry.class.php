@@ -10,49 +10,49 @@ class ResultCountry extends SpeedyResultFormat {
 	 * Active country currency code
 	 * @var string
 	 */
-    private $_activeCurrencyCode;
+    protected $_activeCurrencyCode;
     
     /**
      * Country id
      * @var integer Signed 64-bit
      */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Country ISO alpha 2 code
      * @var string
      */
-    private $_isoAlpha2;
+    protected $_isoAlpha2;
     
     /**
      * Country ISO alpha 3 code
      * @var string
      */
-    private $_isoAlpha3;
+    protected $_isoAlpha3;
     
     /**
      * Country name
      * @var string
      */
-    private $_name;
+    protected $_name;
     
     /**
      * Country post code format
      * @var string
      */
-    private $_postCodeFormat;
+    protected $_postCodeFormat;
     
     /**
      * Require post code for country addresses flag
      * @var boolean
      */
-    private $_requirePostCode;
+    protected $_requirePostCode;
     
     /**
      * Require state for country addresses flag
      * @var boolean
      */
-    private $_requireState;
+    protected $_requireState;
     
     /**
      * Code for site nomenclature support
@@ -60,7 +60,7 @@ class ResultCountry extends SpeedyResultFormat {
      * 1 - Site nomenclature is supported for this site
      * @var integer signed 32-bit 
      */
-    private $_siteNomen;
+    protected $_siteNomen;
     
     /**
      * Constructs new instance of ResultCountry

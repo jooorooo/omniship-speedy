@@ -9,25 +9,25 @@ class ResultCommonObject extends SpeedyResultFormat {
      * Common object ID
      * @var integer Signed 64-bit
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Common object type
      * @var string
      */
-    private $_type;
+    protected $_type;
 
     /**
      * Common object name
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Common object address
      * @var string
      */
-    private $_address;
+    protected $_address;
 
     /**
      * Constructs new instance of ResultCommonObject

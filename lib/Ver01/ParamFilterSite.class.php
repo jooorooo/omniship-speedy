@@ -9,35 +9,35 @@ class ParamFilterSite {
      * MANDATORY: NO
      * @var string
      */
-    private $_postCode;
+    protected $_postCode;
 
     /**
      * Site name
      * MANDATORY: NO
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Site type
      * MANDATORY: NO
      * @var string
      */
-    private $_type;
+    protected $_type;
 
     /**
      * Site municipality name
      * MANDATORY: NO
      * @var string
      */
-    private $_municipality;
+    protected $_municipality;
 
     /**
      * Site region name
      * MANDATORY: NO
      * @var string
      */
-    private $_region;
+    protected $_region;
 
     /**
      * Country id
@@ -45,7 +45,7 @@ class ParamFilterSite {
      * @var integer signed 64-bit
      * @since 2.5.0
      */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Search string
@@ -53,7 +53,7 @@ class ParamFilterSite {
      * @var string Search string
      * @since 2.5.0
      */
-    private $_searchString;
+    protected $_searchString;
 
     /**
      * Set post code

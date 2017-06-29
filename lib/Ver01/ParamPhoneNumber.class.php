@@ -10,7 +10,7 @@ class ParamPhoneNumber {
      * MANDATORY: YES
      * @var string
      */
-    private $_number;
+    protected $_number;
 
     /**
      * An extension number.
@@ -18,7 +18,7 @@ class ParamPhoneNumber {
      * MANDATORY: NO
      * @var string
      */
-    private $_internal;
+    protected $_internal;
 
     /**
      * Set phone number (example: "0888123456", "+35932261020" etc.). Max size is 20 symbols.

@@ -8,13 +8,13 @@ class ResultParcelInfo extends SpeedyResultFormat {
      * Parcel's serial number (1, 2, 3, ...)
      * @var integer Signed 32-bit
      */
-    private $_seqNo;
+    protected $_seqNo;
 
     /**
      * Parcel ID. First parcel's ID is always the same as the BOL number.
      * @var integer Signed 64-bit
      */
-    private $_parcelId;
+    protected $_parcelId;
 
     /**
      * Constructs new instance of ResultParcelInfo from stdClass

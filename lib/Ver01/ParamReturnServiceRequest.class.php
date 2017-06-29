@@ -11,7 +11,7 @@ class ParamReturnServiceRequest {
      * MANDATORY: Only for updateBillOfLading. Null otherwise
      * @var integer signed 32-bit integer
      */
-    private $_parcelsCount;
+    protected $_parcelsCount;
     
     /**
      * Service type id
@@ -19,7 +19,7 @@ class ParamReturnServiceRequest {
      * MANDATORY
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
     
     /**
      * Get courier service type ID

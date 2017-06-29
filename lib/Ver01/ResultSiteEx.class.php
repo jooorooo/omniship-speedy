@@ -12,14 +12,14 @@ class ResultSiteEx extends SpeedyResultFormat {
      * @access private
      * @var ResultSite
      */
-    private $_site;
+    protected $_site;
 
     /**
      * Specifies if there is an exact match
      * @access private
      * @var boolean
      */
-    private $_exactMatch;
+    protected $_exactMatch;
 
     /**
      * Constructs new instance of ResultSiteEx

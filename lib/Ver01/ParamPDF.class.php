@@ -60,7 +60,7 @@ class ParamPDF {
      * MANDATORY: YES
      * @var integer signed 32-bit
      */
-    private $_type;
+    protected $_type;
 
     /**
      * List of IDs.
@@ -69,21 +69,21 @@ class ParamPDF {
      * MANDATORY: YES
      * @var array List of signed 64-bit integers
      */
-    private $_ids;
+    protected $_ids;
 
     /**
      * Specifies if embedded JavaScript code for direct printing to be generated (works for Adobe Acrobat Reader only).
      * MANDATORY: YES
      * @var boolean
      */
-    private $_includeAutoPrintJS;
+    protected $_includeAutoPrintJS;
 
     /**
      * The printer name. If empty, the default printer is to be used. Only applicable if includeAutoPrintJS = true.
      * MANDATORY: NO
      * @var string
      */
-    private $_printerName;
+    protected $_printerName;
 
     /**
      * Only allowed for type 25. A list of additional (second) barcodes to be printed on the bottom of each label in the PDF document.
@@ -92,7 +92,7 @@ class ParamPDF {
      * MANDATORY: NO
      * @var array List of ParamBarcodeInfo
      */
-    private $_additionalBarcodes;
+    protected $_additionalBarcodes;
 
     /**
      * Only allowed for type 25.
@@ -101,7 +101,7 @@ class ParamPDF {
      * MANDATORY: NO
      * @var string
      */
-    private $_additionalBarcodesFormat;
+    protected $_additionalBarcodesFormat;
 
     /**
      * Set document type (10 - BOL; 20 - labels; 25 - labels with additional barcode)

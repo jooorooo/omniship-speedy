@@ -12,35 +12,35 @@ class ParamParcelInfo {
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_seqNo;
+    protected $_seqNo;
 
     /**
      * Parcel ID
      * MANDATORY: YES
      * @var integer Signed 64-bit
      */
-    private $_parcelId;
+    protected $_parcelId;
 
     /**
      * Packing ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_packId;
+    protected $_packId;
     
     /**
      * Parcel size
      * MANDATORY: if pallet service is specified
      * @since 2.3.0
      */
-    private $_size;
+    protected $_size;
     
     /**
      * Parcel weight
      * MANDATORY: if pallet service is specified
      * @since 2.3.0
      */
-    private $_weight;
+    protected $_weight;
     
     /**
      * Foreign parcel number
@@ -48,7 +48,7 @@ class ParamParcelInfo {
      * @var string
      * @since 2.5.0
      */
-    private $_foreignParcelNumber;
+    protected $_foreignParcelNumber;
 
     /**
      * Predefined Size (Applicable to 500 - Speedy Postal service only)
@@ -56,7 +56,7 @@ class ParamParcelInfo {
      * @var string
      * @since 3.2.5
      */
-    private $_predefinedSize;
+    protected $_predefinedSize;
     
     
 	 /**

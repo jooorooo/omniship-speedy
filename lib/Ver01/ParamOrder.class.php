@@ -34,35 +34,35 @@ class ParamOrder {
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_billOfLadingsToIncludeType;
+    protected $_billOfLadingsToIncludeType;
 
     /**
      * List of BOL numbers.
      * MANDATORY: Must be set <=> billOfLadingsToIncludeType = 10.
      * @var array List of signed 64-bit integer
      */
-    private $_billOfLadingsList;
+    protected $_billOfLadingsList;
 
     /**
      * The date for shipments pick-up (the "time" component is ignored). The default value is "today".
      * MANDATORY: NO
      * @var date
      */
-    private $_pickupDate;
+    protected $_pickupDate;
 
     /**
      * Specifies when all the shipments/parcels will be ready for pickup. The default value is "now".
      * MANDATORY: Only if pickupDate > today
      * @var integer Signed 16-bit
      */
-    private $_readinessTime;
+    protected $_readinessTime;
 
     /**
      * The sender's working time end
      * MANDATORY: YES
      * @var integer Signed 16-bit
      */
-    private $_workingEndTime;
+    protected $_workingEndTime;
 
     /**
      * Contact name.
@@ -70,14 +70,14 @@ class ParamOrder {
      * MANDATORY: YES
      * @var string
      */
-    private $_contactName;
+    protected $_contactName;
 
     /**
      * Phone number
      * MANDATORY: YES
      * @var ParamPhoneNumber
      */
-    private $_phoneNumber;
+    protected $_phoneNumber;
 
     /**
      * Set the set of shipments/BOLs to be ordered:

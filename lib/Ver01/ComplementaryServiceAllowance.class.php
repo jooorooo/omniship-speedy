@@ -27,7 +27,7 @@ class ComplementaryServiceAllowance {
      * Value is one of the constants (BANNED, ALLOWED, REQUIRED)
      * @var string
      */
-    private $_value;
+    protected $_value;
 
     /**
      * Constructs new instance of Complementary service allownace from string

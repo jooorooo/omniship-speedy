@@ -10,19 +10,19 @@ class ResultSpecialDeliveryRequirement extends SpeedyResultFormat {
      * A special delivery ID
      * @var integer 64-bit
      */
-    private $_specialDeliveryId;
+    protected $_specialDeliveryId;
 
     /**
      * A special delivery description
      * @var string
      */
-    private $_specialDeliveryText;
+    protected $_specialDeliveryText;
     
     /**
      * A special delivery price
      * @var double (signed 64-bit)
      */
-    private $_specialDeliveryPrice;
+    protected $_specialDeliveryPrice;
 
     /**
      * Constructs new instance of ResultSpecialDeliveryRequirement

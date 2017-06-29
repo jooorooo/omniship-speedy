@@ -11,55 +11,55 @@ class ResultCourierService extends SpeedyResultFormat {
      * Courier service type ID
      * @var integer Signed 64-bit
      */
-    private $_typeId;
+    protected $_typeId;
 
     /**
      * Courier service name
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Specifies if the complementary service "Fixed time for delivery" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceFixedTimeDelivery;
+    protected $_allowanceFixedTimeDelivery;
 
     /**
      * Specifies if the complementary service "COD" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceCashOnDelivery;
+    protected $_allowanceCashOnDelivery;
 
     /**
      * Specifies if the complementary service "Insurance" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceInsurance;
+    protected $_allowanceInsurance;
 
     /**
      * Specifies if the complementary service "Return documents" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceBackDocumentsRequest;
+    protected $_allowanceBackDocumentsRequest;
 
     /**
      * Specifies if the complementary service "Return receipt" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceBackReceiptRequest;
+    protected $_allowanceBackReceiptRequest;
 
     /**
      * Specifies if the complementary service "To be called" is banned, allowed or required
      * @var ComplementaryServiceAllowance
      */
-    private $_allowanceToBeCalled;
+    protected $_allowanceToBeCalled;
 
     /**
      * Cargo type
      * @var integer Signed 32-bit
      */
-    private $_cargoType;
+    protected $_cargoType;
 
     /**
      * Constructs new instance of ResultCourierService

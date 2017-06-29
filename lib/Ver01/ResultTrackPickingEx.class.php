@@ -10,89 +10,89 @@ class ResultTrackPickingEx extends SpeedyResultFormat {
      * @var integer signed 64-bit (nullable)
      * @since 2.8.0
      */
-	private $_barcode;
+	protected $_barcode;
 
     /**
      * Date and time
      * @var date
      */
-    private $_moment;
+    protected $_moment;
 
     /**
      * Operation code
      * @var integer signed 32-bit
      */
-    private $_operationCode;
+    protected $_operationCode;
 
     /**
      * Text description of the operation
      * @var string
      */
-    private $_operationDescription;
+    protected $_operationDescription;
 
     /**
      * Additional note/comment
      * @var string
      */
-    private $_operationComment;
+    protected $_operationComment;
 
     /**
      * Site type
      * @var string
      */
-    private $_siteType;
+    protected $_siteType;
 
     /**
      * Site name
      * @var string
      */
-    private $_siteName;
+    protected $_siteName;
 
     /**
      * The name of the person who received the shipment
      * @var string
      */
-    private $_consignee;
+    protected $_consignee;
 
     /**
      * Returning bill of lading
      * @var integer Signed 64-bit
      */
-    private $_returnBillOfLading;
+    protected $_returnBillOfLading;
 
     /**
      * Redirecting bill of lading
      * @var integer Signed 64-bit
      */
-    private $_redirectBillOfLading;
+    protected $_redirectBillOfLading;
 
 	/**
      * Image URL for proof of delivery
      * @var string
      * @since 2.8.0
      */
-	private $_signatureImage;
+	protected $_signatureImage;
 
 	/**
      * Foreign parcel number associated with this parcel
      * @var string
      * @since 2.9.0
      */
-	private $_foreignParcelNumber;
+	protected $_foreignParcelNumber;
 
 	/**
      * List of exception codes.
      * @var List of signed 32-bit integer (nullable)
      * @since 2.9.0
      */
-	private $_exceptionCodes;
+	protected $_exceptionCodes;
 
 	/**
      * List of foreign parcel numbers list associated with this parcel.
      * @var List string
      * @since 3.2.2
      */
-	private $_foreignParcelNumbersList;
+	protected $_foreignParcelNumbersList;
 
     /**
      * Constructs new instance of ResultTrackPickingEx

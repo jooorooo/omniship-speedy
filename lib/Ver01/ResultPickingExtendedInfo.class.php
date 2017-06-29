@@ -18,313 +18,313 @@ class ResultPickingExtendedInfo extends SpeedyResultFormat {
      * BOL of the secondary shipment.
      * @var integer Signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * The date for shipment pick-up (the "time" component is ignored). Default value is "today".
      * @var date Taking date
      */
-    private $_takingDate;
+    protected $_takingDate;
     
     /**
      * Courier service type ID
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
 
     /**
      * ID of an office "to be called". Non-null and non-zero value indicates this picking as "to office". Otherwise "to address" is considered.
      * var 64-bit integer (nullable)
      */
-    private $_officeToBeCalledId;
+    protected $_officeToBeCalledId;
 
     /**
      * Fixed time for delivery ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.).
      * var signed 16-bit integer (nullable)
      */
-    private $_fixedTimeDelivery;
+    protected $_fixedTimeDelivery;
 
     /**
      * Deferred delivery work days
      * var signed 32-bit integer (nullable)
      */
-    private $_deferredDeliveryWorkDays;
+    protected $_deferredDeliveryWorkDays;
 
     /**
      * Indicates if the shipment has a "request for return documents"
      * var signed boolean
      */
-    private $_backDocumentsRequest;
+    protected $_backDocumentsRequest;
 
     /**
      * Indicates if the shipment has a "request for return receipt"
      * var signed boolean
      */
-    private $_backReceiptRequest;
+    protected $_backReceiptRequest;
 
     /**
      * ID of an office where the sender intends to deliver the shipment by him/herself. Non-null and non-zero value indicates this picking as "to office". Otherwise "from address" is considered.
      * var signed long
      */
-    private $_willBringToOfficeId;
+    protected $_willBringToOfficeId;
 
     /**
      * COD value is to be paid to a third party
      * var signed boolean
      */
-    private $_payCodToThirdParty;
+    protected $_payCodToThirdParty;
 
     /**
      * Money-transfer request amount
      * var signed 64-bit real (nullable)
      */
-    private $_retMoneyTransferReqAmount;
+    protected $_retMoneyTransferReqAmount;
     
     /**
      * Parcels count
      * var signed 32-bit integer
      */
-    private $_parcelsCount;
+    protected $_parcelsCount;
 
     /**
      * Declared weight (the greater of "volume" and "real" weight values)
      * var signed 64-bit real
      */
-    private $_weightDeclared;
+    protected $_weightDeclared;
 
     /**
      * Measured weight
      * var signed 64-bit real (nullable)
      */
-    private $_weightMeasured;
+    protected $_weightMeasured;
 
     /**
      * Calculation weight
      * var signed 64-bit real (nullable)
      */
-    private $_weightCalculation;
+    protected $_weightCalculation;
 
     /**
      * Contents
      * var signed string
      */
-    private $_contents;
+    protected $_contents;
 
     /**
      * Packing
      * var signed string
      */
-    private $_packing;
+    protected $_packing;
 
     /**
      * Indicates whether the shipment consists of documents
      * var signed boolean
      */
-    private $_documents;
+    protected $_documents;
 
     /**
      * Indicates whether the shipment is fragile
      * var signed boolean
      */
-    private $_fragile;
+    protected $_fragile;
 
     /**
      * Indicates whether the shipment is palletized
      * var signed boolean
      */
-    private $_palletized;
+    protected $_palletized;
 
     /**
      * Data for the sender
      * var sender
      */
-    private $_sender;
+    protected $_sender;
 
     /**
      * Data for the receiver
      * var receiver
      */
-    private $_receiver;
+    protected $_receiver;
 
     /**
      * Payer type (0=sender, 1=receiver or 2=third party)
      * var signed 32-bit integer
      */
-    private $_payerType;
+    protected $_payerType;
 
     /**
      * Payer ID
      * var signed 64-bit integer (nullable)
      */
-    private $_payerRefId;
+    protected $_payerRefId;
 
     /**
      * Insurance payer type (0=sender, 1=reciever or 2=third party)
      * var signed 64-bit integer (nullable)
      */
-    private $_payerTypeInsurance;
+    protected $_payerTypeInsurance;
 
     /**
      * Insurance payer ID
      * var signed 64-bit integer (nullable)
      */
-    private $_payerRefInsuranceId;
+    protected $_payerRefInsuranceId;
 
     /**
      * Packings payer type (0=sender, 1=reciever or 2=third party)
      * var signed 32-bit integer (nullable)
      */
-    private $_payerTypePackings;
+    protected $_payerTypePackings;
 
     /**
      * Packings payer ID
      * var signed 64-bit integer (nullable)
      */
-    private $_payerRefPackingsId;
+    protected $_payerRefPackingsId;
 
     /**
      * Client's note
      * var signed string
      */
-    private $_noteClient;
+    protected $_noteClient;
 
     /**
      * Card/Coupon/Voucher number for fixed discount
      * var signed FixedDiscountCardId
      */
-    private $_discCalc;
+    protected $_discCalc;
 
     /**
      * ID of the client who is to receive the return receipt and/or the return documents.
      * var signed signed 64-bit integer (nullable)
      */
-    private $_retToClientId;
+    protected $_retToClientId;
 
     /**
      * ID of the office which is to receive the return receipt and/or the return documents.
      * var signed signed 64-bit integer (nullable)
      */
-    private $_retToOfficeId;
+    protected $_retToOfficeId;
 
     /**
      * An optional reference code
      * var signed string
      */
-    private $_ref1;
+    protected $_ref1;
 
     /**
      * An optional reference code
      * var signed string
      */
-    private $_ref2;
+    protected $_ref2;
 
     /**
      * Data for parcels
      * var signed List<ResultParcelInfoEx>
      */
-    private $_parcels;
+    protected $_parcels;
 
     /**
      * List of declared pallet details
      * var signed string
      */
-    private $_palletsListDeclared;
+    protected $_palletsListDeclared;
 
     /**
      * List of measured pallet details
      * var signed string
      */
-    private $_palletsListMeasured;
+    protected $_palletsListMeasured;
 
     /**
      * List of calculation pallet details
      * var signed string
      */
-    private $_palletsListCalculation;
+    protected $_palletsListCalculation;
 
     /**
      * A special delivery ID
      * var signed 32-bit integer (nullable)
      */
-    private $_specialDeliveryId;
+    protected $_specialDeliveryId;
 
     /**
      * Optional services, allowed before payment, when cash on delivery or money transfer is enabled for the picking.
      * var ResultOptionsBeforePayment
      */
-    private $_optionsBeforePayment;
+    protected $_optionsBeforePayment;
 
     /**
      * List of return services request
      * var List<ResultReturnServiceRequest>
      */
-    private $_retServicesRequest;
+    protected $_retServicesRequest;
 
     /**
      * List of return services request
      * var List<ResultReturnServiceRequest>
      */
-    private $_retShipmentRequest;
+    protected $_retShipmentRequest;
 
     /**
      * Specifies if the payer of the return receipt and/or the return documents is the same third party, which is also the payer of the courier service.
      * var signed boolean
      */
-    private $_retThirdPartyPayer;
+    protected $_retThirdPartyPayer;
 
     /**
      * Packings details.
      * var List<ResultPackings>
      */
-    private $_packings;
+    protected $_packings;
 
     /**
      * Details for return voucher.
      * var ResultReturnVoucher
      */
-    private $_returnVoucher;
+    protected $_returnVoucher;
 
     /**
      * Indicates the floor, which the shipment should be delivered to.
      * var signed 32-bit integer (nullable)
      */
-    private $_deliveryToFloorNo;
+    protected $_deliveryToFloorNo;
 
     /**
      * Amounts.
      * var signed ResultAmounts
      */
-    private $_amounts;
+    protected $_amounts;
 
     /**
      * Deadline for delivery.
      * var signed date
      */
-    private $_deadlineDelivery;
+    protected $_deadlineDelivery;
 
     /**
      * Delivery information.
      * var signed ResultDeliveryInfo
      */
-    private $_deliveryInfo;
+    protected $_deliveryInfo;
 
     /**
      * COD payment information.
      * var signed CODPayment
      */
-    private $_codPayment;
+    protected $_codPayment;
 
     /**
      * COD BOL number of return picking.
      * var signed 64-bit integer (nullable)
      */
-    private $_redirectBillOfLading;
+    protected $_redirectBillOfLading;
 
     /**
      * COD BOL number of return picking.
      * var signed 64-bit integer (nullable)
      */
-    private $_returnBillOfLading;
+    protected $_returnBillOfLading;
 
 
 
@@ -335,25 +335,25 @@ class ResultPickingExtendedInfo extends SpeedyResultFormat {
      * Primary picking BOL.
      * var signed 64-bit integer (nullable)
      */
-    private $_primaryPickingBOL;
+    protected $_primaryPickingBOL;
 
     /**
      * Picking type.
      * var signed 32-bit integer (nullable)
      */
-    private $_pickingType;
+    protected $_pickingType;
 
     /**
      * Value of pendingParcelsDescription flag.
      * var boolean (nullable)
      */
-    private $_pendingParcelsDescription;
+    protected $_pendingParcelsDescription;
 
     /**
      * Value of pendingShipmentDescription flag.
      * var boolean (nullable)
      */
-    private $_pendingShipmentDescription;
+    protected $_pendingShipmentDescription;
 
 
 

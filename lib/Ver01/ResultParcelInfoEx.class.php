@@ -9,56 +9,56 @@ class ResultParcelInfoEx extends SpeedyResultFormat {
      * Parcel's serial number (1, 2, 3, ...)
      * @var integer Signed 32-bit
      */
-    private $_seqNo;
+    protected $_seqNo;
 
     /**
      * Parcel ID. First parcel's ID is always the same as the BOL number.
      * @var integer Signed 64-bit
      */
-    private $_parcelId;
+    protected $_parcelId;
 
     /**
      * Measured weight
      * @var signed 64 bit real (nullable)
      */
-    private $_weightMeasured;
+    protected $_weightMeasured;
 
     /**
      * Declared weight
      * @var signed 64 bit real (nullable)
      */
-    private $_weightDeclared;
+    protected $_weightDeclared;
 
     /**
      * Measured size
      * @var signed Size
      */
-    private $_sizeMeasured;
+    protected $_sizeMeasured;
 
     /**
      * Declared size
      * @var signed Size
      */
-    private $_sizeDeclared;
+    protected $_sizeDeclared;
 
     /**
      * Foreign parcel number associated with this parcel
      * @var signed string (nullable)
      */
-    private $_foreignParcelNumber;
+    protected $_foreignParcelNumber;
 
     /**
      * Packing ID (number)
      * @var signed 64-bit integer (nullable)
      */
-    private $_packId;
+    protected $_packId;
 
 	/**
      * List of foreign parcel numbers list associated with this parcel.
      * @var List string
      * @since 3.2.2
      */
-	private $_foreignParcelNumbersList;
+	protected $_foreignParcelNumbersList;
 
     /**
      * Constructs new instance of stdClassResultParcelInfoEx from stdClass

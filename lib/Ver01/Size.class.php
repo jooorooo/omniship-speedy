@@ -9,21 +9,21 @@ class Size {
      * MANDATORY: NO
      * @var integer Signed 32-bit
      */
-    private $_width;
+    protected $_width;
 
     /**
      * Height (cm). Maximum value is 9999
      * MANDATORY: NO
      * @var integer Signed 32-bit
      */
-    private $_height;
+    protected $_height;
 
     /**
      * Depth (cm). Maximum value is 9999
      * MANDATORY: NO
      * @var integer Signed 32-bit
      */
-    private $_depth;
+    protected $_depth;
 
     /**
      * Constructs new instance of Size

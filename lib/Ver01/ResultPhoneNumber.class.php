@@ -8,13 +8,13 @@ class ResultPhoneNumber extends SpeedyResultFormat {
      * Phone number (example: "0888123456", "+35932261020" etc.)
      * @var string
      */
-    private $_number;
+    protected $_number;
 
     /**
      * An extension number
      * @var string
      */
-    private $_internal;
+    protected $_internal;
 
     /**
      * Constructs new instance of ResultPhoneNumber

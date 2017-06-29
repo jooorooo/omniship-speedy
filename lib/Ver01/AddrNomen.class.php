@@ -27,7 +27,7 @@ class AddrNomen {
      * Value is one of the constants (NO, FULL, PARTIAL)
      * @var string
      */
-    private $_value;
+    protected $_value;
 
     /**
      * Constructs new instance of AddrNomen from string

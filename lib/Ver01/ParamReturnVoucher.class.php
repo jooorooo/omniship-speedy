@@ -16,7 +16,7 @@ class ParamReturnVoucher {
      * MANDATORY: YES
      * @var integer Signed 32-bit
      */
-    private $_payerType;
+    protected $_payerType;
 
     /**
      * Set serviceTypeId ID

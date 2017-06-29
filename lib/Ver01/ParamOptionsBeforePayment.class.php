@@ -11,28 +11,28 @@ class ParamOptionsBeforePayment {
 	 * MANDATORY: NO
 	 * @var boolean Flag
 	 */
-    private $_open;
+    protected $_open;
 
 	/**
 	 * Test before payment option
 	 * MANDATORY: NO
 	 * @var boolean Flag
 	 */
-	private $_test;
+	protected $_test;
 
 	/**
 	 * serviceId option
 	 * MANDATORY: NO
 	 * @var signed 64-bit integer
 	 */
-	private $_returnServiceTypeId;
+	protected $_returnServiceTypeId;
 
 	/**
 	 * payerType option
 	 * MANDATORY: NO
 	 * @var signed 32-bit integer
 	 */
-	private $_returnPayerType;
+	protected $_returnPayerType;
 
     /**
      * Set open option before payment flag

@@ -13,28 +13,28 @@ class EPSFacade {
      * @since 1.0
      * @var EPSInterface
      */
-    private $_epsInterfaceImpl;
+    protected $_epsInterfaceImpl;
 
     /**
      * User name
      * @since 1.0
      * @var string
      */
-    private $_username;
+    protected $_username;
 
     /**
      * User password
      * @since 1.0
      * @var string
      */
-    private $_password;
+    protected $_password;
 
     /**
      * Result of login Speedy web service method clall
      * @since 1.0
      * @var ResultLogin
      */
-    private $_resultLogin;
+    protected $_resultLogin;
 
     /**
      * Constructs new instance of EPS Facade

@@ -14,49 +14,49 @@ class ResultOfficeEx extends SpeedyResultFormat {
      * Office ID
      * @var integer Signed 64-bit
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Office name
      * @var string
      */
-    private $_name;
+    protected $_name;
 
     /**
      * Serving site ID
      * @var string
      */
-    private $_siteId;
+    protected $_siteId;
 
     /**
      * Office address
      * @var ResultAddressEx
      */
-    private $_address;
+    protected $_address;
 
     /**
      * Working time for FULL working days - FROM
      * @var integer Signed 16-bit integer ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.)
      */
-    private $_workingTimeFrom;
+    protected $_workingTimeFrom;
 
     /**
      * Working time for FULL working days - TO
      * @var integer Signed 16-bit integer ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.)
      */
-    private $_workingTimeTo;
+    protected $_workingTimeTo;
 
     /**
      * Working time for HALF working days - FROM
      * @var integer Signed 16-bit integer ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.)
      */
-    private $_workingTimeHalfFrom;
+    protected $_workingTimeHalfFrom;
 
     /**
      *Working time for HALF working days - TO
      * @var integer Signed 16-bit integer ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.)
      */
-    private $_workingTimeHalfTo;
+    protected $_workingTimeHalfTo;
     
     /**
      * Max parcel dimensions (size)

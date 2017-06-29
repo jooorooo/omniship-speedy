@@ -10,14 +10,14 @@ class ResultLogin extends SpeedyResultFormat {
      * @access private
      * @var string
      */
-    private $_sessionId;
+    protected $_sessionId;
 
     /**
      * The logged client's ID (in Speedy's nomenclature).
      * @access private
      * @var integer Signed 64-bit integer
      */
-    private $_clientId;
+    protected $_clientId;
 
     /**
      * Constructs new instance of ResultLogin

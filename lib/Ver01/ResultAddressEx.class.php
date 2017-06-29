@@ -11,149 +11,149 @@ class ResultAddressEx extends SpeedyResultFormat {
      * Result site
      * @var ResultSite result site
      */
-    private $_resultSite;
+    protected $_resultSite;
 
     /**
      * Post code
      * @var string
      */
-    private $_postCode;
+    protected $_postCode;
 
     /**
      * Street name
      * @var string
      */
-    private $_streetName;
+    protected $_streetName;
 
     /**
      * Street type
      * @var string
      */
-    private $_streetType;
+    protected $_streetType;
 
     /**
      * Street ID
      * @var integer Signed 64-bit
      */
-    private $_streetId;
+    protected $_streetId;
 
     /**
      * Quarter name
      * @var string
      */
-    private $_quarterName;
+    protected $_quarterName;
 
     /**
      * Quarter type
      * @var string
      */
-    private $_quarterType;
+    protected $_quarterType;
 
     /**
      * Quarter ID
      * @var long Signed 64-bit
      */
-    private $_quarterId;
+    protected $_quarterId;
 
     /**
      * Street No
      * @var string
      */
-    private $_streetNo;
+    protected $_streetNo;
 
     /**
      * Block No
      * @var string
      */
-    private $_blockNo;
+    protected $_blockNo;
 
     /**
      * Entrance No
      * @var string
      */
-    private $_entranceNo;
+    protected $_entranceNo;
 
     /**
      * Floor No
      * @var string
      */
-    private $_floorNo;
+    protected $_floorNo;
 
     /**
      * Appartment No
      * @var string
      */
-    private $_apartmentNo;
+    protected $_apartmentNo;
 
     /**
      * Address note
      * @var string
      */
-    private $_addressNote;
+    protected $_addressNote;
     
     /**
      * GPS X coordinate
      * @var signed 64-bit real
      */
-    private $_coordX;
+    protected $_coordX;
     
     /**
      * GPS Y coordinate
      * @var signed 64-bit real
      */
-	private $_coordY;
+	protected $_coordY;
     
     /**
      * GPS coordinate type
      * @var signed 32-bit integer
      */
-    private $_coordTypeId;
+    protected $_coordTypeId;
 
     /**
      * Common object ID
      * @var integer Signed 64-bit
      */
-    private $_commonObjectId;
+    protected $_commonObjectId;
 
     /**
      * Common object name
      * @var string
      */
-    private $_commonObjectName;
+    protected $_commonObjectName;
     
     /**
      * Full address as text
      * @var string
      */
-    private $_fullAddressString;
+    protected $_fullAddressString;
 
     /**
      * Country id
      * @var integer signed 64-bit
      * @since 2.5.0
      */
-    private $_countryId;
+    protected $_countryId;
     
     /**
      * Foreign address line 1
      * @var string
      * @since 2.5.0
      */
-    private $_frnAddressLine1;
+    protected $_frnAddressLine1;
     
     /**
      * Foreign address line 2
      * @var string
      * @since 2.5.0
      */
-    private $_frnAddressLine2;
+    protected $_frnAddressLine2;
     
     /**
      * State id
      * @var string
      * @since 2.5.0
      */
-    private $_stateId;
+    protected $_stateId;
 
     /**
      * Constructs new instance of ResultAddressEx

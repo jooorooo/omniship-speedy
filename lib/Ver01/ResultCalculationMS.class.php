@@ -8,19 +8,19 @@ class ResultCalculationMS extends SpeedyResultFormat {
      * Courier service type ID
      * @var integer Signed 64-bit
      */
-    private $_serviceTypeId;
+    protected $_serviceTypeId;
 
     /**
      * Validation error during calculation attempt
      * @var string
      */
-    private $_errorDescription;
+    protected $_errorDescription;
 
     /**
      * The result of calculation (in case no error has occurred)
      * @var ResultCalculation
      */
-    private $_resultInfo;
+    protected $_resultInfo;
 
     /**
      * Constructs new instance of ResultCalculationMS from stdClass

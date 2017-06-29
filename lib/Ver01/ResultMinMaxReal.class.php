@@ -9,13 +9,13 @@ class ResultMinMaxReal extends SpeedyResultFormat {
      * Min value
      * @var double 64-bit
      */
-    private $_minValue;
+    protected $_minValue;
 
     /**
      * Max value
      * @var double 64-bit
      */
-    private $_maxValue;
+    protected $_maxValue;
 
     /**
      * Constructs new instance of ResultMinMaxReal

@@ -9,49 +9,49 @@ class ParamAddressSearch {
      * MANDATORY: YES
      * @var integer Signed 64-bit
      */
-    private $_siteId;
+    protected $_siteId;
 
     /**
      * Quarter ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_quarterId;
+    protected $_quarterId;
 
     /**
      * Street ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_streetId;
+    protected $_streetId;
 
     /**
      * Common object ID
      * MANDATORY: NO
      * @var integer Signed 64-bit
      */
-    private $_commonObjectId;
+    protected $_commonObjectId;
 
     /**
      * Block No/name
      * MANDATORY: NO
      * @var string
      */
-    private $_blockNo;
+    protected $_blockNo;
 
     /**
      * Street No
      * MANDATORY: NO
      * @var string
      */
-    private $_streetNo;
+    protected $_streetNo;
 
     /**
      * Entrance
      * MANDATORY: NO
      * @var string
      */
-    private $_entranceNo;
+    protected $_entranceNo;
     
     /**
      * Return city center if no address option
@@ -59,7 +59,7 @@ class ParamAddressSearch {
      * @var boolean
      * @since 2.6.0
      */
-    private $_returnCityCenterIfNoAddress;
+    protected $_returnCityCenterIfNoAddress;
 
     /**
      * Set site ID

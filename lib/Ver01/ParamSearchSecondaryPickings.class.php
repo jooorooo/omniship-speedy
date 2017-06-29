@@ -9,7 +9,7 @@ class ParamSearchSecondaryPickings {
      * MANDATORY: YES
      * @var integer signed 64-bit
      */
-    private $_billOfLading;
+    protected $_billOfLading;
 
     /**
      * Filters the list for shipments of the specified type only. Not used if null.
@@ -22,7 +22,7 @@ class ParamSearchSecondaryPickings {
      * MANDATORY: NO
      * @var integer Signed 32-bit
      */
-    private $_secondaryPickingType;
+    protected $_secondaryPickingType;
 
     /**
      * Set BOL number

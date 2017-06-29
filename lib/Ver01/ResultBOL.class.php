@@ -11,19 +11,19 @@ class ResultBOL extends SpeedyResultFormat {
      * List of parcels data
      * @var array List of ResultParcelInfo
      */
-    private $_generatedParcels;
+    protected $_generatedParcels;
 
     /**
      * Amounts
      * @var ResultAmounts
      */
-    private $_amounts;
+    protected $_amounts;
 
     /**
      * Deadline for delivery
      * @var date
      */
-    private $_deadlineDelivery;
+    protected $_deadlineDelivery;
 
     /**
      * Constructs new instance of ResultBOL from stdClass
