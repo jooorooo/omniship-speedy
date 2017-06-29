@@ -277,7 +277,7 @@ class Client
     /**
      * @param int $country_id
      * @param string $language
-     * @return ResultSite[]
+     * @return bool|ResultSite[]
      */
     public function getCitiesByCountry($country_id, $language = 'bg')
     {
@@ -294,7 +294,7 @@ class Client
     public function getCityByName($name, $postcode = null, $country_id = null, $language = 'bg')
     {
         $cities = $this->getCities($name, $postcode, $country_id, $language);
-        if (count($cities) == 1) {
+        if ($cities && count($cities) == 1) {
             return array_shift($cities);
         }
         return null;
@@ -305,15 +305,11 @@ class Client
      * @param null $postcode
      * @param null $country_id
      * @param string $language
-     * @return null|ResultSite
+     * @return bool|ResultSite[]
      */
     public function searchCities($name, $postcode = null, $country_id = null, $language = 'bg')
     {
-        $cities = $this->getCities($name, $postcode, $country_id, $language);
-        if (count($cities) == 1) {
-            return array_shift($cities);
-        }
-        return null;
+        return $this->getCities($name, $postcode, $country_id, $language);
     }
 
     /**
@@ -340,7 +336,7 @@ class Client
      * @param null $postcode
      * @param null $country_id
      * @param string $language
-     * @return ResultSite[]
+     * @return bool|ResultSite[]
      */
     public function getCities($name, $postcode = null, $country_id = null, $language = 'bg')
     {
@@ -361,7 +357,7 @@ class Client
     /**
      * @param array $filter
      * @param string $language
-     * @return ResultSite[]
+     * @return bool|ResultSite[]
      */
     public function getCitiesByFilter(array $filter, $language = 'bg')
     {
@@ -408,7 +404,7 @@ class Client
                 }
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
-                return [];
+                return false;
             }
         }
 
@@ -419,7 +415,7 @@ class Client
      * @param null $name
      * @param null $city_id
      * @param string $language
-     * @return ResultOfficeEx[]
+     * @return bool|ResultOfficeEx[]
      */
     public function getOffices($name = null, $city_id = null, $language = 'bg')
     {
@@ -433,7 +429,7 @@ class Client
                 }
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
-                return [];
+                return false;
             }
         }
 
@@ -509,7 +505,7 @@ class Client
      * @param $city_id
      * @param null $name
      * @param string $language
-     * @return ResultQuarter[]
+     * @return bool|ResultQuarter[]
      */
     public function getQuarters($city_id, $name = null, $language = 'bg')
     {
@@ -532,7 +528,7 @@ class Client
      * @param $city_id
      * @param null $name
      * @param string $language
-     * @return ResultStreet[]
+     * @return bool|ResultStreet[]
      */
     public function getStreets($city_id, $name = null, $language = 'bg')
     {
@@ -545,7 +541,7 @@ class Client
                 }
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
-                return [];
+                return false;
             }
         }
 
@@ -578,7 +574,7 @@ class Client
     /**
      * @param $country_id
      * @param null $name
-     * @return ResultState[]
+     * @return bool|ResultState[]
      */
     public function getStates($country_id, $name = null)
     {
@@ -591,7 +587,7 @@ class Client
                 }
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
-                return [];
+                return false;
             }
         }
         return $states;
