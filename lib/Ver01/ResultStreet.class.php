@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned as a result of Speedy web service queries for streets
  */
-class ResultStreet {
+class ResultStreet extends SpeedyResultFormat {
 
     /**
      * Street ID

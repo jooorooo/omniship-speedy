@@ -5,7 +5,7 @@ require_once 'ValueAddress.class.php';
 /**
  * Instances of this class are returned as a result of Speedy web service queries for offices
  */
-class ResultOffice {
+class ResultOffice extends SpeedyResultFormat {
 
     /**
      * Office ID

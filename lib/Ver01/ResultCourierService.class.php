@@ -5,7 +5,7 @@ require_once 'ComplementaryServiceAllowance.class.php';
 /**
  * Instances of this class are returned as a result of Speedy web service calls for services
  */
-class ResultCourierService {
+class ResultCourierService extends SpeedyResultFormat {
 
     /**
      * Courier service type ID

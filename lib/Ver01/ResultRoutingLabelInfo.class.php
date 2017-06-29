@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned routing information for specified parcel number.
  */
-class ResultRoutingLabelInfo {
+class ResultRoutingLabelInfo extends SpeedyResultFormat {
 
     /**
      * Delivery hub id

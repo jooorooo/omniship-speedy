@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of Speedy address search web service methods
  */
-class ResultAddressSearch {
+class ResultAddressSearch extends SpeedyResultFormat {
 
     /**
      * Text description of the address found

@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of create picking Speedy web service calls
  */
-class ResultParcelInfo {
+class ResultParcelInfo extends SpeedyResultFormat {
 
     /**
      * Parcel's serial number (1, 2, 3, ...)

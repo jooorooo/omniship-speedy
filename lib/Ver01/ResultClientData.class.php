@@ -6,7 +6,7 @@ require_once 'ResultPhoneNumber.class.php';
 /**
  * Instances of this class are returned as a result of Speedy web service method calls for client data
  */
-class ResultClientData {
+class ResultClientData extends SpeedyResultFormat {
 
     /**
      * Client ID

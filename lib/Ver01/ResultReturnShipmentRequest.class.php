@@ -4,7 +4,7 @@
  * Instances of this class are used as a result of make picking info methods
  * @since 3.2.0
  */
-class ResultReturnShipmentRequest {
+class ResultReturnShipmentRequest extends SpeedyResultFormat {
 	
 	/**
 	 * Insurance base amount.

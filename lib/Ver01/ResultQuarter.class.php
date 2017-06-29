@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned as a result of Speedy web service queries for quarters
  */
-class ResultQuarter {
+class ResultQuarter extends SpeedyResultFormat {
 
     /**
      * Quarter ID

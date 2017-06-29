@@ -12,7 +12,7 @@ require_once 'ResultReturnServiceRequest.class.php';
 /**
  * Instances of this class are returned as a result of getPickingExtendedInfo
  */
-class ResultPickingExtendedInfo {
+class ResultPickingExtendedInfo extends SpeedyResultFormat {
 
     /**
      * BOL of the secondary shipment.

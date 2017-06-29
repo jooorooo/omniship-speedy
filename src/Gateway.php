@@ -29,6 +29,8 @@ class Gateway extends AbstractGateway
 
     private $name = 'Speedy';
 
+    private $client;
+
     /**
      * @return string
      */
@@ -204,8 +206,10 @@ class Gateway extends AbstractGateway
      * @return Client
      */
     public function getClient() {
-        $client = new Client($this->getUsername(), $this->getPassword());
-        return $client;
+        if(is_null($this->client)) {
+            $this->client = new Client($this->getUsername(), $this->getPassword());
+        }
+        return $this->client;
     }
 
     /**

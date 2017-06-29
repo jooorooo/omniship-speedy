@@ -4,7 +4,7 @@
  * Instances of this class are returned in response to country search methods
  * @since 2.5.0
  */
-class ResultCountry {
+class ResultCountry extends SpeedyResultFormat {
 
 	/**
 	 * Active country currency code

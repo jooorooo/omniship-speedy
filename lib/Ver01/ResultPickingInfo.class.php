@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of searchSecondaryPickings
  */
-class ResultPickingInfo {
+class ResultPickingInfo extends SpeedyResultFormat {
 
     /**
      * BOL of the secondary shipment.

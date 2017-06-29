@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of web service method calls for clients
  */
-class ResultAddress {
+class ResultAddress extends SpeedyResultFormat{
 
     /**
      * Site ID

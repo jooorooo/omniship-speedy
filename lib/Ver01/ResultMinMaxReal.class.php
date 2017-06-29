@@ -3,7 +3,7 @@
  * Instances of this class are returned as a result of services for allowed float ranges of certain parameters
  * (f.e. getWightInterval)
  */
-class ResultMinMaxReal {
+class ResultMinMaxReal extends SpeedyResultFormat {
 
     /**
      * Min value

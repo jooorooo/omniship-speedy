@@ -5,7 +5,7 @@ require_once 'ResultSite.class.php';
 /**
  * ResultSite instances are returned as a result of sites speedy web service requests
  */
-class ResultSiteEx {
+class ResultSiteEx extends SpeedyResultFormat {
 
     /**
      * Site data

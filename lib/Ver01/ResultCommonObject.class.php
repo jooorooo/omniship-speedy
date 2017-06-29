@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned as a result of Speedy web service queries for common objects
  */
-class ResultCommonObject {
+class ResultCommonObject extends SpeedyResultFormat {
 
     /**
      * Common object ID

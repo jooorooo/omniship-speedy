@@ -4,7 +4,7 @@
  * Instances of this class are used as a result of make picking info methods
  * @since 3.2.6
  */
-class ResultPackings {
+class ResultPackings extends SpeedyResultFormat {
 	
 	/**
 	 * Packing id.

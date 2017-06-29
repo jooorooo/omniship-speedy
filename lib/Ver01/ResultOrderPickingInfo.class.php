@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of order web service class
  */
-class ResultOrderPickingInfo {
+class ResultOrderPickingInfo extends SpeedyResultFormat {
 
     /**
      * BOL number

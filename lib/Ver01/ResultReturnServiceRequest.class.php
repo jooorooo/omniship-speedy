@@ -4,7 +4,7 @@
  * Instances of this class are used as a result of make picking info methods
  * @since 3.2.6
  */
-class ResultReturnServiceRequest {
+class ResultReturnServiceRequest extends SpeedyResultFormat {
 	
 	/**
 	 * Service type id.

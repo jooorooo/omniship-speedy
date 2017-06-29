@@ -4,7 +4,7 @@
  * Instances of this class are used as a result of make address methods
  * @since 2.3.0
  */
-class ResultAddressString {
+class ResultAddressString extends SpeedyResultFormat {
 	
 	/**
 	 * Full address string

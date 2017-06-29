@@ -8,7 +8,7 @@ require_once 'Size.class.php';
 /**
  * Instances of this class are returned as a result of Speedy web service queries for offices
  */
-class ResultOfficeEx {
+class ResultOfficeEx extends SpeedyResultFormat {
 
     /**
      * Office ID

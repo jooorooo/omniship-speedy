@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned as a result of ResultPickingExtendedInfo
  */
-class ResultParcelInfoEx {
+class ResultParcelInfoEx extends SpeedyResultFormat {
 
     /**
      * Parcel's serial number (1, 2, 3, ...)

@@ -4,7 +4,7 @@
  * Instances of this class are used as a result of make picking info methods
  * @since 2.9.0
  */
-class ResultOptionsBeforePayment {
+class ResultOptionsBeforePayment extends SpeedyResultFormat {
 	
 	/**
 	 * Indicates if the client is allowed to open the package before payment.

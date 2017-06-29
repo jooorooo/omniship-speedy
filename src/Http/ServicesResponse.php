@@ -23,16 +23,17 @@ class ServicesResponse extends AbstractResponse
         }
 
         if(is_array($this->data)) {
+            /** @var \ResultCourierService $service */
             foreach($this->data AS $service) {
                 $result->push([
                     'id' => $service->getTypeId(),
                     'name' => $service->getName(),
-                    'support_fixed_time' => $service->getAllowanceFixedTimeDelivery(),
-                    'support_cash_on_delivery' => $service->getAllowanceCashOnDelivery(),
-                    'support_insurance' => $service->getAllowanceInsurance(),
-                    'support_back_documents' => $service->getAllowanceBackDocumentsRequest(),
-                    'support_back_receipt' => $service->getAllowanceBackReceiptRequest(),
-                    'support_to_be_called' => $service->getAllowanceToBeCalled(),
+                    'support_fixed_time' => $service->getAllowanceFixedTimeDelivery()->getValue(),
+                    'support_cash_on_delivery' => $service->getAllowanceCashOnDelivery()->getValue(),
+                    'support_insurance' => $service->getAllowanceInsurance()->getValue(),
+                    'support_back_documents' => $service->getAllowanceBackDocumentsRequest()->getValue(),
+                    'support_back_receipt' => $service->getAllowanceBackReceiptRequest()->getValue(),
+                    'support_to_be_called' => $service->getAllowanceToBeCalled()->getValue(),
                 ]);
             }
         }

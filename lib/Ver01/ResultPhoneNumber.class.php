@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as part of client data in Speedy web service method calls
  */
-class ResultPhoneNumber {
+class ResultPhoneNumber extends SpeedyResultFormat {
 
     /**
      * Phone number (example: "0888123456", "+35932261020" etc.)

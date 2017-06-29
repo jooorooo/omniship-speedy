@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of calculation Speedy web service requestst for multiple services
  */
-class ResultCalculationMS {
+class ResultCalculationMS extends SpeedyResultFormat {
 
     /**
      * Courier service type ID

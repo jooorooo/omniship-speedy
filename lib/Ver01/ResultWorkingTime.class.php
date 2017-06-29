@@ -5,7 +5,7 @@ require_once 'ResultParcelInfo.class.php';
 /**
  * Instances of this class are returned as a result of office working time information
  */
-class ResultWorkingTime {
+class ResultWorkingTime extends SpeedyResultFormat {
 
     /**
      * Date for which working time is valid

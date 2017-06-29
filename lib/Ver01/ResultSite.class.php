@@ -5,7 +5,7 @@ require_once 'AddrNomen.class.php';
 /**
  * ResultSite instances are returned as a result of sites speedy web service requests
  */
-class ResultSite {
+class ResultSite extends SpeedyResultFormat {
 
     /**
      * Site ID

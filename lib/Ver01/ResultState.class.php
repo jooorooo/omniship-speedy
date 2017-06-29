@@ -4,7 +4,7 @@
  * Instances of this class are returned in response to state search methods
  * @since 2.5.0
  */
-class ResultState {
+class ResultState extends SpeedyResultFormat {
 
 	/**
 	 * State country id

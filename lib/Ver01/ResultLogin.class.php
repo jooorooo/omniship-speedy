@@ -3,7 +3,7 @@
 /**
  * Instances of this class are returned as a result of login Speedy web service method calls
  */
-class ResultLogin {
+class ResultLogin extends SpeedyResultFormat {
 
     /**
      * The session ID to be used as a parameter in subsequent method calls.

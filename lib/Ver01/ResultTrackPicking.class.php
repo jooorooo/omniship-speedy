@@ -2,7 +2,7 @@
 /**
  * Instances of this class are returned as a result of track picking web service calls
  */
-class ResultTrackPicking {
+class ResultTrackPicking extends SpeedyResultFormat {
 
 	/**
      * BOL number or parcel id

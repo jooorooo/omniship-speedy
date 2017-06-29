@@ -4,7 +4,7 @@
  * 
  * @since 2.1.0
  */
-class ResultSpecialDeliveryRequirement {
+class ResultSpecialDeliveryRequirement extends SpeedyResultFormat {
 
     /**
      * A special delivery ID

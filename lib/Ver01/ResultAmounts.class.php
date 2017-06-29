@@ -1,6 +1,6 @@
 <?php
 
-class ResultAmounts {
+class ResultAmounts extends SpeedyResultFormat {
 
     /**
      * The real value of the shipment

@@ -5,7 +5,7 @@ require_once 'ResultAmounts.class.php';
 /**
  * Instances of this class are returned as a result of Speedy caclulcation web service methods
  */
-class ResultCalculation {
+class ResultCalculation extends SpeedyResultFormat {
 
     /**
      * Shipment's price (structure with values that form the price)
