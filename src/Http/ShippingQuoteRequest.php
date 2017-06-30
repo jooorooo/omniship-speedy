@@ -41,11 +41,15 @@ class ShippingQuoteRequest extends AbstractRequest
 
         //Packings payer type (0=sender, 1=reciever or 2=third party)
         $paramCalculation->setPayerTypePackings($payer_type);
-
+        
         //The date for shipment pick-up (the "time" component is ignored if it is allready passed or is overriden with 09:01). Default value is "today". (Required: no)
-        $paramCalculation->setTakingDate(Carbon::now()->format('H:i'));
+        if(($taking_date = $this->getShipmentDate()) instanceof Carbon) {
+            $paramCalculation->setTakingDate($taking_date->timestamp);
+        } else {
+            $paramCalculation->setTakingDate(Carbon::now()->timestamp);
+        }
         //If set to true, the "takingDate" field is not just to be validated, but the first allowed (following) date will be used instead (in compliance with the pick-up schedule etc.). (Required: no)
-        $paramCalculation->setAutoAdjustTakingDate(true);
+//        $paramCalculation->setAutoAdjustTakingDate(true);
 
         $sender_address = $this->getSenderAddress();
         // if no sender address get information from profile
@@ -150,10 +154,6 @@ class ShippingQuoteRequest extends AbstractRequest
 //            $parcels[] = $parcel;
 //        }
 //        $paramCalculation->setParcels($parcels);
-
-        if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
-            $paramCalculation->setFixedTimeDelivery($priority_time_value->format('Hi'));
-        }
 
         return $paramCalculation;
     }

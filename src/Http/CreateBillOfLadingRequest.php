@@ -147,24 +147,6 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setSpecialDeliveryId($special_delivery_id);
         }
 
-//        /** @var $items ItemBag */
-//        $items = $this->getItems();
-//        $parcels = [];
-//        foreach($items->all() AS $row => $item) {
-//            $parcel = new ParamParcelInfo();
-//            $parcel->setSeqNo($row - 1);
-//            $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
-//            if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
-//                $size = new Size();
-//                $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
-//                $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
-//                $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
-//                $parcel->setSize($size);
-//            }
-//            $parcels[] = $parcel;
-//        }
-//        $picking->setParcels($parcels);
-
         $picking->setParcelsCount($this->getNumberOfPieces());
         $picking->setWeightDeclared($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()));
         $picking->setContents($this->getContent());
@@ -191,7 +173,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setFragile(false);
         }
 
-        if(is_null($taking_date = $this->getTakingDate())) {
+        if(is_null($taking_date = $this->getShipmentDate())) {
             $result = $this->getClient()->getAllowedDaysForTaking(
                 $this->getServiceId(),
                 Carbon::now($this->getSenderTimeZone())->addDay(1)->timestamp,
@@ -199,12 +181,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 !$sender_city_id && $sender_office_id ? $sender_office_id : null
             );
             if($result && !empty($result[1])) {
-                $this->setTakingDate($result[1]);
+                $this->setShipmentDate($result[1]);
             }
         }
 
-        if(!is_null($taking_date = $this->getTakingDate())) {
-            $picking->setTakingDate($taking_date->format('H:i'));
+        if(!is_null($taking_date = $this->getShipmentDate())) {
+            $picking->setTakingDate($taking_date->timestamp);
         }
 
         if ($this->getOtherParameters('deffered_days')) {
