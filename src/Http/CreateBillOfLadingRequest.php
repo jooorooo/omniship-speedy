@@ -115,23 +115,21 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setClientSystemId(self::SpeedyClientId);
         $picking->setRef1($this->getTransactionId());
 
-//        if ($data['depth'] || $data['height'] || $data['width']) {
-//            $size = new Size();
-//
-//            if ($data['depth']) {
-//                $size->setDepth($data['depth']);
-//            }
-//
-//            if ($data['height']) {
-//                $size->setHeight($data['height']);
-//            }
-//
-//            if ($data['width']) {
-//                $size->setWidth($data['width']);
-//            }
-//
-//            $picking->setSize($size);
-//        }
+        if($dimensions = $this->getParcelDimensions()) {
+            $size = new \Size();
+
+            if (($length = (float)$dimensions->getLength()) > 0) {
+                $size->setDepth($length);
+            }
+            if (($height = (float)$dimensions->getHeight()) > 0) {
+                $size->setHeight($height);
+            }
+            if (($width = (float)$dimensions->getWidth()) > 0) {
+                $size->setWidth($width);
+            }
+
+            $picking->setSize($size);
+        }
 
         if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
             $picking->setFixedTimeDelivery($priority_time_value->format('Hi'));
