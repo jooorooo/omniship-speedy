@@ -31,6 +31,8 @@ class Gateway extends AbstractGateway
 
     private $client;
 
+    const TRACKING_URL = 'https://www.speedy.bg/bg/track-shipment?shipmentNumber=%s';
+
     /**
      * @return string
      */
@@ -210,6 +212,14 @@ class Gateway extends AbstractGateway
             $this->client = new Client($this->getUsername(), $this->getPassword());
         }
         return $this->client;
+    }
+
+    /**
+     * @param $parcel_id
+     * @return string
+     */
+    public function trackingUrl($parcel_id) {
+        return sprintf(static::TRACKING_URL, $parcel_id);
     }
 
     /**
