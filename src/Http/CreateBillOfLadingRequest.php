@@ -47,7 +47,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if($sender_address) {
 
 //            $sender->setPartnerName($sender_address->getFirstName() . ' ' . $sender_address->getLastName());
-            $sender->setContactName($sender_address->getFirstName() . ' ' . $sender_address->getLastName());
+            $sender->setContactName($sender_address->getFullName());
 
             if($company = $sender_address->getCompanyName()) {
                 $sender->setObjectName($company);
@@ -89,8 +89,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $receiver->setEmail($this->getReceiverEmail());
         $receiver_address = $this->getReceiverAddress();
         if($receiver_address) {
-            $receiver->setPartnerName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
-            $receiver->setContactName($receiver_address->getFirstName() . ' ' . $receiver_address->getLastName());
+            $receiver->setPartnerName($receiver_address->getFullName());
+            $receiver->setContactName($receiver_address->getFullName());
 
             if($company = $receiver_address->getCompanyName()) {
                 $receiver->setObjectName($company);
