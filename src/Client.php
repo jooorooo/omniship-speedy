@@ -594,6 +594,20 @@ class Client
     }
 
     /**
+     * @param $country_id
+     * @param $name
+     * @return null|ResultState
+     */
+    public function getStateByName($country_id, $name)
+    {
+        $states = $this->getStates($country_id, $name);
+        if($this->getError() || count($states) != 1) {
+            return null;
+        }
+        return array_shift($states);
+    }
+
+    /**
      * @param $service_id
      * @param null $taking_date
      * @param null $sender_site_id
