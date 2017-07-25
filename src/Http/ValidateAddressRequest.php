@@ -32,13 +32,13 @@ class ValidateAddressRequest extends AbstractRequest
 		$paramAddress->setSiteName($address->getCity() ? $address->getCity()->getName() : null);
         $paramAddress->setPostCode($address->getPostCode());
         if($l = $address->getAddress1()) {
-            $paramAddress->setFrnAddressLine1($l);
+            $paramAddress->setAddressNote($l);
         }
         if($l = $address->getAddress2()) {
-            $paramAddress->setFrnAddressLine2($l);
+            $paramAddress->setFrnAddressLine1($l);
         }
-        if($l = $address->getNote()) {
-            $paramAddress->setAddressNote($l);
+        if($l = $address->getAddress3()) {
+            $paramAddress->setFrnAddressLine2($l);
         }
         $paramAddress->setCountryId($address->getCountry() ? $address->getCountry()->getId() : null);
         $paramAddress->setStateId($address->getState() ? $address->getState()->getId() : null);
