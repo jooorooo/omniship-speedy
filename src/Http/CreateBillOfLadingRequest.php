@@ -9,6 +9,7 @@
 namespace Omniship\Speedy\Http;
 
 use Omniship\Common\Address;
+use Omniship\Common\PieceBag;
 use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
@@ -224,6 +225,27 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 $optionBeforePayment->setReturnPayerType($payer_type_return);
             }
             $picking->setOptionsBeforePayment($optionBeforePayment);
+        }
+
+        /** @var $pieces PieceBag */
+        $pieces = $this->getPieces();
+        if ($pieces->count()) {
+            $parcels = [];
+            foreach ($pieces->all() as $row => $item) {
+                $parcel = new \ParamParcelInfo();
+                $parcel->setSeqNo($row+1);
+                $parcel->setParcelId(-1);
+                $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
+                if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+                    $size = new \Size();
+                    $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
+                    $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
+                    $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
+                    $parcel->setSize($size);
+                }
+                $parcels[] = $parcel;
+            }
+            $picking->setParcels($parcels);
         }
 
         if($this->getClient()->getError()) {

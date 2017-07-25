@@ -9,6 +9,7 @@
 namespace Omniship\Speedy\Http;
 
 use Omniship\Common\ItemBag;
+use Omniship\Common\PieceBag;
 use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
@@ -126,8 +127,6 @@ class ShippingQuoteRequest extends AbstractRequest
         //Specifies whether the shipment is palletized
         $paramCalculation->setPalletized(false);
 
-
-
         if ($special_delivery_id = $this->getOtherParameters('special_delivery_id')) {
             //A special delivery ID
             $paramCalculation->setSpecialDeliveryId($special_delivery_id);
@@ -136,24 +135,28 @@ class ShippingQuoteRequest extends AbstractRequest
         //Check if specified office to be called is working. Default value - true
         $paramCalculation->setCheckTBCOfficeWorkDay(true);
 
-        /** @var $items ItemBag */
-//        $items = $this->getItems();
-//        $parcels = [];
-//        foreach($items->all() AS $row => $item) {
-//            $parcel = new \ParamParcelInfo();
-//            $parcel->setSeqNo($row+1);
-//            $parcel->setParcelId(-1);
-//            $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
-//            if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
-//                $size = new \Size();
-//                $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
-//                $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
-//                $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
-//                $parcel->setSize($size);
-//            }
-//            $parcels[] = $parcel;
-//        }
-//        $paramCalculation->setParcels($parcels);
+        /** @var $pieces PieceBag */
+        $pieces = $this->getPieces();
+        if ($pieces->count()) {
+            $parcels = [];
+            foreach ($pieces->all() as $row => $item) {
+                $parcel = new \ParamParcelInfo();
+                $parcel->setSeqNo($row+1);
+                if(!$row) {
+                    $parcel->setParcelId(-1);
+                }
+                $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
+                if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+                    $size = new \Size();
+                    $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
+                    $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
+                    $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
+                    $parcel->setSize($size);
+                }
+                $parcels[] = $parcel;
+            }
+            $paramCalculation->setParcels($parcels);
+        }
 
         return $paramCalculation;
     }
