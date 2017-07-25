@@ -142,8 +142,9 @@ class ShippingQuoteRequest extends AbstractRequest
             foreach ($pieces->all() as $row => $item) {
                 $parcel = new \ParamParcelInfo();
                 $parcel->setSeqNo($row+1);
-                if(!$row) {
-                    $parcel->setParcelId(-1);
+                $parcel->setParcelId(-1);
+                if(($id = $item->getId())) {
+                    $parcel->setPackId($id);
                 }
                 $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
                 if($item->getWidth() && $item->getDepth() && $item->getHeight()) {

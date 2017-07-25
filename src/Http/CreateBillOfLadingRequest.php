@@ -150,7 +150,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setWeightDeclared($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()));
         $picking->setContents($this->getContent());
         $picking->setPacking($this->getPackageType()); // packing type
-        if(!is_null($package_id = $this->getOtherParameters('package_id'))) {
+        if(!is_null($package_id = $this->getPackageId())) {
             $picking->setPackId($package_id);
         }
         $picking->setDocuments($this->getIsDocuments());
@@ -235,6 +235,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 $parcel = new \ParamParcelInfo();
                 $parcel->setSeqNo($row+1);
                 $parcel->setParcelId(-1);
+                if(($id = $item->getId())) {
+                    $parcel->setPackId($id);
+                }
                 $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
                 if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
