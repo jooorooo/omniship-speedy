@@ -216,6 +216,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $pieces = $this->getPieces();
         if ($pieces->count()) {
             $parcels = [];
+            $total_pieces = $pieces->count();
             foreach ($pieces->all() as $row => $item) {
                 $parcel = new \ParamParcelInfo();
                 $parcel->setSeqNo($row + 1);
@@ -230,8 +231,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
                     $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
                     $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
                     $parcel->setSize($size);
-                } elseif (trim($name = $item->getName())) {
-                    $parcel->setPredefinedSize($name);
+                } elseif (trim($name = $item->getName())&& in_array(strtoupper($name), ['XS','S','M','L']) && $this->getServiceId() == 500 && $total_pieces == 1) {
+                    $parcel->setPredefinedSize(strtoupper($name));
                 }
                 $parcels[] = $parcel;
             }
