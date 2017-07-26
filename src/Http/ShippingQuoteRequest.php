@@ -8,7 +8,6 @@
 
 namespace Omniship\Speedy\Http;
 
-use Omniship\Common\ItemBag;
 use Omniship\Common\PieceBag;
 use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
@@ -153,6 +152,8 @@ class ShippingQuoteRequest extends AbstractRequest
                     $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
                     $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
                     $parcel->setSize($size);
+                } elseif(trim($name = $item->getName())) {
+                    $parcel->setPredefinedSize($name);
                 }
                 $parcels[] = $parcel;
             }
