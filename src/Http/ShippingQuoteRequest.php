@@ -20,10 +20,10 @@ class ShippingQuoteRequest extends AbstractRequest
     /**
      * @return ParamCalculation
      */
-    public function getData() {
-
+    public function getData()
+    {
         $paramCalculation = new ParamCalculation();
-        if(is_null($login = $this->getClient()->getResultLogin())) {
+        if (is_null($login = $this->getClient()->getResultLogin())) {
             return $paramCalculation;
         }
 
@@ -32,18 +32,18 @@ class ShippingQuoteRequest extends AbstractRequest
         //if send out of bg disable cod & payer is sender
         //Payer type (0=sender, 1=receiver or 2=third party)
         $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
-        if($this->getPayer() == Consts::PAYER_RECEIVER) {
+        if ($this->getPayer() == Consts::PAYER_RECEIVER) {
             $payer_type = ParamCalculation::PAYER_TYPE_RECEIVER;
-        } elseif($this->getPayer() == Consts::PAYER_OTHER) {
+        } elseif ($this->getPayer() == Consts::PAYER_OTHER) {
             $payer_type = ParamCalculation::PAYER_TYPE_THIRD_PARTY;
         }
         $paramCalculation->setPayerType($payer_type);
 
         //Packings payer type (0=sender, 1=reciever or 2=third party)
         $paramCalculation->setPayerTypePackings($payer_type);
-        
+
         //The date for shipment pick-up (the "time" component is ignored if it is allready passed or is overriden with 09:01). Default value is "today". (Required: no)
-        if(($taking_date = $this->getShipmentDate()) instanceof Carbon) {
+        if (($taking_date = $this->getShipmentDate()) instanceof Carbon) {
             $paramCalculation->setTakingDate($taking_date->timestamp);
         } else {
             $paramCalculation->setTakingDate(Carbon::now()->timestamp);
@@ -53,11 +53,11 @@ class ShippingQuoteRequest extends AbstractRequest
 
         $sender_address = $this->getSenderAddress();
         // if no sender address get information from profile
-        if(!$sender_address) {
+        if (!$sender_address) {
             $paramCalculation->setSenderId($login->getClientId());
         } else {
             //if send from office
-            if(!is_null($office = $sender_address->getOffice()) && $office->getId()) {
+            if (!is_null($office = $sender_address->getOffice()) && $office->getId()) {
                 $paramCalculation->setWillBringToOfficeId($office->getId());
             } else {
                 $paramCalculation->setSenderCountryId($sender_address->getCountry()->getId());
@@ -68,13 +68,13 @@ class ShippingQuoteRequest extends AbstractRequest
         }
 
         $receiver_address = $this->getReceiverAddress();
-        if($receiver_address && !is_null($office = $receiver_address->getOffice()) && $office->getId()) {
+        if ($receiver_address && !is_null($office = $receiver_address->getOffice()) && $office->getId()) {
             //ID of an office "to be called". Non-null and non-zero value indicates this picking as "to office". Otherwise "to address" is considered. If officeToBeCalledId is provided (non-null and non-zero), toBeCalled flag is considered "true". If officeToBeCalledId is set to 0, toBeCalled flag is considered "false".
             $paramCalculation->setOfficeToBeCalledId($office->getId());
             //Specifies if the shipment is "to be called". If this flag is true the shipment is considered "to office". Otherwise "to address" is considered.
             $paramCalculation->setToBeCalled(true);
         } else {
-            if($receiver_address) {
+            if ($receiver_address) {
                 $paramCalculation->setReceiverCountryId($receiver_address->getCountry()->getId());
                 $paramCalculation->setReceiverSiteId($receiver_address->getCity()->getId());
                 $paramCalculation->setReceiverPostCode($receiver_address->getPostCode());
@@ -93,7 +93,7 @@ class ShippingQuoteRequest extends AbstractRequest
             $paramCalculation->setDeferredDeliveryWorkDays($this->getOtherParameters('deffered_days'));
         }
 
-        if(($insurance = $this->getInsuranceAmount()) > 0) {
+        if (($insurance = $this->getInsuranceAmount()) > 0) {
             //Shipment insurance value (if the shipment is insured)
             $paramCalculation->setAmountInsuranceBase($insurance);
             //Specifies whether the shipment is fragile - necessary when the price of insurance is being calculated
@@ -106,7 +106,7 @@ class ShippingQuoteRequest extends AbstractRequest
 
         //Cash-on-Delivery (COD) amount
 
-        if(($cod = $this->getCashOnDeliveryAmount()) > 0) {
+        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
             $paramCalculation->setAmountCodBase($cod);
             //Flag indicating whether the shipping price should be included into the cash on delivery price.
             $paramCalculation->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
@@ -140,19 +140,19 @@ class ShippingQuoteRequest extends AbstractRequest
             $parcels = [];
             foreach ($pieces->all() as $row => $item) {
                 $parcel = new \ParamParcelInfo();
-                $parcel->setSeqNo($row+1);
+                $parcel->setSeqNo($row + 1);
                 $parcel->setParcelId(-1);
-                if(($id = $item->getId())) {
+                if (($id = $item->getId())) {
                     $parcel->setPackId($id);
                 }
                 $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
-                if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+                if ($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
                     $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
                     $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
                     $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
                     $parcel->setSize($size);
-                } elseif(trim($name = $item->getName())) {
+                } elseif (trim($name = $item->getName())) {
                     $parcel->setPredefinedSize($name);
                 }
                 $parcels[] = $parcel;
@@ -163,7 +163,8 @@ class ShippingQuoteRequest extends AbstractRequest
         return $paramCalculation;
     }
 
-    public function sendData($data) {
+    public function sendData($data)
+    {
         $response = $this->getClient()->calculate($data, $this->getOtherParameters('allowed_services'));
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }

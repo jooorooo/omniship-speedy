@@ -28,8 +28,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
     /**
      * @return ParamCalculation
      */
-    public function getData() {
-        if(!$login = $this->getClient()->getResultLogin()) {
+    public function getData()
+    {
+        if (!$login = $this->getClient()->getResultLogin()) {
             return null;
         }
 
@@ -45,12 +46,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $sender_office_id = null;
         $sender->setClientId($login->getClientId());
 
-        if($sender_address) {
+        if ($sender_address) {
 
 //            $sender->setPartnerName($sender_address->getFirstName() . ' ' . $sender_address->getLastName());
             $sender->setContactName($sender_address->getFullName());
 
-            if($company = $sender_address->getCompanyName()) {
+            if ($company = $sender_address->getCompanyName()) {
                 $sender->setObjectName($company);
             }
 
@@ -62,9 +63,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
             $sender_city = $sender_address->getCity();
             $sender_office = $sender_address->getOffice();
-            if($sender_city && $sender_city->getId()) {
+            if ($sender_city && $sender_city->getId()) {
                 $sender_city_id = $sender_city->getId();
-            } elseif(!$sender_office || !$sender_office->getId()) {
+            } elseif (!$sender_office || !$sender_office->getId()) {
                 $client_info = $this->getClient()->getClientInfo()->getAddress();
                 $sender_city_id = $client_info->getSiteId();
             }
@@ -77,7 +78,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
         } else {
             $client_info = $this->getClient()->getClientInfo();
-            if($client_info && $phones = $client_info->getPhones()) {
+            if ($client_info && $phones = $client_info->getPhones()) {
                 $senderPhone = new ParamPhoneNumber();
                 $senderPhone->setNumber($phones[0]->getNumber());
                 $sender->setPhones([$senderPhone]);
@@ -89,11 +90,11 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $receiver = new ParamClientData();
         $receiver->setEmail($this->getReceiverEmail());
         $receiver_address = $this->getReceiverAddress();
-        if($receiver_address) {
+        if ($receiver_address) {
             $receiver->setPartnerName($receiver_address->getFullName());
             $receiver->setContactName($receiver_address->getFullName());
 
-            if($company = $receiver_address->getCompanyName()) {
+            if ($company = $receiver_address->getCompanyName()) {
                 $receiver->setObjectName($company);
             }
 
@@ -134,21 +135,21 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setWeightDeclared($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()));
         $picking->setContents($this->getContent());
         $picking->setPacking($this->getPackageType()); // packing type
-        if(!is_null($package_id = $this->getPackageId())) {
+        if (!is_null($package_id = $this->getPackageId())) {
             $picking->setPackId($package_id);
         }
         $picking->setDocuments($this->getIsDocuments());
         $picking->setPalletized(false);
 
         $payer_type = ParamCalculation::PAYER_TYPE_SENDER;
-        if($this->getPayer() == Consts::PAYER_RECEIVER) {
+        if ($this->getPayer() == Consts::PAYER_RECEIVER) {
             $payer_type = ParamCalculation::PAYER_TYPE_RECEIVER;
-        } elseif($this->getPayer() == Consts::PAYER_OTHER) {
+        } elseif ($this->getPayer() == Consts::PAYER_OTHER) {
             $payer_type = ParamCalculation::PAYER_TYPE_THIRD_PARTY;
         }
         $picking->setPayerType($payer_type);
 
-        if(($ins = $this->getInsuranceAmount()) > 0) {
+        if (($ins = $this->getInsuranceAmount()) > 0) {
             $picking->setFragile((bool)$this->getOtherParameters('fragile'));
             $picking->setAmountInsuranceBase($ins);
             $picking->setPayerTypeInsurance($payer_type);
@@ -156,19 +157,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setFragile(false);
         }
 
-        if(is_null($taking_date = $this->getShipmentDate())) {
+        if (is_null($taking_date = $this->getShipmentDate())) {
             $result = $this->getClient()->getAllowedDaysForTaking(
                 $this->getServiceId(),
                 Carbon::now($this->getSenderTimeZone())->addDay(1)->timestamp,
                 $sender_city_id && !$sender_office_id ? $sender_city_id : null,
                 !$sender_city_id && $sender_office_id ? $sender_office_id : null
             );
-            if($result && !empty($result[1])) {
+            if ($result && !empty($result[1])) {
                 $this->setShipmentDate($result[1]);
             }
         }
 
-        if(!is_null($taking_date = $this->getShipmentDate())) {
+        if (!is_null($taking_date = $this->getShipmentDate())) {
             $picking->setTakingDate($taking_date->timestamp);
         }
 
@@ -180,7 +181,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setNoteClient($note);
         }
 
-        if(($cod = $this->getCashOnDeliveryAmount()) > 0) {
+        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
             $picking->setAmountCodBase($cod);
             $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
         } else {
@@ -194,16 +195,16 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $optionBeforePayment = new ParamOptionsBeforePayment();
         if ($cod > 0 && in_array($this->getOptionBeforePayment(), [Consts::OPTION_BEFORE_PAYMENT_OPEN, Consts::OPTION_BEFORE_PAYMENT_TEST])) {
-            if($this->getInstructionReturns() == 'return') {
+            if ($this->getInstructionReturns() == 'return') {
                 $payer_type_return = ParamCalculation::PAYER_TYPE_SENDER;
             } else {
                 $payer_type_return = ParamCalculation::PAYER_TYPE_RECEIVER;
             }
-            if($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
+            if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
                 $optionBeforePayment->setTest(true);
                 $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
                 $optionBeforePayment->setReturnPayerType($payer_type_return);
-            } elseif($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
+            } elseif ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
                 $optionBeforePayment->setOpen(true);
                 $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
                 $optionBeforePayment->setReturnPayerType($payer_type_return);
@@ -217,19 +218,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $parcels = [];
             foreach ($pieces->all() as $row => $item) {
                 $parcel = new \ParamParcelInfo();
-                $parcel->setSeqNo($row+1);
+                $parcel->setSeqNo($row + 1);
                 $parcel->setParcelId(-1);
-                if(($id = $item->getId())) {
+                if (($id = $item->getId())) {
                     $parcel->setPackId($id);
                 }
                 $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
-                if($item->getWidth() && $item->getDepth() && $item->getHeight()) {
+                if ($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
                     $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
                     $size->setHeight($convert->convertLengthUnit($item->getHeight(), $this->getDimensionUnit()));
                     $size->setWidth($convert->convertLengthUnit($item->getWidth(), $this->getDimensionUnit()));
                     $parcel->setSize($size);
-                } elseif(trim($name = $item->getName())) {
+                } elseif (trim($name = $item->getName())) {
                     $parcel->setPredefinedSize($name);
                 }
                 $parcels[] = $parcel;
@@ -237,7 +238,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setParcels($parcels);
         }
 
-        if($this->getClient()->getError()) {
+        if ($this->getClient()->getError()) {
             return null;
         }
 
@@ -248,7 +249,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
      * @param mixed $data
      * @return CreateBillOfLadingResponse
      */
-    public function sendData($data) {
+    public function sendData($data)
+    {
         $response = $data ? $this->getClient()->createBillOfLading($data) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
@@ -268,7 +270,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
      */
     protected function translateAddress($address = null)
     {
-        if(!$address || $address->isEmpty()) {
+        if (!$address || $address->isEmpty()) {
             return null;
         }
         $country = $address->getCountry();
@@ -289,28 +291,28 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
 
         if ($city) {
-            if($city->getId()) {
+            if ($city->getId()) {
                 $new_address->setSiteId($city->getId());
             } elseif ($city->getName()) {
                 $new_address->setSiteName($city->getName());
             }
         }
-        if($office && $office->getId()) {
+        if ($office && $office->getId()) {
             $new_address->setSiteId(null);
         }
 
         if ($quarter) {
-            if($quarter->getId()) {
+            if ($quarter->getId()) {
                 $new_address->setQuarterId($quarter->getId());
-            } elseif($quarter->getName()) {
+            } elseif ($quarter->getName()) {
                 $new_address->setQuarterName($quarter->getName());
             }
         }
 
         if ($street) {
-            if($street->getId()) {
+            if ($street->getId()) {
                 $new_address->setStreetId($street->getId());
-            } elseif($street->getName()) {
+            } elseif ($street->getName()) {
                 $new_address->setStreetName($street->getName());
             }
         }
@@ -335,19 +337,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $new_address->setApartmentNo($address->getApartment());
         }
 
-        if($l = $address->getNote()) {
+        if ($l = $address->getNote()) {
             $new_address->setAddressNote($l);
         }
 
-        if($l = $address->getAddress1()) {
+        if ($l = $address->getAddress1()) {
             $new_address->setFrnAddressLine1($l);
         }
 
-        if($l = $address->getAddress2()) {
+        if ($l = $address->getAddress2()) {
             $new_address->setFrnAddressLine2($l);
         }
 
-        if($post_code = $address->getPostCode()) {
+        if ($post_code = $address->getPostCode()) {
             $new_address->setPostCode($post_code);
         }
 
