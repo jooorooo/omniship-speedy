@@ -53,9 +53,8 @@ class ShippingQuoteRequest extends AbstractRequest
 
         $sender_address = $this->getSenderAddress();
         // if no sender address get information from profile
-        if (!$sender_address) {
-            $paramCalculation->setSenderId($login->getClientId());
-        } else {
+        $paramCalculation->setSenderId($login->getClientId());
+        if ($sender_address) {
             //if send from office
             if (!is_null($office = $sender_address->getOffice()) && $office->getId()) {
                 $paramCalculation->setWillBringToOfficeId($office->getId());

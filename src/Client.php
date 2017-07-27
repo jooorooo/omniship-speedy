@@ -502,6 +502,26 @@ class Client
     }
 
     /**
+     * @return ResultClientData[]
+     */
+    public function listContractClients()
+    {
+        $quarter_types = [];
+        if (!is_null($login = $this->getResultLogin())) {
+            try {
+                $list = $this->getEPSFacade()->listContractClients();
+                if ($list) {
+                    $quarter_types = $list;
+                }
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+                return [];
+            }
+        }
+        return $quarter_types;
+    }
+
+    /**
      * @param $city_id
      * @param null $name
      * @param string $language
@@ -705,6 +725,19 @@ class Client
     {
         if (!is_null($login = $this->getResultLogin())) {
             return $this->getEPSFacade()->isSessionActive($refreshSession);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param ParamAddress $address
+     * @return bool
+     */
+    public function makeAddressString(ParamAddress $address)
+    {
+        if (!is_null($login = $this->getResultLogin())) {
+            return $this->getEPSFacade()->makeAddressString($address);
         } else {
             return false;
         }
