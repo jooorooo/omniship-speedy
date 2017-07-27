@@ -225,6 +225,7 @@ class ResultOfficeEx extends SpeedyResultFormat {
 
     /**
      * Get office type
+     * 0 - Speedy office 3 - APT
      * @return signed 16-bit integer (nullable)
      * @since 3.0.1 
      */
