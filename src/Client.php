@@ -438,14 +438,17 @@ class Client
 
     /**
      * @param $id
-     * @return boolean|ResultSite
+     * @return boolean|ResultOfficeEx
      */
     public function getOfficeById($id)
     {
         $office = false;
         if (!is_null($login = $this->getResultLogin())) {
             try {
-                $office = $this->getEPSFacade()->listOfficesEx($id, 68134);
+                $offices = $this->getEPSFacade()->listOfficesEx($id);
+                if(count($offices) == 1) {
+                    $office = array_shift($offices);
+                }
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
                 return false;
