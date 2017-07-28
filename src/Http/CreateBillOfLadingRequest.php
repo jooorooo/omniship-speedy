@@ -44,7 +44,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $sender_city_id = null;
         $sender_office_id = null;
-        $sender->setClientId($login->getClientId());
+        $sender->setClientId($this->getOtherParameters('sender_id', $login->getClientId()));
 
         if ($sender_address) {
 
