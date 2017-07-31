@@ -867,7 +867,7 @@ class Client
      * @param array $bol_ids
      * @param null|Carbon $date_start
      * @param null|Carbon $date_end
-     * @return array|bool
+     * @return \ResultOrderPickingInfo[]|bool
      */
     public function requestCourier(array $bol_ids, Carbon $date_start = null, Carbon $date_end = null) {
         if (!is_null($login = $this->getResultLogin())) {

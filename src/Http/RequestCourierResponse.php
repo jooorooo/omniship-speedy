@@ -8,6 +8,7 @@
 
 namespace Omniship\Speedy\Http;
 
+use Omniship\Common\RequestCourier;
 use ResultOrderPickingInfo;
 
 class RequestCourierResponse extends AbstractResponse
@@ -20,21 +21,25 @@ class RequestCourierResponse extends AbstractResponse
     protected $data;
 
     /**
-     * @return bool
+     * @return RequestCourier[]
      */
     public function getData()
     {
         if(!is_null($this->getCode()) || !is_array($this->data)) {
-            return false;
+            return [];
         }
 
-        foreach($this->data as $res) {
-            if($error = $res->getErrorDescriptions()) {
-                $this->getRequest()->getClient()->setError($error);
-                return false;
-            }
+        $results = [];
+        foreach($this->data AS $result) {
+            $results[] = new RequestCourier([
+                'bol_id' => $result->getBillOfLading(),
+                'pickup_date' => $this->getRequest()->getEndDate(),
+                'error' => $result->getErrorDescriptions() ? : null,
+                'error_code' => $result->getErrorDescriptions() ? md5($result->getErrorDescriptions()) : null,
+            ]);
         }
-        return true;
+
+        return $results;
     }
 
 }
