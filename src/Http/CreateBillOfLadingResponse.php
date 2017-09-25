@@ -39,6 +39,7 @@ class CreateBillOfLadingResponse extends AbstractResponse
 //                return $parcel->getParcelId();
 //            }, $parcels));
 //        }
+        $result->setServiceId(strtolower($this->getRequest()->getServiceId()));
         $result->setBolId($parcels[0]->getParcelId());
         $result->setBillOfLadingSource(base64_encode($this->getRequest()->getClient()->createPDF($parcels[0]->getParcelId())));
         $result->setBillOfLadingType($result::PDF);
