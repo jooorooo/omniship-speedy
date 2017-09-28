@@ -117,8 +117,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $picking->setClientSystemId(self::SpeedyClientId);
         $picking->setRef1($this->getTransactionId());
 
-        if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
-            $picking->setFixedTimeDelivery($priority_time_value->format('Hi'));
+        if (!is_null($priority_time = $this->getPriorityTime())) {
+            $picking->setFixedTimeDelivery($priority_time->format('Hi'));
         }
 
         $picking->setServiceTypeId($this->getServiceId());
@@ -188,7 +188,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setAmountCodBase(0);
         }
 
-        if ($cod > 0 && ($this->getOtherParameters('money_transfer') && $receiver_address->getCountry()->getIso2() == 'BG')) {
+        if ($cod > 0 && ($this->getMoneyTransfer() && strtoupper($receiver_address->getCountry()->getIso2()) == 'BG')) {
             $picking->setRetMoneyTransferReqAmount($cod);
             $picking->setAmountCodBase(0);
         }

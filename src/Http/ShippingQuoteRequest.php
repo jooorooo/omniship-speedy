@@ -82,8 +82,8 @@ class ShippingQuoteRequest extends AbstractRequest
         }
 
         //Fixed time for delivery ("HHmm" format, i.e., the number "1315" means "13:15", "830" means "8:30" etc.) (Depending on the courier service, this property could be required, allowed or banned)
-        if (($priority_time_value = $this->getOtherParameters('priority_time_value')) instanceof Carbon) {
-            $paramCalculation->setFixedTimeDelivery($priority_time_value->format('Hi'));
+        if (!is_null($priority_time = $this->getPriorityTime())) {
+            $paramCalculation->setFixedTimeDelivery($priority_time->format('Hi'));
         }
 
         //In some rare cases users might prefer the delivery to be deferred by a day or two. This parameter allows users to specify by how many (working) days they would like to postpone the shipment delivery.
@@ -164,7 +164,7 @@ class ShippingQuoteRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        $response = $this->getClient()->calculate($data, $this->getOtherParameters('allowed_services'));
+        $response = $this->getClient()->calculate($data, $this->getAllowedServices());
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
