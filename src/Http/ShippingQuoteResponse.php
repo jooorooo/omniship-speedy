@@ -10,6 +10,7 @@ namespace Omniship\Speedy\Http;
 
 use Carbon\Carbon;
 use Omniship\Common\ShippingQuoteBag;
+use Omniship\Consts;
 use ResultCalculationMS;
 
 class ShippingQuoteResponse extends AbstractResponse
@@ -43,7 +44,8 @@ class ShippingQuoteResponse extends AbstractResponse
                     'currency' => 'BGN',//@todo return price in BGN
                     'tax' => $amounts->getVat(),
                     'insurance' => $amounts->getInsurancePremium(),
-                    'exchange_rate' => null
+                    'exchange_rate' => null,
+                    'payer' => $this->getRequest()->getPayer() ? : Consts::PAYER_SENDER
                 ]);
             }
         }
