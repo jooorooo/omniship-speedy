@@ -247,6 +247,13 @@ class Gateway extends AbstractGateway
     /**
      * {@inheritdoc}
      */
+    public function supportPriorityDay()
+    {
+        return true;
+    }
+    /**
+     * {@inheritdoc}
+     */
     public function supportPriorityTime()
     {
         return true;
