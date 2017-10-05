@@ -11,6 +11,7 @@ namespace Omniship\Speedy\Http;
 use Carbon\Carbon;
 use Omniship\Common\ShippingQuoteBag;
 use Omniship\Consts;
+use Omniship\Speedy\Client;
 use ResultCalculationMS;
 
 class ShippingQuoteResponse extends AbstractResponse
@@ -43,7 +44,8 @@ class ShippingQuoteResponse extends AbstractResponse
                     'delivery_time' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getDeadlineDelivery()),
                     'currency' => 'BGN',//@todo return price in BGN
                     'tax' => $amounts->getVat(),
-                    'insurance' => $amounts->getInsurancePremium(),
+                    'insurance' => $amounts->getInsurancePremium() * (1 + (Client::VAT_PERCENTAGE/100)),
+                    'cash_on_delivery' => $amounts->getCodPremium() * (1 + (Client::VAT_PERCENTAGE/100)),
                     'exchange_rate' => null,
                     'payer' => $this->getRequest()->getPayer() ? : Consts::PAYER_SENDER
                 ]);

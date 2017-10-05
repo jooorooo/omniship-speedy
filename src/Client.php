@@ -63,6 +63,8 @@ class Client
     protected $error;
 
     const SERVER_ADDRESS = 'https://www.speedy.bg/eps/main01.wsdl';
+    
+    const VAT_PERCENTAGE = 20;
 
     public function __construct($username, $password)
     {
