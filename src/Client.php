@@ -62,6 +62,8 @@ class Client
 
     protected $error;
 
+    protected $services;
+
     const SERVER_ADDRESS = 'https://www.speedy.bg/eps/main01.wsdl';
     
     const VAT_PERCENTAGE = 20;
@@ -132,6 +134,9 @@ class Client
      */
     public function getServices($language = 'bg')
     {
+        if(!is_null($this->services)) {
+            return $this->services;
+        }
         $services = [];
         if (!is_null($login = $this->getResultLogin())) {
             try {
@@ -146,6 +151,7 @@ class Client
                         $services[] = $service;
                     }
                 }
+                $this->services = $services;
             } catch (Exception $e) {
                 $this->error = $e->getMessage();
                 return false;
@@ -156,7 +162,7 @@ class Client
 
     /**
      * @param string $language
-     * @return array
+     * @return ResultCourierService[]
      */
     public function getServicesList($language = 'bg')
     {
@@ -165,6 +171,22 @@ class Client
         if ($services) {
             foreach ($services as $service) {
                 $result[$service->getTypeId()] = $service->getName();
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $language
+     * @return ResultCourierService[]
+     */
+    public function getServicesByKey($language = 'bg')
+    {
+        $services = $this->getServices($language);
+        $result = [];
+        if ($services) {
+            foreach ($services as $service) {
+                $result[$service->getTypeId()] = $service;
             }
         }
         return $result;

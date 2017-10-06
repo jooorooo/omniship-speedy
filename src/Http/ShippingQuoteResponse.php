@@ -11,6 +11,7 @@ namespace Omniship\Speedy\Http;
 use Carbon\Carbon;
 use Omniship\Common\ShippingQuoteBag;
 use Omniship\Consts;
+use Omniship\Helper\Helper;
 use Omniship\Speedy\Client;
 use ResultCalculationMS;
 
@@ -28,14 +29,14 @@ class ShippingQuoteResponse extends AbstractResponse
         }
 
         if(is_array($this->data)) {
-            $services = $this->getRequest()->getClient()->getServicesList($this->getRequest()->getLanguageCode());
+            $services = $this->getRequest()->getClient()->getServicesByKey($this->getRequest()->getLanguageCode());
             foreach($this->data AS $service) {
                 $service = $this->_getService($service);
                 $result_info = $service->getResultInfo();
                 $amounts = $result_info->getAmounts();
                 $result->push([
                     'id' => $service->getServiceTypeId(),
-                    'name' => $services[$service->getServiceTypeId()],
+                    'name' => $services[$service->getServiceTypeId()]->getName(),
                     'description' => null,
                     'price' => $amounts->getTotal(),
                     'pickup_date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $result_info->getTakingDate()),
@@ -47,7 +48,10 @@ class ShippingQuoteResponse extends AbstractResponse
                     'insurance' => $amounts->getInsurancePremium() * (1 + (Client::VAT_PERCENTAGE/100)),
                     'cash_on_delivery' => $amounts->getCodPremium() * (1 + (Client::VAT_PERCENTAGE/100)),
                     'exchange_rate' => null,
-                    'payer' => $this->getRequest()->getPayer() ? : Consts::PAYER_SENDER
+                    'payer' => $this->getRequest()->getPayer() ? : Consts::PAYER_SENDER,
+                    'allowance_fixed_time_delivery' => $services[$service->getServiceTypeId()]->getAllowanceFixedTimeDelivery() && $services[$service->getServiceTypeId()]->getAllowanceFixedTimeDelivery()->getValue() == Consts::SERVICE_ALLOWED,
+                    'allowance_cash_on_delivery' => $services[$service->getServiceTypeId()]->getAllowanceCashOnDelivery() && $services[$service->getServiceTypeId()]->getAllowanceCashOnDelivery()->getValue() == Consts::SERVICE_ALLOWED,
+                    'allowance_insurance' => $services[$service->getServiceTypeId()]->getAllowanceInsurance() && $services[$service->getServiceTypeId()]->getAllowanceInsurance()->getValue() == Consts::SERVICE_ALLOWED
                 ]);
             }
         }
