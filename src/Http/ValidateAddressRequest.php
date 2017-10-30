@@ -42,7 +42,13 @@ class ValidateAddressRequest extends AbstractRequest
         }
         $paramAddress->setCountryId($address->getCountry() ? $address->getCountry()->getId() : null);
         $paramAddress->setStateId($address->getState() ? $address->getState()->getId() : null);
-        $paramAddress->setStreetId($address->getStreet() ? $address->getStreet()->getId() : null);
+        if($address->getStreet()) {
+            if($address->getStreet()->getId()) {
+                $paramAddress->setStreetId($address->getStreet()->getId());
+            } else {
+                $paramAddress->setStreetName($address->getStreet()->getName());
+            }
+        }
         $paramAddress->setStreetNo($address->getStreetNumber());
         $paramAddress->setQuarterId($address->getQuarter() ? $address->getQuarter()->getId() : null);
         $paramAddress->setBlockNo($address->getBuilding());

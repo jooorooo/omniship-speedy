@@ -313,7 +313,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if ($street) {
             if ($street->getId()) {
                 $new_address->setStreetId($street->getId());
-            } elseif ($street->getName()) {
+            } else {
                 $new_address->setStreetName($street->getName());
             }
         }
