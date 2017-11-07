@@ -5,7 +5,7 @@
 
     "require": {
       "php": "^7",
-      "simexis/omniship": "dev-master"
+      "simexis/omniship": "@dev"
     },
 
     "license": "LGPL-2.1",
