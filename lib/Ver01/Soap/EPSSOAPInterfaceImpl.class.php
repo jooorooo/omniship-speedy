@@ -20,9 +20,9 @@ class EPSSOAPInterfaceImpl extends SoapClient implements EPSInterface {
      */
     function __construct($wsdlURL=self::SPEEDY_SOAP_WSDL_V01_URL, $options=null) {
         if (is_null($options)) {
-            parent::SoapClient($wsdlURL);
+            parent::__construct($wsdlURL);
         } else {
-            parent::SoapClient($wsdlURL, $options);
+            parent::__construct($wsdlURL, $options);
         }
         //   echo('<BR>Connected to '.$wsdlURL);
     }
