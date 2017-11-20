@@ -106,11 +106,17 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param array $parameters
+     * @param array|ShippingQuoteRequest $parameters
      * @return ShippingQuoteRequest
      */
-    public function getQuotes(array $parameters = [])
+    public function getQuotes($parameters = [])
     {
+        if ($parameters instanceof ShippingQuoteRequest) {
+            return $parameters;
+        }
+        if (!is_array($parameters)) {
+            $parameters = [];
+        }
         return $this->createRequest(ShippingQuoteRequest::class, $this->getParameters() + $parameters);
     }
 
@@ -133,11 +139,17 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param array $parameters
+     * @param array|CreateBillOfLadingRequest $parameters
      * @return CreateBillOfLadingRequest
      */
-    public function createBillOfLading(array $parameters = [])
+    public function createBillOfLading($parameters = [])
     {
+        if ($parameters instanceof CreateBillOfLadingRequest) {
+            return $parameters;
+        }
+        if (!is_array($parameters)) {
+            $parameters = [];
+        }
         return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
     }
 
@@ -207,8 +219,9 @@ class Gateway extends AbstractGateway
     /**
      * @return Client
      */
-    public function getClient() {
-        if(is_null($this->client)) {
+    public function getClient()
+    {
+        if (is_null($this->client)) {
             $this->client = new Client($this->getUsername(), $this->getPassword());
         }
         return $this->client;
@@ -218,7 +231,8 @@ class Gateway extends AbstractGateway
      * @param $parcel_id
      * @return string
      */
-    public function trackingUrl($parcel_id) {
+    public function trackingUrl($parcel_id)
+    {
         return sprintf(static::TRACKING_URL, $parcel_id);
     }
 
@@ -230,6 +244,7 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(ValidatePostCodeRequest::class, $this->setAddress($address)->getParameters());
     }
+
     /**
      * {@inheritdoc}
      */
@@ -237,6 +252,7 @@ class Gateway extends AbstractGateway
     {
         return true;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -244,6 +260,7 @@ class Gateway extends AbstractGateway
     {
         return true;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -251,6 +268,7 @@ class Gateway extends AbstractGateway
     {
         return true;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -258,6 +276,7 @@ class Gateway extends AbstractGateway
     {
         return true;
     }
+
     /**
      * {@inheritdoc}
      */
