@@ -41,7 +41,7 @@ class CreateBillOfLadingResponse extends AbstractResponse
 //            }, $parcels));
 //        }
         $result->setServiceId(strtolower($this->getRequest()->getServiceId()));
-        $result->setBolId($parcels[0]->getParcelId());
+        $result->setBolId((string)$parcels[0]->getParcelId());
         $result->setBillOfLadingSource(base64_encode($this->getRequest()->getClient()->createPDF($parcels[0]->getParcelId())));
         $result->setBillOfLadingType($result::PDF);
         $result->setEstimatedDeliveryDate(Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDeadlineDelivery(), $this->getRequest()->getReceiverTimeZone()));
