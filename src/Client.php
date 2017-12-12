@@ -787,13 +787,15 @@ class Client
                 /** @var $resultCalculation ResultCalculationMS[] */
                 $resultCalculation = $this->getEPSFacade()->calculateMultipleServices($paramCalculation, $allowed_services);
                 $error = null;
+                $errors = [];
                 foreach ($resultCalculation as $key => $service) {
                     if ($error = $service->getErrorDescription()) {
+                        $errors[] = $error;
                         unset($resultCalculation[$key]);
                     }
                 }
-                if (!$resultCalculation && $error) {
-                    $this->error = $error;
+                if (!$resultCalculation && $errors) {
+                    $this->error = implode("\n", $errors);
                 }
                 $resultCalculation = array_values($resultCalculation);
             } catch (Exception $e) {
