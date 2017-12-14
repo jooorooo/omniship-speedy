@@ -39,6 +39,19 @@ class ShippingQuoteRequest extends AbstractRequest
         }
         $paramCalculation->setPayerType($payer_type);
 
+        if($payer_type == ParamCalculation::PAYER_TYPE_THIRD_PARTY) {
+            if(!empty($payer = $this->getOtherParameters('payer_id'))) {
+                $payer_id = $payer;
+            } else {
+                $payer_id = $login->getClientId();
+            }
+            $paramCalculation->setPayerRefId($payer_id);
+            $paramCalculation->setPayerRefPackingsId($payer_id);
+            if($this->getInsuranceAmount() > 0) {
+                $paramCalculation->setPayerRefInsuranceId($payer_id);
+            }
+        }
+
         //Packings payer type (0=sender, 1=reciever or 2=third party)
         $paramCalculation->setPayerTypePackings($payer_type);
 

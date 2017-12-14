@@ -149,6 +149,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
         $picking->setPayerType($payer_type);
 
+        if($payer_type == ParamCalculation::PAYER_TYPE_THIRD_PARTY) {
+            if(!empty($payer = $this->getOtherParameters('payer_id'))) {
+                $payer_id = $payer;
+            } else {
+                $payer_id = $login->getClientId();
+            }
+            $picking->setPayerRefId($payer_id);
+            $picking->setPayerRefPackingsId($payer_id);
+            if($this->getInsuranceAmount() > 0) {
+                $picking->setPayerRefInsuranceId($payer_id);
+            }
+        }
+
         if (($ins = $this->getInsuranceAmount()) > 0) {
             $picking->setFragile((bool)$this->getOtherParameters('fragile'));
             $picking->setAmountInsuranceBase($ins);
