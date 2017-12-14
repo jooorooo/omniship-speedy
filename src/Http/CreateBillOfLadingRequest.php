@@ -162,6 +162,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
         }
 
+        //Packings payer type (0=sender, 1=reciever or 2=third party)
+        $picking->setPayerTypePackings($payer_type);
+
         if (($ins = $this->getInsuranceAmount()) > 0) {
             $picking->setFragile((bool)$this->getOtherParameters('fragile'));
             $picking->setAmountInsuranceBase($ins);
