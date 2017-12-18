@@ -64,8 +64,10 @@ class ShippingQuoteRequest extends AbstractRequest
         //If set to true, the "takingDate" field is not just to be validated, but the first allowed (following) date will be used instead (in compliance with the pick-up schedule etc.). (Required: no)
         $paramCalculation->setAutoAdjustTakingDate(true);
 
-        $sender_address = $this->getSenderAddress();
-        if ($sender_address) {
+        if(!empty($sender_id = $this->getOtherParameters('sender_id', $login->getClientId()))) {
+            // if no sender address get information from profile
+            $paramCalculation->setSenderId($sender_id);
+        } elseif (!empty($sender_address = $this->getSenderAddress())) {
             //if send from office
             if (!is_null($office = $sender_address->getOffice()) && $office->getId()) {
                 $paramCalculation->setWillBringToOfficeId($office->getId());
@@ -74,9 +76,6 @@ class ShippingQuoteRequest extends AbstractRequest
                 $paramCalculation->setSenderSiteId($sender_address->getCity()->getId());
                 $paramCalculation->setSenderPostCode($sender_address->getPostCode());
             }
-        } elseif(!empty($sender_id = $this->getOtherParameters('sender_id'))) {
-            // if no sender address get information from profile
-            $paramCalculation->setSenderId($sender_id);
         }
 
         $receiver_address = $this->getReceiverAddress();
