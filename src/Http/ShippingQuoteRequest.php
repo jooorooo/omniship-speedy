@@ -67,11 +67,12 @@ class ShippingQuoteRequest extends AbstractRequest
         if(!empty($sender_id = $this->getOtherParameters('sender_id', $login->getClientId()))) {
             // if no sender address get information from profile
             $paramCalculation->setSenderId($sender_id);
-        } elseif (!empty($sender_address = $this->getSenderAddress())) {
+        }
+        if (!empty($sender_address = $this->getSenderAddress())) {
             //if send from office
             if (!is_null($office = $sender_address->getOffice()) && $office->getId()) {
                 $paramCalculation->setWillBringToOfficeId($office->getId());
-            } else {
+            } elseif(!$paramCalculation->getSenderId()) {
                 $paramCalculation->setSenderCountryId($sender_address->getCountry()->getId());
                 $paramCalculation->setSenderSiteId($sender_address->getCity()->getId());
                 $paramCalculation->setSenderPostCode($sender_address->getPostCode());
