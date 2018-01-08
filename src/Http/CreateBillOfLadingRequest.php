@@ -255,6 +255,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setParcels($parcels);
         }
 
+        if(($money_transfer = $this->getOtherParameters('money_transfer')) > 0) {
+            $picking->setRetMoneyTransferReqAmount($money_transfer);
+        }
+
         if ($this->getClient()->getError()) {
             return null;
         }
