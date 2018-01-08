@@ -359,6 +359,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
 
         if ($l = $address->getAddress1()) {
+            if ($street && !$street->getId()) {
+                $l = $street->getName() . ($l ? ', ' . $l : '');
+            }
+            if ($quarter && !$quarter->getId()) {
+                $l = $quarter->getName() . ($l ? ', ' . $l : '');
+            }
             $new_address->setFrnAddressLine1($l);
         }
 
