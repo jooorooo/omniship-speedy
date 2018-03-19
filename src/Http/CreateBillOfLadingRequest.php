@@ -370,7 +370,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
         }
         if ($quarter && !$quarter->getId()) {
-            $l = [1=>$quarter->getName()];
+            $l[1] = $quarter->getName();
             if (!$street && $address->getStreetNumber()) {
                 $l[1] .= ' ' . $address->getStreetNumber();
             }
