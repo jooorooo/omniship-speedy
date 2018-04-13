@@ -29,8 +29,8 @@ class ValidateAddressRequest extends AbstractRequest
         //sender
         $paramAddress = new ParamAddress();
         $paramAddress->setSiteId($address->getCity() ? $address->getCity()->getId() : null);
-		$paramAddress->setSiteName($address->getCity() ? $address->getCity()->getName() : null);
-        $paramAddress->setPostCode($address->getPostCode());
+        $paramAddress->setSiteName($address->getCity() ? $address->getCity()->getName() : null);
+        $paramAddress->setPostCode(str_replace(' ', '', $address->getPostCode()));
         if($l = $address->getNote()) {
             $paramAddress->setAddressNote($l);
         }

@@ -35,7 +35,7 @@ class ValidatePostCodeRequest extends AbstractRequest
      * @return ValidateAddressResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->validatePostCode($data->getPostCode(), $data->getCountry() ? $data->getCountry()->getId() : null, $data->getCity() ? $data->getCity()->getId() : null) : null;
+        $response = $data ? $this->getClient()->validatePostCode(str_replace(' ', '', $data->getPostCode()), $data->getCountry() ? $data->getCountry()->getId() : null, $data->getCity() ? $data->getCity()->getId() : null) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
