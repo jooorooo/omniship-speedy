@@ -75,7 +75,7 @@ class ShippingQuoteRequest extends AbstractRequest
             } elseif(!$paramCalculation->getSenderId()) {
                 $paramCalculation->setSenderCountryId($sender_address->getCountry()->getId());
                 $paramCalculation->setSenderSiteId($sender_address->getCity()->getId());
-                $paramCalculation->setSenderPostCode($sender_address->getPostCode());
+                $paramCalculation->setSenderPostCode(str_replace(' ', '', $sender_address->getPostCode()));
             }
         }
 
@@ -89,7 +89,7 @@ class ShippingQuoteRequest extends AbstractRequest
             if ($receiver_address) {
                 $paramCalculation->setReceiverCountryId($receiver_address->getCountry()->getId());
                 $paramCalculation->setReceiverSiteId($receiver_address->getCity()->getId());
-                $paramCalculation->setReceiverPostCode($receiver_address->getPostCode());
+                $paramCalculation->setReceiverPostCode(str_replace(' ', '', $receiver_address->getPostCode()));
             }
             $paramCalculation->setOfficeToBeCalledId(0);
             $paramCalculation->setToBeCalled(false);

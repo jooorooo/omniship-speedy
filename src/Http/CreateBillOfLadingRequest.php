@@ -402,7 +402,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }*/
 
         if ($post_code = $address->getPostCode()) {
-            $new_address->setPostCode($post_code);
+            $new_address->setPostCode(str_replace(' ', '', $post_code));
         }
 
         return $new_address;
