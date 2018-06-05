@@ -23,7 +23,8 @@ use ParamPicking;
 class CreateBillOfLadingRequest extends AbstractRequest
 {
 
-    const SpeedyClientId = null; //An optional value used to identify user's client software. Please verify the allowed values with Speedy's IT Department.
+    /* @todo CloudCart number */
+    const SpeedyClientId = 18060510100; //An optional value used to identify user's client software. Please verify the allowed values with Speedy's IT Department.
 
     /**
      * @return ParamCalculation
