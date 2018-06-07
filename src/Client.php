@@ -64,6 +64,8 @@ class Client
 
     protected $services;
 
+    protected $_latestResponse;
+
     const SERVER_ADDRESS = 'https://www.speedy.bg/eps/main01.wsdl';
     
     const VAT_PERCENTAGE = 20;
@@ -786,6 +788,7 @@ class Client
                 }
                 /** @var $resultCalculation ResultCalculationMS[] */
                 $resultCalculation = $this->getEPSFacade()->calculateMultipleServices($paramCalculation, $allowed_services);
+                $this->_latestResponse = $this->getEPSFacade()->getLatestResponse();
                 $error = null;
                 $errors = [];
                 foreach ($resultCalculation as $key => $service) {
@@ -1105,6 +1108,15 @@ class Client
     public function getEPSFacade()
     {
         return $this->ePSFacade;
+    }
+
+    /**
+     * Get latest respone without format
+     * @return mixed
+     */
+    public function getLatestResponse()
+    {
+        return $this->_latestResponse;
     }
 
     /**

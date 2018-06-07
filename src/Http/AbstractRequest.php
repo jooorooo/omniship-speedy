@@ -61,5 +61,17 @@ abstract class AbstractRequest extends BaseAbstractRequest
         }
         return $this->client;
     }
+    /**
+     * Get the formatted Request.
+     *
+     * @return null|string
+     */
+    public function getRequestFormatted()
+    {
+        if(method_exists($this->getData(), 'toStdClass')) {
+            return var_export($this->getData()->toStdClass(), 1);
+        }
+        return json_encode($this->getData());
+    }
 
 }

@@ -46,5 +46,24 @@ abstract class AbstractResponse extends BaseAbstractResponse
         }
         return null;
     }
+    /**
+     * Get the formatted Request.
+     *
+     * @return null|string
+     */
+    public function getRequestFormatted()
+    {
+        if(method_exists($this->getRequest()->getData(), 'toStdClass')) {
+            return var_export($this->getRequest()->getData()->toStdClass(), 1);
+        }
+        return json_encode($this->getData());
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getResponseFormatted()
+    {
+        return var_export(json_decode(json_encode($this->getRequest()->getClient()->getLatestResponse()), true), 1);
+    }
 
 }

@@ -30,11 +30,16 @@ class EPSFacade {
     protected $_password;
 
     /**
-     * Result of login Speedy web service method clall
+     * Result of login Speedy web service method call
      * @since 1.0
      * @var ResultLogin
      */
     protected $_resultLogin;
+
+    /**
+     * Latest response
+     */
+    protected $_latestResponse;
 
     /**
      * Constructs new instance of EPS Facade
@@ -147,7 +152,7 @@ class EPSFacade {
      */
     public function login() {
         $this->checkStateBeforeCall();
-        $this->_resultLogin = $this->_epsInterfaceImpl->login($this->_username, $this->_password);
+        $this->_resultLogin = $this->_latestResponse = $this->_epsInterfaceImpl->login($this->_username, $this->_password);
         return $this->_resultLogin;
     }
 
@@ -162,7 +167,7 @@ class EPSFacade {
     public function isSessionActive($refreshSession) {
         $this->checkStateBeforeCall();
         if (isset($this->_resultLogin)) {
-            return $this->_epsInterfaceImpl->isSessionActive($this->_resultLogin->getSessionId(), $refreshSession);
+            return $this->_latestResponse = $this->_epsInterfaceImpl->isSessionActive($this->_resultLogin->getSessionId(), $refreshSession);
         } else {
             return false;
         }
@@ -179,7 +184,7 @@ class EPSFacade {
      */
     public function listServices($date, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listServices($this->getResultLogin(true)->getSessionId(), $date, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listServices($this->getResultLogin(true)->getSessionId(), $date, $language);
     }
 
     /**
@@ -195,7 +200,7 @@ class EPSFacade {
      */
     public function listSites($type, $name, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listSites($this->getResultLogin(true)->getSessionId(), $type, $name, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listSites($this->getResultLogin(true)->getSessionId(), $type, $name, $language);
     }
 
     /**
@@ -210,7 +215,7 @@ class EPSFacade {
      */
     public function listSitesEx($paramFilterSite, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listSitesEx($this->getResultLogin(true)->getSessionId(), $paramFilterSite, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listSitesEx($this->getResultLogin(true)->getSessionId(), $paramFilterSite, $language);
     }
 
     /**
@@ -237,7 +242,7 @@ class EPSFacade {
         $senderId = null, $receiverId = null, $senderOfficeId = null, $receiverOfficeId = null
     ) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listServicesForSites(
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listServicesForSites(
             $this->getResultLogin(true)->getSessionId(), $date, $senderSiteId, $receiverSiteId, 
             $senderCountryId, $senderPostCode, $receiverCountryId, $receiverPostCode, $language,
             $senderId, $receiverId, $senderOfficeId, $receiverOfficeId
@@ -270,7 +275,7 @@ class EPSFacade {
         $senderId = null, $receiverId = null, $senderOfficeId = null, $receiverOfficeId = null
     ) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getWeightInterval(
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getWeightInterval(
                 $this->getResultLogin(true)->getSessionId(), $serviceTypeId, $senderSiteId, $receiverSiteId, $date, $documents,
                 $senderCountryId, $senderPostCode, $receiverCountryId, $receiverPostCode,
                 $senderId, $receiverId, $senderOfficeId, $receiverOfficeId
@@ -298,7 +303,7 @@ class EPSFacade {
      */
     public function getAddressNomenclature($nomenType, $countryId = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getAddressNomenclature($this->getResultLogin(true)->getSessionId(), $nomenType, $countryId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getAddressNomenclature($this->getResultLogin(true)->getSessionId(), $nomenType, $countryId);
     }
     
     /**
@@ -315,7 +320,7 @@ class EPSFacade {
      */
     public function listAllSites($language = null, $countryId = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listAllSites($this->getResultLogin(true)->getSessionId(), $language, $countryId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listAllSites($this->getResultLogin(true)->getSessionId(), $language, $countryId);
     }
     
     /**
@@ -328,7 +333,7 @@ class EPSFacade {
      */
     public function getSiteById($siteId) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getSiteById($this->getResultLogin(true)->getSessionId(), $siteId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getSiteById($this->getResultLogin(true)->getSessionId(), $siteId);
     }
 
     /**
@@ -341,7 +346,7 @@ class EPSFacade {
      */
     public function getSitesByAddrNomenType($addrNomen) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getSitesByAddrNomenType($this->getResultLogin(true)->getSessionId(), $addrNomen);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getSitesByAddrNomenType($this->getResultLogin(true)->getSessionId(), $addrNomen);
     }
 
     /**
@@ -354,7 +359,7 @@ class EPSFacade {
      */
     public function listStreetTypes($language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listStreetTypes($this->getResultLogin(true)->getSessionId(), $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listStreetTypes($this->getResultLogin(true)->getSessionId(), $language);
     }
 
     /**
@@ -367,7 +372,7 @@ class EPSFacade {
      */
     public function listQuarterTypes($language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listQuarterTypes($this->getResultLogin(true)->getSessionId(), $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listQuarterTypes($this->getResultLogin(true)->getSessionId(), $language);
     }
 
     /**
@@ -383,7 +388,7 @@ class EPSFacade {
      */
     public function listStreets($name, $siteId, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listStreets($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listStreets($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
     }
 
     /**
@@ -399,7 +404,7 @@ class EPSFacade {
      */
     public function listQuarters($name, $siteId, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listQuarters($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listQuarters($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
     }
 
     /**
@@ -415,7 +420,7 @@ class EPSFacade {
      */
     public function listCommonObjects($name, $siteId, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listCommonObjects($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listCommonObjects($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
     }
 
     /**
@@ -431,7 +436,7 @@ class EPSFacade {
      */
     public function listBlocks($name, $siteId, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listBlocks($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listBlocks($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language);
     }
 
     /**
@@ -446,7 +451,7 @@ class EPSFacade {
      */
     public function listOffices($name, $siteId) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listOffices($this->getResultLogin(true)->getSessionId(), $name, $siteId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listOffices($this->getResultLogin(true)->getSessionId(), $name, $siteId);
     }
 
     /**
@@ -461,7 +466,7 @@ class EPSFacade {
      */
     public function getClientById($clientId) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getClientById($this->getResultLogin(true)->getSessionId(), $clientId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getClientById($this->getResultLogin(true)->getSessionId(), $clientId);
     }
 
     /**
@@ -486,7 +491,7 @@ class EPSFacade {
         $serviceTypeId, $senderSiteId, $senderOfficeId, $minDate, $senderCountryId = null, $senderPostCode = null, $senderId = null
     ) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getAllowedDaysForTaking(
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getAllowedDaysForTaking(
                 $this->getResultLogin(true)->getSessionId(), $serviceTypeId, $senderSiteId, $senderOfficeId, $minDate,
                 $senderCountryId, $senderPostCode, $senderId
         );
@@ -502,7 +507,7 @@ class EPSFacade {
      */
     public function addressSearch($address) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->addressSearch($this->getResultLogin(true)->getSessionId(), $address);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->addressSearch($this->getResultLogin(true)->getSessionId(), $address);
     }
 
     /**
@@ -515,7 +520,7 @@ class EPSFacade {
      */
     public function calculate($calculation) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->calculate($this->getResultLogin(true)->getSessionId(), $calculation);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->calculate($this->getResultLogin(true)->getSessionId(), $calculation);
     }
 
     /**
@@ -529,7 +534,7 @@ class EPSFacade {
      */
     public function calculateMultipleServices($calculation, $serviceTypeIds) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->calculateMultipleServices($this->getResultLogin(true)->getSessionId(), $calculation, $serviceTypeIds);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->calculateMultipleServices($this->getResultLogin(true)->getSessionId(), $calculation, $serviceTypeIds);
     }
 
     /**
@@ -543,7 +548,7 @@ class EPSFacade {
      */
     public function calculatePicking($picking) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->calculatePicking($this->getResultLogin(true)->getSessionId(), $picking);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->calculatePicking($this->getResultLogin(true)->getSessionId(), $picking);
     }
 
     /**
@@ -556,7 +561,7 @@ class EPSFacade {
      */
     public function createBillOfLading($picking) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->createBillOfLading($this->getResultLogin(true)->getSessionId(), $picking);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->createBillOfLading($this->getResultLogin(true)->getSessionId(), $picking);
     }
 
     /**
@@ -574,7 +579,7 @@ class EPSFacade {
      */
     public function createPDF($params) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->createPDF($this->getResultLogin(true)->getSessionId(), $params);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->createPDF($this->getResultLogin(true)->getSessionId(), $params);
     }
 
     /**
@@ -590,7 +595,7 @@ class EPSFacade {
      */
     public function createBillOfLadingPDF($billOfLading, $includeAutoPrintJS) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->createBillOfLadingPDF($this->getResultLogin(true)->getSessionId(), $billOfLading, $includeAutoPrintJS);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->createBillOfLadingPDF($this->getResultLogin(true)->getSessionId(), $billOfLading, $includeAutoPrintJS);
     }
 
     /**
@@ -604,7 +609,7 @@ class EPSFacade {
      */
     public function createCustomTravelLabelPDFType1($parcelId) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->createCustomTravelLabelPDFType1($this->getResultLogin(true)->getSessionId(), $parcelId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->createCustomTravelLabelPDFType1($this->getResultLogin(true)->getSessionId(), $parcelId);
     }
 
     /**
@@ -618,7 +623,7 @@ class EPSFacade {
      */
     public function invalidatePicking($billOfLading, $cancelComment=null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->invalidatePicking($this->getResultLogin(true)->getSessionId(), $billOfLading, $cancelComment);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->invalidatePicking($this->getResultLogin(true)->getSessionId(), $billOfLading, $cancelComment);
     }
 
     /**
@@ -632,7 +637,7 @@ class EPSFacade {
      */
     public function updateBillOfLading($picking) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->updateBillOfLading($this->getResultLogin(true)->getSessionId(), $picking);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->updateBillOfLading($this->getResultLogin(true)->getSessionId(), $picking);
     }
 
     /**
@@ -646,7 +651,7 @@ class EPSFacade {
      */
     public function addParcel($parcel) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->addParcel($this->getResultLogin(true)->getSessionId(), $parcel);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->addParcel($this->getResultLogin(true)->getSessionId(), $parcel);
     }
 
     /**
@@ -660,7 +665,7 @@ class EPSFacade {
      */
     public function finalizeBillOfLadingCreation($billOfLading) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->finalizeBillOfLadingCreation($this->getResultLogin(true)->getSessionId(), $billOfLading);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->finalizeBillOfLadingCreation($this->getResultLogin(true)->getSessionId(), $billOfLading);
     }
 
     /**
@@ -675,7 +680,7 @@ class EPSFacade {
      */
     public function createOrder($order) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->createOrder($this->getResultLogin(true)->getSessionId(), $order);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->createOrder($this->getResultLogin(true)->getSessionId(), $order);
     }
 
     /**
@@ -688,7 +693,7 @@ class EPSFacade {
      */
     public function getPickingParcels($billOfLading) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getPickingParcels($this->getResultLogin(true)->getSessionId(), $billOfLading);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getPickingParcels($this->getResultLogin(true)->getSessionId(), $billOfLading);
     }
 
     /**
@@ -702,7 +707,7 @@ class EPSFacade {
      */
     public function trackPicking($billOfLading) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->trackPicking($this->getResultLogin(true)->getSessionId(), $billOfLading);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->trackPicking($this->getResultLogin(true)->getSessionId(), $billOfLading);
     }
 
     /**
@@ -718,7 +723,7 @@ class EPSFacade {
      */
     public function trackPickingEx($billOfLading, $language, $returnOnlyLastOperation = false) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->trackPickingEx($this->getResultLogin(true)->getSessionId(), $billOfLading, $language, $returnOnlyLastOperation);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->trackPickingEx($this->getResultLogin(true)->getSessionId(), $billOfLading, $language, $returnOnlyLastOperation);
     }
     
     /**
@@ -734,7 +739,7 @@ class EPSFacade {
      */
     public function trackParcel($parcelId, $language, $returnOnlyLastOperation = false) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->trackParcel($this->getResultLogin(true)->getSessionId(), $parcelId, $language, $returnOnlyLastOperation);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->trackParcel($this->getResultLogin(true)->getSessionId(), $parcelId, $language, $returnOnlyLastOperation);
     }
 
 	/**
@@ -749,7 +754,7 @@ class EPSFacade {
      */
     public function trackParcelMultiple($barcodes, $language, $returnOnlyLastOperation = false) {
 		$this->checkStateBeforeCall();
-		return $this->_epsInterfaceImpl->trackParcelMultiple($this->getResultLogin(true)->getSessionId(), $barcodes, $language, $returnOnlyLastOperation);
+		return $this->_latestResponse = $this->_epsInterfaceImpl->trackParcelMultiple($this->getResultLogin(true)->getSessionId(), $barcodes, $language, $returnOnlyLastOperation);
     }
     
 
@@ -763,7 +768,7 @@ class EPSFacade {
      */
     public function searchPickingsByRefNumber($params) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->searchPickingsByRefNumber($this->getResultLogin(true)->getSessionId(), $params);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->searchPickingsByRefNumber($this->getResultLogin(true)->getSessionId(), $params);
     }
     
     /**
@@ -777,7 +782,7 @@ class EPSFacade {
      */
     public function getMicroregionId($coordX, $coordY) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getMicroregionId($this->getResultLogin(true)->getSessionId(), $coordX, $coordY);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getMicroregionId($this->getResultLogin(true)->getSessionId(), $coordX, $coordY);
     }
     
    /**
@@ -792,7 +797,7 @@ class EPSFacade {
      */
     public function searchClients($clientQuery) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->searchClients($this->getResultLogin(true)->getSessionId(), $clientQuery);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->searchClients($this->getResultLogin(true)->getSessionId(), $clientQuery);
     }
     
     
@@ -805,7 +810,7 @@ class EPSFacade {
      */
     public function listSpecialDeliveryRequirements() {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->listSpecialDeliveryRequirements($this->getResultLogin(true)->getSessionId());
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->listSpecialDeliveryRequirements($this->getResultLogin(true)->getSessionId());
     }
     
     /**
@@ -823,7 +828,7 @@ class EPSFacade {
      */
     public function validateAddress($address, $validationMode) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->validateAddress($this->getResultLogin(true)->getSessionId(), $address, $validationMode);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->validateAddress($this->getResultLogin(true)->getSessionId(), $address, $validationMode);
     }
     
     /**
@@ -835,7 +840,7 @@ class EPSFacade {
     */
     public function listContractClients() {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->listContractClients($this->getResultLogin(true)->getSessionId());
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->listContractClients($this->getResultLogin(true)->getSessionId());
     }
     
     /**
@@ -853,7 +858,7 @@ class EPSFacade {
      */
     public function listOfficesEx($name, $siteId = null, $language = null, $countryId = null) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->listOfficesEx($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language, $countryId);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->listOfficesEx($this->getResultLogin(true)->getSessionId(), $name, $siteId, $language, $countryId);
     }
     
     /**
@@ -866,7 +871,7 @@ class EPSFacade {
      */
     public function deserializeAddress($address) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->deserializeAddress($this->getResultLogin(true)->getSessionId(), $address);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->deserializeAddress($this->getResultLogin(true)->getSessionId(), $address);
     }
     
     /**
@@ -879,7 +884,7 @@ class EPSFacade {
     */
     public function serializeAddress($address) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->serializeAddress($this->getResultLogin(true)->getSessionId(), $address);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->serializeAddress($this->getResultLogin(true)->getSessionId(), $address);
     }
     
     /**
@@ -891,7 +896,7 @@ class EPSFacade {
     */
     public function makeAddressString($address) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->makeAddressString($this->getResultLogin(true)->getSessionId(), $address);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->makeAddressString($this->getResultLogin(true)->getSessionId(), $address);
     }
     
     /**
@@ -903,7 +908,7 @@ class EPSFacade {
     */
     public function getAdditionalUserParams($date) {
     	$this->checkStateBeforeCall();
-    	return $this->_epsInterfaceImpl->getAdditionalUserParams($this->getResultLogin(true)->getSessionId(), $date);
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->getAdditionalUserParams($this->getResultLogin(true)->getSessionId(), $date);
     }
     
     /**
@@ -918,7 +923,7 @@ class EPSFacade {
      */
     public function listCountries($name, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listCountries($this->getResultLogin(true)->getSessionId(), $name, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listCountries($this->getResultLogin(true)->getSessionId(), $name, $language);
     }
     
     /**
@@ -933,7 +938,7 @@ class EPSFacade {
      */
     public function listCountriesEx($filter, $language = null) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listCountriesEx($this->getResultLogin(true)->getSessionId(), $filter, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listCountriesEx($this->getResultLogin(true)->getSessionId(), $filter, $language);
     }
     
     /**
@@ -948,7 +953,7 @@ class EPSFacade {
      */
     public function listStates($countryId, $name) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->listStates($this->getResultLogin(true)->getSessionId(), $countryId, $name);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->listStates($this->getResultLogin(true)->getSessionId(), $countryId, $name);
     }
     
     /**
@@ -961,7 +966,7 @@ class EPSFacade {
      */
     public function getStateById($stateId) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getStateById($this->getResultLogin(true)->getSessionId(), $stateId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getStateById($this->getResultLogin(true)->getSessionId(), $stateId);
     }
     
     /**
@@ -976,7 +981,7 @@ class EPSFacade {
      */
     public function validatePostCode($countryId, $postCode, $siteId = '') {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->validatePostCode($this->getResultLogin(true)->getSessionId(), $countryId, $postCode, $siteId);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->validatePostCode($this->getResultLogin(true)->getSessionId(), $countryId, $postCode, $siteId);
     }
     
     /**
@@ -990,7 +995,7 @@ class EPSFacade {
      */
     public function getPickingDeliveryInfo($billOfLading, $language) {
         $this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getPickingDeliveryInfo($this->getResultLogin(true)->getSessionId(), $billOfLading, $language);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getPickingDeliveryInfo($this->getResultLogin(true)->getSessionId(), $billOfLading, $language);
     }
     
     /**
@@ -1001,7 +1006,7 @@ class EPSFacade {
      */
     public function searchSecondaryPickings($paramSearchSecondaryPickings) {
     	$this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->searchSecondaryPickings($this->getResultLogin(true)->getSessionId(), $paramSearchSecondaryPickings);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->searchSecondaryPickings($this->getResultLogin(true)->getSessionId(), $paramSearchSecondaryPickings);
     } 
 
     /**
@@ -1012,7 +1017,7 @@ class EPSFacade {
      */
     public function getPickingExtendedInfo($billOfLading) {
     	$this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getPickingExtendedInfo($this->getResultLogin(true)->getSessionId(), $billOfLading);
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getPickingExtendedInfo($this->getResultLogin(true)->getSessionId(), $billOfLading);
     } 
 
     /**
@@ -1023,7 +1028,15 @@ class EPSFacade {
      */
     public function getRoutingLabelInfo($parcelId) {
     	$this->checkStateBeforeCall();
-        return $this->_epsInterfaceImpl->getRoutingLabelInfo($this->getResultLogin(true)->getSessionId(), $parcelId);
-    } 
+        return $this->_latestResponse = $this->_epsInterfaceImpl->getRoutingLabelInfo($this->getResultLogin(true)->getSessionId(), $parcelId);
+    }
+
+    /**
+     * Returns latest response data.
+     * @return mixed
+     */
+    public function getLatestResponse() {
+        return $this->_latestResponse;
+    }
 }
 ?>
