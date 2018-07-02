@@ -35,14 +35,14 @@ class CodPaymentsResponse extends AbstractResponse
             if($data instanceof \CODPayment) {
                 $result->put($bol_id, [
                     'id' => $bol_id,
-                    'date' => $data->getDate() ? Carbon::createFromFormat('Y-m-d\TH:i:sP', $data->getDate()) : null,
+                    'date' => $data->getDate() ? Carbon::createFromFormat('Y-m-d\TH:i:sP', $data->getDate(), 'Europe/Sofia') : null,
                     'price' => $data->getTotalPayedOutAmount(),
                     'error' => null
                 ]);
             } else {
                 $result->put($bol_id, [
                     'id' => $bol_id,
-                    'date' => Carbon::now(),
+                    'date' => Carbon::now()->timezone('Europe/Sofia'),
                     'price' => 0,
                     'error' => $data
                 ]);
