@@ -406,6 +406,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $new_address->setPostCode(str_replace(' ', '', $post_code));
         }
 
+        //lat & lng
+        if(!is_null($address->getLongitude()) && !is_null($address->getLatitude())) {
+            $new_address->setCoordX($address->getLongitude());
+            $new_address->setCoordY($address->getLatitude());
+        }
+
         return $new_address;
     }
 
