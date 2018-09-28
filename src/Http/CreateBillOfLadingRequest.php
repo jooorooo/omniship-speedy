@@ -213,9 +213,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
         $optionBeforePayment = new ParamOptionsBeforePayment();
         if ($cod > 0 && in_array($this->getOptionBeforePayment(), [Consts::OPTION_BEFORE_PAYMENT_OPEN, Consts::OPTION_BEFORE_PAYMENT_TEST])) {
             if ($this->getInstructionReturns() == 'return') {
-                $payer_type_return = ParamCalculation::PAYER_TYPE_SENDER;
-            } else {
                 $payer_type_return = ParamCalculation::PAYER_TYPE_RECEIVER;
+            } else {
+                $payer_type_return = ParamCalculation::PAYER_TYPE_SENDER;
             }
             if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
                 $optionBeforePayment->setTest(true);
