@@ -5,7 +5,7 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'EPSInterface.
 /**
  * Speedy SOAP EPS ver01 Service Interface Implementation
  */
-class EPSSOAPInterfaceImpl extends SoapClient implements EPSInterface {
+class EPSSOAPInterfaceImpl extends Client implements EPSInterface {
 
     /**
      * Speedy SOAP WSDL version 01 URL
@@ -14,17 +14,20 @@ class EPSSOAPInterfaceImpl extends SoapClient implements EPSInterface {
     const SPEEDY_SOAP_WSDL_V01_URL = 'https://www.speedy.bg/eps/main01.wsdl';
 
     /**
-     * Constructs new instance of SOAP service
-     * @param string $wsdlURL
-     * @param options[optional]
+     * Constructor of the new object. Creates an instance of the new SoapClient.
+     * Sets default values of the timeouts and number of retries.
+     *
+     * @param string $wsdlURL Url of the WebService's wsdl
+     * @param array $options PHP SoapClient's array of options
+     * @param int $negotiationTimeout Connection timeout in seconds. 0 to disable.
+     * @param int $persistanceFactor Number of retries.
+     * @param int $persistanceTimeout Read timeout in seconds. 0 to disable. null to use ini default_socket_timeout
      */
-    function __construct($wsdlURL=self::SPEEDY_SOAP_WSDL_V01_URL, $options=null) {
-        if (is_null($options)) {
-            parent::__construct($wsdlURL);
-        } else {
-            parent::__construct($wsdlURL, $options);
+    public function __construct($wsdlURL = self::SPEEDY_SOAP_WSDL_V01_URL, array $options = null, $negotiationTimeout = 0, $persistanceFactor = 1, $persistanceTimeout = null) {
+        if(is_null($options)) {
+            $options = [];
         }
-        //   echo('<BR>Connected to '.$wsdlURL);
+        parent::__construct($wsdlURL, $options, $negotiationTimeout, $persistanceFactor, $persistanceTimeout);
     }
 
     /**

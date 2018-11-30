@@ -26,7 +26,7 @@ class ShippingQuoteRequest extends AbstractRequest
         if (is_null($login = $this->getClient()->getResultLogin())) {
             return $paramCalculation;
         }
-
+        
         $convert = new Convert();
 
         //if send out of bg disable cod & payer is sender

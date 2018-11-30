@@ -57,7 +57,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
     public function getClient()
     {
         if(is_null($this->client)) {
-            $this->client = new SpeedyClient($this->getUsername(), $this->getPassword());
+            $this->client = new SpeedyClient($this->getUsername(), $this->getPassword(), $this->getConnectionOptions());
         }
         return $this->client;
     }

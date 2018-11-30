@@ -60,6 +60,11 @@ class Client
      */
     protected $password;
 
+    /**
+     * @var null|array
+     */
+    protected $connection_options;
+
     protected $error;
 
     protected $services;
@@ -70,10 +75,11 @@ class Client
     
     const VAT_PERCENTAGE = 20;
 
-    public function __construct($username, $password)
+    public function __construct($username, $password, array $connection_options = null)
     {
         $this->username = $username;
         $this->password = $password;
+        $this->connection_options = $connection_options;
         $this->initialize();
     }
 
@@ -84,7 +90,19 @@ class Client
     {
         try {
             @ini_set("soap.wsdl_cache_enabled", 0);
-            $this->ePSFacade = new EPSFacade(new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, array('cache_wsdl' => WSDL_CACHE_NONE, 'trace' => 1)), $this->username, $this->password);
+            $options = array(
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                'trace' => 1
+            );
+            $connection_timeout = 0;
+            $retries = 1;
+            $read_timeout = null;
+            if(is_array($this->connection_options)) {
+                extract($this->connection_options);
+            }
+
+            $EPSSOAPInterfaceImpl = new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, $options, $connection_timeout, $retries, $read_timeout);
+            $this->ePSFacade = new EPSFacade($EPSSOAPInterfaceImpl, $this->username, $this->password);
             $this->resultLogin = $this->ePSFacade->getResultLogin();
             return true;
         } catch (Exception $e) {
