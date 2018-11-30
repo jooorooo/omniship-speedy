@@ -90,10 +90,11 @@ class Client
     {
         try {
             @ini_set("soap.wsdl_cache_enabled", 0);
-            $options = array(
+            $soap_options = array(
                 'cache_wsdl' => WSDL_CACHE_NONE,
                 'trace' => 1
             );
+            $soap_server_address = static::SERVER_ADDRESS;
             $connection_timeout = 0;
             $retries = 1;
             $read_timeout = null;
@@ -101,7 +102,7 @@ class Client
                 extract($this->connection_options);
             }
 
-            $EPSSOAPInterfaceImpl = new EPSSOAPInterfaceImpl(static::SERVER_ADDRESS, $options, $connection_timeout, $retries, $read_timeout);
+            $EPSSOAPInterfaceImpl = new EPSSOAPInterfaceImpl($soap_server_address, $soap_options, $connection_timeout, $retries, $read_timeout);
             $this->ePSFacade = new EPSFacade($EPSSOAPInterfaceImpl, $this->username, $this->password);
             $this->resultLogin = $this->ePSFacade->getResultLogin();
             return true;
