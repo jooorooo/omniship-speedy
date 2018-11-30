@@ -2,6 +2,8 @@
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'EPSInterface.class.php';
 
+use Omniship\Soap\Client;
+
 /**
  * Speedy SOAP EPS ver01 Service Interface Implementation
  */
