@@ -117,14 +117,21 @@ class ShippingQuoteRequest extends AbstractRequest
         }
 
         //Cash-on-Delivery (COD) amount
+        $cod = $this->getCashOnDeliveryAmount();
+        if ($cod > 0 && ($this->getMoneyTransfer() && strtoupper($receiver_address->getCountry()->getIso2()) == 'BG')) {
 
-        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
+        } elseif($cod > 0) {
             $paramCalculation->setAmountCodBase($cod);
-            //Flag indicating whether the shipping price should be included into the cash on delivery price.
             $paramCalculation->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
-        } else {
-            $paramCalculation->setAmountCodBase(0);
         }
+        
+//        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
+//            $paramCalculation->setAmountCodBase($cod);
+//            //Flag indicating whether the shipping price should be included into the cash on delivery price.
+//            $paramCalculation->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
+//        } else {
+//            $paramCalculation->setAmountCodBase(0);
+//        }
 
         //Specifies if the COD value is to be paid to a third party. Allowed only if the shipment has payerType = 2 (third party). (Required: no)
         $paramCalculation->setPayCodToThirdParty(false);

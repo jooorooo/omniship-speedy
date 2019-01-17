@@ -198,16 +198,13 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $picking->setNoteClient($note);
         }
 
-        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
-            $picking->setAmountCodBase($cod);
-            $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
-        } else {
-            $picking->setAmountCodBase(0);
-        }
-
+        $cod = $this->getCashOnDeliveryAmount();
         if ($cod > 0 && ($this->getMoneyTransfer() && strtoupper($receiver_address->getCountry()->getIso2()) == 'BG')) {
             $picking->setRetMoneyTransferReqAmount($cod);
             $picking->setAmountCodBase(0);
+        } elseif($cod > 0) {
+            $picking->setAmountCodBase($cod);
+            $picking->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
         }
 
         $optionBeforePayment = new ParamOptionsBeforePayment();
