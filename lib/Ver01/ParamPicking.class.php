@@ -1,14 +1,14 @@
 <?php
 
-require_once 'Size.class.php';
-require_once 'ParamClientData.class.php';
-require_once 'FixedDiscountCardId.class.php';
-require_once 'ParamParcelInfo.class.php';
-require_once 'ParamOptionsBeforePayment.class.php';
-require_once 'ParamPackings.class.php';
-require_once 'ParamReturnServiceRequest.class.php';
-require_once 'ParamReturnShipmentRequest.class.php';
-require_once 'ParamReturnVoucher.class.php';
+require_once __DIR__ . '/Size.class.php';
+require_once __DIR__ . '/ParamClientData.class.php';
+require_once __DIR__ . '/FixedDiscountCardId.class.php';
+require_once __DIR__ . '/ParamParcelInfo.class.php';
+require_once __DIR__ . '/ParamOptionsBeforePayment.class.php';
+require_once __DIR__ . '/ParamPackings.class.php';
+require_once __DIR__ . '/ParamReturnServiceRequest.class.php';
+require_once __DIR__ . '/ParamReturnShipmentRequest.class.php';
+require_once __DIR__ . '/ParamReturnVoucher.class.php';
 
 /**
  * Instances of this class are passed as a parameter of Speedy web service calls for calclualation and registration

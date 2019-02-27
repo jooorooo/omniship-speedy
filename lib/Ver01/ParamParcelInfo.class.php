@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Size.class.php';
+require_once __DIR__ . '/Size.class.php';
 
 /**
  * Instances of this class are used as parameters in web service calls for picking calculation and registration

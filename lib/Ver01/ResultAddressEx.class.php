@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ResultSite.class.php';
+require_once __DIR__ . '/ResultSite.class.php';
 
 /**
  * Instances of this class are returned as a result of web service method calls for clients

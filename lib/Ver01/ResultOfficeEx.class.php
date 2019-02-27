@@ -1,8 +1,8 @@
 <?php
 
-require_once 'ResultAddressEx.class.php';
-require_once 'ResultWorkingTime.class.php';
-require_once 'Size.class.php';
+require_once __DIR__ . '/ResultAddressEx.class.php';
+require_once __DIR__ . '/ResultWorkingTime.class.php';
+require_once __DIR__ . '/Size.class.php';
 
 
 /**

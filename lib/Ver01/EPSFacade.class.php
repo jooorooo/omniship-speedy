@@ -1,7 +1,7 @@
 <?php
 
-require_once 'ClientException.class.php';
-require_once 'EPSInterface.class.php';
+require_once __DIR__ . '/ClientException.class.php';
+require_once __DIR__ . '/EPSInterface.class.php';
 
 /**
  * Speedy EPS Service

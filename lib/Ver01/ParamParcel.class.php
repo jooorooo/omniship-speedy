@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Size.class.php';
+require_once __DIR__ . '/Size.class.php';
 
 /**
  * Inctances of this class are used as a paremeter to add parcels to pickings

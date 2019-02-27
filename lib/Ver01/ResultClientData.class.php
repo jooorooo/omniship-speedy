@@ -1,7 +1,7 @@
 <?php
 
-require_once 'ResultAddress.class.php';
-require_once 'ResultPhoneNumber.class.php';
+require_once __DIR__ . '/ResultAddress.class.php';
+require_once __DIR__ . '/ResultPhoneNumber.class.php';
 
 /**
  * Instances of this class are returned as a result of Speedy web service method calls for client data

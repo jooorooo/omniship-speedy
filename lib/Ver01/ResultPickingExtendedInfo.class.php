@@ -1,13 +1,13 @@
 <?php
 
-require_once 'ResultParcelInfoEx.class.php';
-require_once 'ResultOptionsBeforePayment.class.php';
-require_once 'ResultPackings.class.php';
-require_once 'ResultReturnVoucher.class.php';
-require_once 'ResultDeliveryInfo.class.php';
-require_once 'CODPayment.class.php';
-require_once 'ResultReturnShipmentRequest.class.php';
-require_once 'ResultReturnServiceRequest.class.php';
+require_once __DIR__ . '/ResultParcelInfoEx.class.php';
+require_once __DIR__ . '/ResultOptionsBeforePayment.class.php';
+require_once __DIR__ . '/ResultPackings.class.php';
+require_once __DIR__ . '/ResultReturnVoucher.class.php';
+require_once __DIR__ . '/ResultDeliveryInfo.class.php';
+require_once __DIR__ . '/CODPayment.class.php';
+require_once __DIR__ . '/ResultReturnShipmentRequest.class.php';
+require_once __DIR__ . '/ResultReturnServiceRequest.class.php';
 
 /**
  * Instances of this class are returned as a result of getPickingExtendedInfo

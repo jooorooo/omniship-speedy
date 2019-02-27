@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ComplementaryServiceAllowance.class.php';
+require_once __DIR__ . '/ComplementaryServiceAllowance.class.php';
 
 /**
  * Instances of this class are returned as a result of Speedy web service calls for services

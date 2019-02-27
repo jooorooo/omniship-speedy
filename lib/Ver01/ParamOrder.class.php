@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ParamPhoneNumber.class.php';
+require_once __DIR__ . '/ParamPhoneNumber.class.php';
 
 /**
  * Instances of this class are used as parameters for orders web service calls

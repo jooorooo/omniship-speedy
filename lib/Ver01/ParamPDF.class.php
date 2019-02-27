@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ParamBarcodeInfo.class.php';
+require_once __DIR__ . '/ParamBarcodeInfo.class.php';
 
 /**
  * Instances of this class are used as a parameter for createPDF documents web service methods

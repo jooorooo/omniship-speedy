@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ResultParcelInfo.class.php';
+require_once __DIR__ . '/ResultParcelInfo.class.php';
 
 /**
  * Instances of this class are returned as a result of create picking speedy web service calls

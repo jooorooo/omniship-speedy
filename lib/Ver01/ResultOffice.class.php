@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ValueAddress.class.php';
+require_once __DIR__ . '/ValueAddress.class.php';
 
 /**
  * Instances of this class are returned as a result of Speedy web service queries for offices

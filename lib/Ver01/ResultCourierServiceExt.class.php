@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ResultCourierService.class.php';
+require_once __DIR__ . '/ResultCourierService.class.php';
 
 /**
  * Instances of this class are returned as a result of Speedy web service calls for services alloweed between sites

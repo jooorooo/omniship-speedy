@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ResultAmounts.class.php';
+require_once __DIR__ . '/ResultAmounts.class.php';
 
 /**
  * Instances of this class are returned as a result of Speedy caclulcation web service methods
