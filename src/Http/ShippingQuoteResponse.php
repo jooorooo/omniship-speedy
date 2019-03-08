@@ -31,6 +31,9 @@ class ShippingQuoteResponse extends AbstractResponse
         if(is_array($this->data)) {
             $services = $this->getRequest()->getClient()->getServicesByKey($this->getRequest()->getLanguageCode());
             foreach($this->data AS $service) {
+                if(empty($services[$service->getServiceTypeId()])) {
+                    continue;
+                }
                 $service = $this->_getService($service);
                 $result_info = $service->getResultInfo();
                 $amounts = $result_info->getAmounts();
