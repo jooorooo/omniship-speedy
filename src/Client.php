@@ -1144,7 +1144,7 @@ class Client
      */
     protected function _languageValidate($language)
     {
-        if (!in_array(strtolower($language), ['bg', 'en'])) {
+        if (!in_array(strtolower($language), ['bg', 'en', 'ro'])) {
             $language = 'en';
         }
         return strtoupper($language);
