@@ -13,6 +13,7 @@ use Omniship\Consts;
 use Omniship\Speedy\Helper\Convert;
 use ParamCalculation;
 use Carbon\Carbon;
+use ParamOptionsBeforePayment;
 
 class ShippingQuoteRequest extends AbstractRequest
 {
@@ -116,14 +117,44 @@ class ShippingQuoteRequest extends AbstractRequest
             $paramCalculation->setFragile(false);
         }
 
-        //Cash-on-Delivery (COD) amount
+//        //Cash-on-Delivery (COD) amount
+//        $cod = $this->getCashOnDeliveryAmount();
+//        if ($cod > 0 && ($this->getMoneyTransfer() && strtoupper($receiver_address->getCountry()->getIso2()) == 'BG')) {
+//
+//        } elseif($cod > 0) {
+//            $paramCalculation->setAmountCodBase($cod);
+//            $paramCalculation->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
+//        }
+
+        //@since 3.4.9
         $cod = $this->getCashOnDeliveryAmount();
         if ($cod > 0 && ($this->getMoneyTransfer() && strtoupper($receiver_address->getCountry()->getIso2()) == 'BG')) {
-
+            $paramCalculation->setRetMoneyTransferReqAmount($cod);
+            $paramCalculation->setAmountCodBase(0);
         } elseif($cod > 0) {
             $paramCalculation->setAmountCodBase($cod);
             $paramCalculation->setIncludeShippingPriceInCod((bool)$this->getOtherParameters('shipping_price_in_cod'));
         }
+
+        $optionBeforePayment = new ParamOptionsBeforePayment();
+        if ($cod > 0 && in_array($this->getOptionBeforePayment(), [Consts::OPTION_BEFORE_PAYMENT_OPEN, Consts::OPTION_BEFORE_PAYMENT_TEST])) {
+            if ($this->getInstructionReturns() == 'return') {
+                $payer_type_return = ParamCalculation::PAYER_TYPE_RECEIVER;
+            } else {
+                $payer_type_return = ParamCalculation::PAYER_TYPE_SENDER;
+            }
+            if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
+                $optionBeforePayment->setTest(true);
+                $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
+                $optionBeforePayment->setReturnPayerType($payer_type_return);
+            } elseif ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
+                $optionBeforePayment->setOpen(true);
+                $optionBeforePayment->setReturnServiceTypeId($this->getServiceId());
+                $optionBeforePayment->setReturnPayerType($payer_type_return);
+            }
+            $paramCalculation->setOptionsBeforePayment($optionBeforePayment);
+        }
+        //@since 3.4.9
         
 //        if (($cod = $this->getCashOnDeliveryAmount()) > 0) {
 //            $paramCalculation->setAmountCodBase($cod);
