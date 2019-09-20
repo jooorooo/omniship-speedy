@@ -315,6 +315,12 @@ class ResultPickingExtendedInfo extends SpeedyResultFormat {
     protected $_codPayment;
 
     /**
+     * Money Transfer information.
+     * var signed MoneyTransferPayment
+     */
+    protected $_moneyTransferPayment;
+
+    /**
      * COD BOL number of return picking.
      * var signed 64-bit integer (nullable)
      */
@@ -455,13 +461,13 @@ class ResultPickingExtendedInfo extends SpeedyResultFormat {
         }
         $this->_packings = $arrResultPackings;
 
- 
         $this->_returnVoucher = isset($stdResultPickingExtendedInfo->returnVoucher) ? new ResultReturnVoucher($stdResultPickingExtendedInfo->returnVoucher) : null;
         $this->_deliveryToFloorNo = isset($stdResultPickingExtendedInfo->deliveryToFloorNo) ? $stdResultPickingExtendedInfo->deliveryToFloorNo : null;
         $this->_amounts = isset($stdResultPickingExtendedInfo->amounts) ? new ResultAmounts($stdResultPickingExtendedInfo->amounts) : null;
         $this->_deadlineDelivery = isset($stdResultPickingExtendedInfo->deadlineDelivery) ? $stdResultPickingExtendedInfo->deadlineDelivery : null;
         $this->_deliveryInfo = isset($stdResultPickingExtendedInfo->deliveryInfo) ? new ResultDeliveryInfo($stdResultPickingExtendedInfo->deliveryInfo) : null;
         $this->_codPayment = isset($stdResultPickingExtendedInfo->codPayment) ? new CODPayment($stdResultPickingExtendedInfo->codPayment) : null;
+        $this->_moneyTransferPayment = isset($stdResultPickingExtendedInfo->moneyTransferPayment) ? new MoneyTransferPayment($stdResultPickingExtendedInfo->moneyTransferPayment) : null;
         $this->_redirectBillOfLading = isset($stdResultPickingExtendedInfo->redirectBillOfLading) ? $stdResultPickingExtendedInfo->redirectBillOfLading : null;
         $this->_returnBillOfLading = isset($stdResultPickingExtendedInfo->returnBillOfLading) ? $stdResultPickingExtendedInfo->returnBillOfLading : null;
 
@@ -869,6 +875,14 @@ class ResultPickingExtendedInfo extends SpeedyResultFormat {
      */
     public function getCodPayment() {
         return $this->_codPayment;
+    }
+
+    /**
+     * Get Money Transfer information.
+     * @return CODPayment
+     */
+    public function getMoneyTransferPayment() {
+        return $this->_moneyTransferPayment;
     }
 
     /**

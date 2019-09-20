@@ -11,13 +11,14 @@ namespace Omniship\Speedy\Http;
 use Carbon\Carbon;
 use Omniship\Common\CodPayment;
 use CODPayment AS SpeedyCODPayment;
+use MoneyTransferPayment AS SpeedyMoneyTransferPayment;
 
 class CodPaymentResponse extends AbstractResponse
 {
     /**
      * The data contained in the response.
      *
-     * @var SpeedyCODPayment
+     * @var SpeedyCODPayment|SpeedyMoneyTransferPayment
      */
     protected $data;
 
@@ -30,12 +31,12 @@ class CodPaymentResponse extends AbstractResponse
             return null;
         }
 
-        $cod_payment = new CodPayment([
+        return new CodPayment([
             'id' => $this->getRequest()->getBolId(),
             'date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDate(), 'Europe/Sofia'),
-            'price' => $this->data->getTotalPayedOutAmount()
+            'price' => $this->data->getTotalPayedOutAmount(),
+            'type' => $this->data instanceof SpeedyMoneyTransferPayment ? 'money_transfer' : 'cod'
         ]);
-        return $cod_payment;
     }
 
 }

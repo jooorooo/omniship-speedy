@@ -906,6 +906,10 @@ class Client
     {
         $info = $this->getPickingExtendedInfo($parcelId);
         if($info) {
+            if($info->getMoneyTransferPayment()) {
+                return $info->getMoneyTransferPayment();
+            }
+
             return $info->getCodPayment();
         }
         return null;
