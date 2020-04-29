@@ -356,35 +356,36 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $new_address->setApartmentNo($address->getApartment());
         }
 
-        if ($l = $address->getNote()) {
-            $new_address->setAddressNote($l);
+        $lines = array_filter([$address->getNote(), $address->getAddress1(), $address->getAddress2(), $address->getAddress3()]);
+        if ($lines) {
+            $new_address->setAddressNote(implode(', ', $lines));
         }
 
-        $l = null;
-        if ($street && !$street->getId()) {
-            $l = [0=>$street->getName()];
-            if ($address->getStreetNumber()) {
-                $l[0] .= ' ' . $address->getStreetNumber();
-            }
-        }
-        if ($quarter && !$quarter->getId()) {
-            $l[1] = $quarter->getName();
-            if (!$street && $address->getStreetNumber()) {
-                $l[1] .= ' ' . $address->getStreetNumber();
-            }
-        }
+//        $l = null;
+//        if ($street && !$street->getId()) {
+//            $l = [0=>$street->getName()];
+//            if ($address->getStreetNumber()) {
+//                $l[0] .= ' ' . $address->getStreetNumber();
+//            }
+//        }
+//        if ($quarter && !$quarter->getId()) {
+//            $l[1] = $quarter->getName();
+//            if (!$street && $address->getStreetNumber()) {
+//                $l[1] .= ' ' . $address->getStreetNumber();
+//            }
+//        }
 
-        $lines = array_filter([$address->getAddress1(), $address->getAddress2(), $address->getAddress3()]);
-        if($l) {
-            $new_address->setFrnAddressLine1(implode(', ', $l));
-            if($lines) {
-                $new_address->setFrnAddressLine2(implode(', ', $lines));
-            }
-        } else {
-            if($lines) {
-                $new_address->setFrnAddressLine1(implode(', ', $lines));
-            }
-        }
+//        $lines = array_filter([$address->getAddress1(), $address->getAddress2(), $address->getAddress3()]);
+//        if($l) {
+//            $new_address->setFrnAddressLine1(implode(', ', $l));
+//            if($lines) {
+//                $new_address->setFrnAddressLine2(implode(', ', $lines));
+//            }
+//        } else {
+//            if($lines) {
+//                $new_address->setFrnAddressLine1(implode(', ', $lines));
+//            }
+//        }
         /*if ($l = $address->getAddress1()) {
             if ($street && !$street->getId()) {
                 $l = $street->getName() . ($l ? ', ' . $l : '');
