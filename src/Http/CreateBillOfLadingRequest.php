@@ -405,10 +405,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
 
         //lat & lng
-        if(!is_null($address->getLongitude()) && !is_null($address->getLatitude())) {
-            $new_address->setCoordX($address->getLongitude());
-            $new_address->setCoordY($address->getLatitude());
-        }
+//        if(!is_null($address->getLongitude()) && !is_null($address->getLatitude())) {
+//            $new_address->setCoordX($address->getLongitude());
+//            $new_address->setCoordY($address->getLatitude());
+//        }
 
         return $new_address;
     }
