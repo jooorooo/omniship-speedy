@@ -356,9 +356,19 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $new_address->setApartmentNo($address->getApartment());
         }
 
-        $lines = array_filter([$address->getNote(), $address->getAddress1(), $address->getAddress2(), $address->getAddress3()]);
+        $lines = array_filter([$address->getNote(), $address->getAddress1(), $address->getAddress2()]);
         if ($lines) {
             $new_address->setAddressNote(implode(', ', $lines));
+        }
+
+        if($address->getAddress3()) {
+            $str = mb_substr($address->getAddress3(), 0, 80, 'utf-8');
+            if(mb_strlen($str, 'utf-8') > 40) {
+                $new_address->setFrnAddressLine1(mb_substr($str, 0, 40, 'utf-8'));
+                $new_address->setFrnAddressLine2(mb_substr($str, 40, 80, 'utf-8'));
+            } else {
+                $new_address->setFrnAddressLine1($str);
+            }
         }
 
 //        $l = null;
