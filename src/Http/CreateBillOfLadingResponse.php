@@ -53,5 +53,21 @@ class CreateBillOfLadingResponse extends AbstractResponse
 
         return $result;
     }
+    /**
+     * {@inheritdoc}
+     */
+    public function getResponseFormatted()
+    {
+        if($this->data instanceof ResultBOL) {
+            $response = $this->data->toArray();
+            if (isset($response['bill_of_lading_source'])) {
+                $response['bill_of_lading_source'] = '{BLOB}';
+            }
+
+            return var_export($response, 1);
+        }
+
+        return var_export(null, 1);
+    }
 
 }
