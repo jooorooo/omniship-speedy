@@ -58,9 +58,9 @@ class ShippingQuoteRequest extends AbstractRequest
 
         //The date for shipment pick-up (the "time" component is ignored if it is allready passed or is overriden with 09:01). Default value is "today". (Required: no)
         if (($taking_date = $this->getShipmentDate()) instanceof Carbon) {
-            $paramCalculation->setTakingDate($taking_date->timestamp);
+            $paramCalculation->setTakingDate($taking_date->format('Y-m-d'));
         } else {
-            $paramCalculation->setTakingDate(Carbon::now()->timestamp);
+            $paramCalculation->setTakingDate('today');
         }
         //If set to true, the "takingDate" field is not just to be validated, but the first allowed (following) date will be used instead (in compliance with the pick-up schedule etc.). (Required: no)
         $paramCalculation->setAutoAdjustTakingDate(true);
