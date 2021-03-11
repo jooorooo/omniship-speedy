@@ -1250,7 +1250,26 @@ class EPSSOAPInterfaceImpl extends Client implements EPSInterface {
        	} catch (SoapFault $sf) {
        		throw new ServerException($sf);
        	}
-	}	
+	}
+
+	/**
+	 * @see EPSInterface::getAdditionalUserParams()
+	 */
+	public function convertToWin1251($sessionId, $text) {
+		try {
+       		$getAdditionalUserParamsStdObject = new stdClass();
+       		$getAdditionalUserParamsStdObject->sessionId = $sessionId;
+       		$getAdditionalUserParamsStdObject->text      = $text;
+       		$return = parent::convertToWin1251($getAdditionalUserParamsStdObject);
+       		if(!empty($return->return)) {
+       		    return $return->return;
+            }
+
+       		return $text;
+       	} catch (SoapFault $sf) {
+       		throw new ServerException($sf);
+       	}
+	}
 	
 	/**
      * @see EPSInterface::listCountries()

@@ -1072,6 +1072,19 @@ class Client
     }
 
     /**
+     * @param $text string
+     * @return string
+     */
+    public function convertToWin1251($text) {
+        try {
+            return $this->ePSFacade->convertToWin1251($text);
+        } catch (ClientException $ce) {
+        } catch (ServerException $se) {
+        }
+        return $text;
+    }
+
+    /**
      * @param string $username
      * @return Client
      */

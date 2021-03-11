@@ -658,6 +658,15 @@ interface EPSInterface {
      * @since 2.3.0
      */
     public function getAdditionalUserParams($sessionId, $date);
+
+    /**
+     * Get list of additional user paramters
+     * @param string $sessionId
+     * @param date $date Effective date. If null is provided then current date is applied
+     * @return array signed 32-bit integers - List of additional user parameters
+     * @since 2.3.0
+     */
+    public function convertToWin1251($sessionId, $text);
     
     /**
      * Returns a list of countries matching the search criteria.

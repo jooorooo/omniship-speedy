@@ -910,6 +910,17 @@ class EPSFacade {
     	$this->checkStateBeforeCall();
     	return $this->_latestResponse = $this->_epsInterfaceImpl->getAdditionalUserParams($this->getResultLogin(true)->getSessionId(), $date);
     }
+
+    /**
+     * @param text
+     * @return string Returns the transliterated input text as result, it excludes latin characters (a-z, A-Z), cyrillic characters (а-я, А–Я) and digits (0-9).
+     * @throws ClientException Thrown in case EPS interface implementation is not set
+     * @throws ServerException Thrown in case communication with server has failed
+    */
+    public function convertToWin1251($text) {
+    	$this->checkStateBeforeCall();
+    	return $this->_latestResponse = $this->_epsInterfaceImpl->convertToWin1251($this->getResultLogin(true)->getSessionId(), $text);
+    }
     
     /**
      * Returns a list of countries matching the search criteria.
