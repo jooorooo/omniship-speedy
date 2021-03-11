@@ -1063,7 +1063,7 @@ class Client
      */
     public function getAdditionalUserParams() {
         try {
-            return $this->ePSFacade->getAdditionalUserParams(Carbon::now()->timestamp);
+            return $this->ePSFacade->getAdditionalUserParams(null);
         } catch (ClientException $ce) {
             return [];
         } catch (ServerException $se) {
