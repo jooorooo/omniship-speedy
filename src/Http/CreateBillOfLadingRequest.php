@@ -177,7 +177,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if (is_null($taking_date = $this->getShipmentDate())) {
             $result = $this->getClient()->getAllowedDaysForTaking(
                 $this->getServiceId(),
-                Carbon::now($this->getSenderTimeZone())->addDay()->timestamp,
+                Carbon::now($this->getSenderTimeZone())->addDay()->format('Y-m-d'),
                 $sender_city_id && !$sender_office_id ? $sender_city_id : null,
                 !$sender_city_id && $sender_office_id ? $sender_office_id : null
             );
