@@ -184,7 +184,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
             if ($result && !empty($result[1])) {
                 $this->setShipmentDate($result[1]);
             }
-        } else {
+        }
+
+        if (!is_null($taking_date = $this->getShipmentDate())) {
             $picking->setTakingDate($taking_date->format('Y-m-d'));
         }
 
