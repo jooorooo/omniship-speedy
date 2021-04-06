@@ -1062,13 +1062,16 @@ class Client
      * @return array
      */
     public function getAdditionalUserParams() {
-        try {
-            return $this->ePSFacade->getAdditionalUserParams(null);
-        } catch (ClientException $ce) {
-            return [];
-        } catch (ServerException $se) {
-            return [];
-        }
+		if (!is_null($login = $this->getResultLogin())) {
+			try {
+				return $this->getEPSFacade()->getAdditionalUserParams(null);
+			} catch (ClientException $ce) {
+				return [];
+			} catch (ServerException $se) {
+				return [];
+			}
+		}
+		return [];
     }
 
     /**
@@ -1076,11 +1079,13 @@ class Client
      * @return string
      */
     public function convertToWin1251($text) {
-        try {
-            return $this->ePSFacade->convertToWin1251($text);
-        } catch (ClientException $ce) {
-        } catch (ServerException $se) {
-        }
+		if (!is_null($login = $this->getResultLogin())) {
+			try {
+				return $this->getEPSFacade()->convertToWin1251($text);
+			} catch (ClientException $ce) {
+			} catch (ServerException $se) {
+			}
+		}
         return $text;
     }
 
