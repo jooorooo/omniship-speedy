@@ -44,7 +44,9 @@ class CreateBillOfLadingResponse extends AbstractResponse
         $result->setBolId((string)$parcels[0]->getParcelId());
         $result->setBillOfLadingSource(base64_encode($this->getRequest()->getClient()->createPDF($parcels[0]->getParcelId())));
         $result->setBillOfLadingType($result::PDF);
-        $result->setEstimatedDeliveryDate(Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDeadlineDelivery(), $this->getRequest()->getReceiverTimeZone()));
+        if($this->data->getDeadlineDelivery() && strpos($this->data->getDeadlineDelivery(), '3000-') === false) {
+            $result->setEstimatedDeliveryDate(Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDeadlineDelivery(), $this->getRequest()->getReceiverTimeZone()));
+        }
         $result->setPickupDate($this->getRequest()->getShipmentDate());
         $result->setInsurance($amounts->getInsurancePremium() * (1 + (Client::VAT_PERCENTAGE/100)));
         $result->setCashOnDelivery($amounts->getCodPremium() * (1 + (Client::VAT_PERCENTAGE/100)));
