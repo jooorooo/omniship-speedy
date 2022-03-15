@@ -133,7 +133,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
         }
 
         $picking->setParcelsCount($this->getNumberOfPieces());
-        $picking->setWeightDeclared($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()));
+        $picking->setWeightDeclared(round($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()), 2));
         $picking->setContents($this->getContent());
         $picking->setPacking($this->getPackageType()); // packing type
         if (!is_null($package_id = $this->getPackageId())) {
@@ -238,7 +238,7 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 if (($id = $item->getId())) {
                     $parcel->setPackId($id);
                 }
-                $parcel->setWeight($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()));
+                $parcel->setWeight(round($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()), 2));
                 if ($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
                     $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
