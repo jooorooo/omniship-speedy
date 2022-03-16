@@ -171,7 +171,11 @@ class ShippingQuoteRequest extends AbstractRequest
         $paramCalculation->setParcelsCount($this->getNumberOfPieces());
         //Declared weight (the greater of "volume" and "real" weight values)
         if(is_numeric($this->getWeight())  && $this->getWeight() > 0) {
-            $paramCalculation->setWeightDeclared(round($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()), 2));
+            $weight = round($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()), 2);
+            if($weight <= 0) {
+                $weight = 0.01;
+            }
+            $paramCalculation->setWeightDeclared($weight);
         }
         //Specifies whether the shipment only consists of documents
         $paramCalculation->setDocuments($this->getIsDocuments());
@@ -199,7 +203,11 @@ class ShippingQuoteRequest extends AbstractRequest
                     $parcel->setPackId($id);
                 }
                 if(is_numeric($item->getWeight()) && $item->getWeight() > 0) {
-                    $parcel->setWeight(round($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()), 2));
+                    $weight = round($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()), 2);
+                    if($weight <= 0) {
+                        $weight = 0.01;
+                    }
+                    $parcel->setWeight($weight);
                 }
                 if ($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
