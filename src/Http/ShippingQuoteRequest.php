@@ -170,7 +170,9 @@ class ShippingQuoteRequest extends AbstractRequest
         //Parcels count (must be equal to the number of parcels described in List parcels)
         $paramCalculation->setParcelsCount($this->getNumberOfPieces());
         //Declared weight (the greater of "volume" and "real" weight values)
-        $paramCalculation->setWeightDeclared(round($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()), 2));
+        if(is_numeric($this->getWeight())  && $this->getWeight() > 0) {
+            $paramCalculation->setWeightDeclared(round($convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()), 2));
+        }
         //Specifies whether the shipment only consists of documents
         $paramCalculation->setDocuments($this->getIsDocuments());
         //Specifies whether the shipment is palletized
@@ -196,7 +198,9 @@ class ShippingQuoteRequest extends AbstractRequest
                 if (($id = $item->getId())) {
                     $parcel->setPackId($id);
                 }
-                $parcel->setWeight(round($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()), 2));
+                if(is_numeric($item->getWeight()) && $item->getWeight() > 0) {
+                    $parcel->setWeight(round($convert->convertWeightUnit($item->getWeight(), $this->getWeightUnit()), 2));
+                }
                 if ($item->getWidth() && $item->getDepth() && $item->getHeight()) {
                     $size = new \Size();
                     $size->setDepth($convert->convertLengthUnit($item->getDepth(), $this->getDimensionUnit()));
