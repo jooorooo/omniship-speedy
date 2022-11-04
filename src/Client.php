@@ -166,9 +166,9 @@ class Client
                 if ($listServices) {
                     foreach ($listServices as $service) {
                         // Remove pallet services
-                        if ($service->getCargoType() == 2) {
+                        /*if ($service->getCargoType() == 2) {
                             continue;
-                        }
+                        }*/
                         $services[] = $service;
                     }
                 }
